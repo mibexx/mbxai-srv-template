@@ -1,6 +1,6 @@
-# Python REST Service Cookiecutter Template
+# MIBEXX AI Service Template
 
-A cookiecutter template for creating modern Python REST services.
+A cookiecutter template for creating AI Services that can be launched in the Mibexx AI Orchestrator to expose ai features.
 
 ## Features
 
