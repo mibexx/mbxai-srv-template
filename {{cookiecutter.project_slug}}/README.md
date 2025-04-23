@@ -72,7 +72,7 @@ Response:
 }
 ```
 
-### POST /project/hello
+### POST /api/hello
 
 Project-level hello world endpoint demonstrating the use of FastAPI routers and Pydantic models:
 

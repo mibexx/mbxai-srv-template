@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 # Create a router for project-level endpoints
-router = APIRouter(prefix="/project", tags=["project"])
+router = APIRouter(prefix="/api", tags=["api"])
 
 
 class HelloRequest(BaseModel):
