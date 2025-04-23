@@ -1,0 +1,55 @@
+[project]
+name = "{{cookiecutter.package_name}}"
+version = "0.1.0"
+description = "{{cookiecutter.description}}"
+authors = [{ name = "{{cookiecutter.author_name}}", email = "{{cookiecutter.author_email}}" }]
+readme = "README.md"
+packages = [
+    { include = "src" }
+]
+requires-python = ">=3.12,<3.13"
+license = "{{cookiecutter.open_source_license}}"
+dependencies = [
+    "pydantic-settings>=2.8.0",
+    "pydantic>=2.10.6",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.1",
+    "python-dotenv>=1.0.0",
+    "openai>=1.66.0",
+    {% if cookiecutter.use_pytest == 'y' -%}
+    "pytest>=8.0.0",
+    {% endif -%}
+    {% if cookiecutter.use_mypy == 'y' -%}
+    "mypy>=1.8.0",
+    {% endif -%}
+    {% if cookiecutter.use_ruff == 'y' -%}
+    "ruff>=0.2.0",
+    {% endif -%}
+]
+
+[project.scripts]
+service = "src.{{cookiecutter.package_name}}.api.run:main"
+
+[tool.hatch.build.targets.sdist]
+include = ["src"]
+
+[tool.hatch.build.targets.wheel]
+include = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+select = ["E", "F", "I"]
+
+{% if cookiecutter.use_mypy == 'y' -%}
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+{% endif -%} 

@@ -1,0 +1,19 @@
+apiVersion: mbxai.cloud/v1
+kind: MbxAiResource
+metadata:
+  name: { { cookiecutter.project_slug } }
+  namespace: mbxai-sandbox
+spec:
+  name: "{{cookiecutter.project_name}}"
+  repoUrl: "https://github.com/mibexx/{{cookiecutter.project_slug}}"
+  key: "{{cookiecutter.project_slug}}-key"
+  baseImage: "mibexx/mbxai-service:latest"
+  port: 5000
+  expose: false
+  runCommand: ["service"]
+  customEnvVars:
+    - "{{cookiecutter.project_slug.upper()}}_NAME": "{{cookiecutter.project_name}}"
+    - "{{cookiecutter.project_slug.upper()}}_LOG_LEVEL": "INFO"
+  customSecrets:
+    - "{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY": "your-openrouter-api-key"
+    - "{{cookiecutter.project_slug.upper()}}_OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1"

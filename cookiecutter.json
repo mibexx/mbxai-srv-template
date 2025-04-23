@@ -1,0 +1,15 @@
+{
+  "project_name": "MBX AI Service",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "package_name": "{{ cookiecutter.project_slug }}",
+  "description": "An AI Service that can be launched in the Mibexx AI Orchestrator to expose ai features",
+  "author_name": "Mike Bertram",
+  "author_email": "contact@mibexx.de",
+  "python_version": "3.12",
+  "use_pytest": "y",
+  "use_mypy": "y",
+  "use_ruff": "y",
+  "use_docker": "y",
+  "create_venv": "y",
+  "open_source_license": ["MIT"]
+} 

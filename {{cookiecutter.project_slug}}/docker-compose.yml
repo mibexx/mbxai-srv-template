@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  { { cookiecutter.project_slug } }:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - "{{cookiecutter.project_slug.upper()}}_NAME={{cookiecutter.project_name}}"
+      - "{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=20"
+      - "{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY=${OPENROUTER_API_KEY}"
+      - "{{cookiecutter.project_slug.upper()}}_OPENROUTER_BASE_URL=https://openrouter.ai/api/v1"
+    volumes:
+      - ./src:/app/src
+    restart: unless-stopped
