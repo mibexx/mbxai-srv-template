@@ -117,8 +117,4 @@ class MbxDefinitionBuilder:
             
             definitions.append(definition)
             
-        return definitions 
-    
-    
-    http://hello-world.mbxai-srv.svc.cluster.local
-    http://hello-world.mbxai-srv.srv.cluster.local:5000/mbxai-definition
+        return definitions
