@@ -4,7 +4,6 @@ from typing import Dict, List, Any
 
 from ..config import get_config
 from .definition import MbxDefinitionBuilder
-from .echo import EchoRequest, EchoResponse
 from ..project.api import router as project_router
 
 # Initialize the FastAPI app
@@ -31,23 +30,6 @@ async def ident() -> IdentResponse:
     return IdentResponse(
         name=config.name,
         version=config.version,
-    )
-
-
-@app.post("/echo", response_model=EchoResponse)
-async def echo(request: EchoRequest) -> EchoResponse:
-    """Echo the incoming message.
-
-    This is a sample endpoint that demonstrates the use of Pydantic models
-    for request and response validation.
-    """
-    # Process the request
-    repeated_message = request.message * request.count
-
-    # Create and return the response
-    return EchoResponse(
-        response=repeated_message,
-        request_length=len(request.message),
     )
 
 

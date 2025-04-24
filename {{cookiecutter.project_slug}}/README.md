@@ -50,28 +50,6 @@ Returns basic service identity information:
 }
 ```
 
-### POST /echo
-
-Sample endpoint for testing that echoes the provided message:
-
-Request:
-
-```json
-{
-  "message": "Hello, world!",
-  "count": 3
-}
-```
-
-Response:
-
-```json
-{
-  "response": "Hello, world!Hello, world!Hello, world!",
-  "request_length": 13
-}
-```
-
 ### POST /api/hello
 
 Project-level hello world endpoint demonstrating the use of FastAPI routers and Pydantic models:
