@@ -1,0 +1,483 @@
+[
+    {
+        "label": "inspect",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "inspect",
+        "description": "inspect",
+        "detail": "inspect",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Set",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRoute",
+        "importPath": "fastapi.routing",
+        "description": "fastapi.routing",
+        "isExtraImport": true,
+        "detail": "fastapi.routing",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "create_model",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Enum",
+        "importPath": "enum",
+        "description": "enum",
+        "isExtraImport": true,
+        "detail": "enum",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncOpenAI",
+        "importPath": "openai",
+        "description": "openai",
+        "isExtraImport": true,
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "OpenAIError",
+        "importPath": "openai",
+        "description": "openai",
+        "isExtraImport": true,
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "NOT_GIVEN",
+        "importPath": "openai._types",
+        "description": "openai._types",
+        "isExtraImport": true,
+        "detail": "openai._types",
+        "documentation": {}
+    },
+    {
+        "label": "importlib.metadata",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "importlib.metadata",
+        "description": "importlib.metadata",
+        "detail": "importlib.metadata",
+        "documentation": {}
+    },
+    {
+        "label": "lru_cache",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "BaseSettings",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "SettingsConfigDict",
+        "importPath": "pydantic_settings",
+        "description": "pydantic_settings",
+        "isExtraImport": true,
+        "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "MbxDefinitionBuilder",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.definition",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.definition",
+        "peekOfCode": "class MbxDefinitionBuilder:\n    \"\"\"Builder for API definition information.\n    This class extracts information about API endpoints including:\n    - Path\n    - HTTP Method\n    - Request schema\n    - Response schema\n    It excludes specified endpoints from the definition.\n    \"\"\"\n    def __init__(self, app: FastAPI, excluded_paths: Optional[Set[str]] = None):",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.definition",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "peekOfCode": "def main():\n    \"\"\"Run the FastAPI server.\"\"\"\n    parser = argparse.ArgumentParser(description=f\"Run the {config.name} API server\")\n    parser.add_argument(\n        \"--host\", type=str, default=\"0.0.0.0\", help=\"Host to bind the server to\"\n    )\n    parser.add_argument(\n        \"--port\", type=int, default=5000, help=\"Port to bind the server to\"\n    )\n    parser.add_argument(",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "peekOfCode": "config = get_config()\nlogging.basicConfig(\n    level=config.log_level,\n    format=\"%(asctime)s - %(levelname)s - %(name)s:%(lineno)d - %(message)s\",\n    handlers=[\n        logging.StreamHandler(),\n    ],\n)\nlogger = logging.getLogger(__name__)\ndef main():",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef main():\n    \"\"\"Run the FastAPI server.\"\"\"\n    parser = argparse.ArgumentParser(description=f\"Run the {config.name} API server\")\n    parser.add_argument(\n        \"--host\", type=str, default=\"0.0.0.0\", help=\"Host to bind the server to\"\n    )\n    parser.add_argument(\n        \"--port\", type=int, default=5000, help=\"Port to bind the server to\"\n    )",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.run",
+        "documentation": {}
+    },
+    {
+        "label": "IdentResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "peekOfCode": "class IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str\n    version: str\n@app.get(\"/ident\", response_model=IdentResponse)\nasync def ident() -> IdentResponse:\n    \"\"\"Return basic service identity information.\"\"\"\n    config = get_config()\n    return IdentResponse(\n        name=config.name,",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "peekOfCode": "app = FastAPI(\n    title=\"{{cookiecutter.project_name}}\",\n    description=\"{{cookiecutter.description}}\",\n)\n# Include project routers\napp.include_router(project_router)\nclass IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str\n    version: str",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "OpenRouterModel",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
+        "peekOfCode": "class OpenRouterModel(Enum):\n    \"\"\"Available models from OpenRouter.\n    This enum can be extended or modified to add custom models as needed.\n    \"\"\"\n    GPT_4O = \"openai/gpt-4o\"\n    GPT_41 = \"openai/gpt-4.1\"\n    GPT_4O_MINI = \"openai/gpt-4o-mini\"\n    # Additional models can be added here\n    # ANTHROPIC_CLAUDE_3_OPUS = \"anthropic/claude-3-opus-20240229\"\n    # ANTHROPIC_CLAUDE_3_SONNET = \"anthropic/claude-3-sonnet-20240229\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
+        "documentation": {}
+    },
+    {
+        "label": "OpenRouterApiClient",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "peekOfCode": "class OpenRouterApiClient:\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,\n    ) -> None:\n        \"\"\"\n        Initializes the OpenRouterApiClient with the specified model.\n        Args:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass OpenRouterApiClient:\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,\n    ) -> None:\n        \"\"\"\n        Initializes the OpenRouterApiClient with the specified model.",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
+        "documentation": {}
+    },
+    {
+        "label": "HelloRequest",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "peekOfCode": "class HelloRequest(BaseModel):\n    \"\"\"Hello world request model.\"\"\"\n    name: str = Field(\"World\", description=\"Name to greet\")\nclass HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:\n    \"\"\"A simple hello world endpoint.",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "documentation": {}
+    },
+    {
+        "label": "HelloResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "peekOfCode": "class HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:\n    \"\"\"A simple hello world endpoint.\n    This is an example of a project-level endpoint that is automatically\n    included in the main API.\n    \"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"api\"])\nclass HelloRequest(BaseModel):\n    \"\"\"Hello world request model.\"\"\"\n    name: str = Field(\"World\", description=\"Name to greet\")\nclass HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
+        "documentation": {}
+    },
+    {
+        "label": "ApplicationConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class ApplicationConfig(BaseSettings):\n    \"\"\"Application configuration.\"\"\"\n    name: str = \"{{cookiecutter.project_name}}\"\n    version: str = Field(default_factory=_get_version)\n    log_level: int = logging.INFO\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME,\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "OpenRouterAPIConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class OpenRouterAPIConfig(BaseSettings):\n    \"\"\"OpenRouter API configuration.\"\"\"\n    api_key: str\n    base_url: str = \"https://openrouter.ai/api/v1\"\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME + \"OPENROUTER_\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_config() -> ApplicationConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return ApplicationConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_openrouter_api_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "ROOT_DIR",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "ROOT_DIR = Path(__file__).parent.parent.parent\nSERVICE_NAME = \"{{cookiecutter.project_slug.upper()}}_\"\ndef _get_version() -> str:\n    \"\"\"Get the package version.\"\"\"\n    try:\n        return importlib.metadata.version(\"{{cookiecutter.package_name}}\")\n    except importlib.metadata.PackageNotFoundError:\n        return \"0.1.0\"  # Default during development\nclass ApplicationConfig(BaseSettings):\n    \"\"\"Application configuration.\"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "SERVICE_NAME",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "SERVICE_NAME = \"{{cookiecutter.project_slug.upper()}}_\"\ndef _get_version() -> str:\n    \"\"\"Get the package version.\"\"\"\n    try:\n        return importlib.metadata.version(\"{{cookiecutter.package_name}}\")\n    except importlib.metadata.PackageNotFoundError:\n        return \"0.1.0\"  # Default during development\nclass ApplicationConfig(BaseSettings):\n    \"\"\"Application configuration.\"\"\"\n    name: str = \"{{cookiecutter.project_name}}\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    }
+]

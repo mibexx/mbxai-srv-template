@@ -1,7 +1,7 @@
 apiVersion: mbxai.cloud/v1
 kind: MbxAiResource
 metadata:
-  name: { { cookiecutter.project_slug } }
+  name: "{{cookiecutter.project_slug}}"
   namespace: mbxai-sandbox
 spec:
   name: "{{cookiecutter.project_name}}"
