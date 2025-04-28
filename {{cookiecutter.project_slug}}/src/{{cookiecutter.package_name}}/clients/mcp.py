@@ -10,8 +10,6 @@ from typing import (
     Type,
     Union,
     AsyncGenerator,
-    Dict,
-    List,
 )
 
 from openai import AsyncOpenAI, OpenAIError
@@ -58,9 +56,9 @@ class McpClient:
         self.retry_delay = retry_delay
         
         # MCP-specific attributes
-        self._mcp_clients: Dict[str, Client] = {}  # Map of tool name to MCP client
-        self._available_tools: List[Dict[str, Any]] = []  # List of available tools
-        self._messages: List[Dict[str, Any]] = []  # Conversation history
+        self._mcp_clients: dict[str, Client] = {}  # Map of tool name to MCP client
+        self._available_tools: list[dict[str, Any]] = []  # List of available tools
+        self._messages: list[dict[str, Any]] = []  # Conversation history
         self._http_client = httpx.AsyncClient(timeout=30.0)
         
     async def add_mcp_server(self, server_params: Union[StdioServerParameters, str]) -> None:
@@ -157,12 +155,12 @@ class McpClient:
             logger.error(f"Error connecting to MCP server at {server_url}: {e}")
             raise
     
-    def get_available_tools(self) -> List[Dict[str, Any]]:
+    def get_available_tools(self) -> list[dict[str, Any]]:
         """
         Get all available tools from connected MCP servers.
         
         Returns:
-            List[Dict[str, Any]]: A list of available tools.
+            list[dict[str, Any]]: A list of available tools.
         """
         return self._available_tools.copy()
     
@@ -315,8 +313,8 @@ class McpClient:
     async def _call_llm(
         self,
         model_value: str,
-        messages: List[Dict[str, Any]],
-        extra_headers: Dict[str, str],
+        messages: list[dict[str, Any]],
+        extra_headers: dict[str, str],
         response_format=None,
         structured_output=None,
         tools=None,
@@ -372,27 +370,27 @@ class McpClient:
     
     async def agent(
         self,
-        messages: List[Dict[str, str]],
-        structured_output: Optional[Union[Type[BaseModel], Dict[str, Any]]] = None,
+        messages: list[dict[str, str]],
+        structured_output: Optional[Union[Type[BaseModel], dict[str, Any]]] = None,
         model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        extra_headers: Optional[dict[str, str]] = None,
         max_iterations: int = 5,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Run an agent that can use tools from connected MCP servers.
         
         Args:
-            messages (List[Dict[str, str]]): A list of messages to send to the chat.
-            structured_output (Optional[Union[Type[BaseModel], Dict[str, Any]]]): 
+            messages (list[dict[str, str]]): A list of messages to send to the chat.
+            structured_output (Optional[Union[Type[BaseModel], dict[str, Any]]]): 
                 - If a Pydantic model class is provided, it will be used for structured parsing.
                 - If a dict is provided, it will be used as a response format for chat completion.
                 - If None, a regular chat completion will be performed.
             model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default model.
-            extra_headers (Optional[Dict[str, str]]): Additional headers to include in the API request.
+            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request.
             max_iterations (int): Maximum number of iterations for the agent loop, defaults to 5.
             
         Returns:
-            Dict[str, Any]: A dictionary containing the response content, parsed response (if structured_output is a Pydantic model),
+            dict[str, Any]: A dictionary containing the response content, parsed response (if structured_output is a Pydantic model),
                           tool calls, and tool results if any.
         """
         model = model or self.default_model
@@ -471,27 +469,27 @@ class McpClient:
     
     async def agent_stream(
         self,
-        messages: List[Dict[str, str]],
-        structured_output: Optional[Union[Type[BaseModel], Dict[str, Any]]] = None,
+        messages: list[dict[str, str]],
+        structured_output: Optional[Union[Type[BaseModel], dict[str, Any]]] = None,
         model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[Dict[str, str]] = None,
+        extra_headers: Optional[dict[str, str]] = None,
         max_iterations: int = 5,
-    ) -> AsyncGenerator[Dict[str, Any], None]:
+    ) -> AsyncGenerator[dict[str, Any], None]:
         """
         Stream the agent's responses, yielding each step of the process.
         
         Args:
-            messages (List[Dict[str, str]]): A list of messages to send to the chat.
-            structured_output (Optional[Union[Type[BaseModel], Dict[str, Any]]]): 
+            messages (list[dict[str, str]]): A list of messages to send to the chat.
+            structured_output (Optional[Union[Type[BaseModel], dict[str, Any]]]): 
                 - If a Pydantic model class is provided, it will be used for structured parsing.
                 - If a dict is provided, it will be used as a response format for chat completion.
                 - If None, a regular chat completion will be performed.
             model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default model.
-            extra_headers (Optional[Dict[str, str]]): Additional headers to include in the API request.
+            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request.
             max_iterations (int): Maximum number of iterations for the agent loop, defaults to 5.
             
         Yields:
-            Dict[str, Any]: A dictionary containing the current state of the agent.
+            dict[str, Any]: A dictionary containing the current state of the agent.
         """
         model = model or self.default_model
         headers = {
