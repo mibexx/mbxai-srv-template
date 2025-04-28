@@ -1,229 +1,390 @@
-# {{cookiecutter.project_name}}
+# MIBEXX AI Service Template
 
-{{cookiecutter.description}}
+A template for creating AI services with FastAPI, Pydantic, SQLAlchemy, and Docker support.
 
 ## Features
 
-- FastAPI-based REST API
-- Configuration via environment variables and .env files
-- Identity endpoint at `/ident`
-- Command-line arguments for server configuration
-- OpenRouter AI API client with retry logic and structured output support
-- Configurable OpenRouter models through a dedicated models module
-- Kubernetes deployment via MbxAiResource CustomResource
-- Automatic API definition generation via `/mbxai-definition` endpoint
-- Project-level API organization for better code structure
-- Standardized Pydantic models for all requests and responses
+- FastAPI for high-performance API development
+- Pydantic for data validation and settings management
+- SQLAlchemy for database operations
+- Docker support for containerization
+- OpenRouter API client for AI model interactions
+- Model Context Protocol (MCP) client for tool discovery and execution
+- Comprehensive testing setup with pytest
+- Code quality tools: mypy, ruff
+- GitHub Actions for CI/CD
 
-## Installation
+## Project Structure
 
-This project uses uv for dependency management.
+The template creates a well-organized project structure:
 
-```bash
-uv sync
+```
+{{cookiecutter.project_slug}}/
+├── src/
+│   └── {{cookiecutter.package_name}}/
+│       ├── api/                  # Core API functionality
+│       │   ├── definition.py     # API definition generation
+│       │   ├── run.py            # Server startup
+│       │   └── server.py         # FastAPI server configuration
+│       ├── clients/              # Client libraries
+│       │   ├── mcp.py            # Model Context Protocol client
+│       │   ├── models.py         # Model definitions
+│       │   └── openrouter.py     # OpenRouter API client
+│       ├── project/              # Project-specific code
+│       │   └── api.py            # Project API endpoints
+│       ├── config.py             # Configuration management
+│       └── __init__.py           # Package initialization
+├── tests/                        # Test suite
+├── data/                         # Data storage
+├── logs/                         # Log files
+├── kubernetes/                   # Kubernetes deployment files
+├── Dockerfile                    # Docker configuration
+├── docker-compose.yml            # Docker Compose configuration
+├── pyproject.toml                # Project metadata and dependencies
+└── README.md                     # This file
 ```
 
 ## Usage
 
-Run the service with:
+### Creating a New Project
 
 ```bash
-uv run service
+cookiecutter gh:mibexx/mbxai-srv-template
+```
+
+Follow the prompts to configure your project.
+
+### Running the Service
+
+```bash
+# Install dependencies
+pip install -e .
+
+# Run the service
+python -m src.{{cookiecutter.package_name}}.api.run
 ```
 
 Or with command-line arguments:
 
 ```bash
-uv run service -- --host 127.0.0.1 --port 5000 --reload --workers 2
+python -m src.{{cookiecutter.package_name}}.api.run --host 127.0.0.1 --port 5000 --reload
 ```
 
-## API Endpoints
-
-### GET /ident
-
-Returns basic service identity information:
-
-```json
-{
-  "name": "{{cookiecutter.project_name}}",
-  "version": "0.1.0"
-}
-```
-
-### POST /api/hello
-
-Project-level hello world endpoint demonstrating the use of FastAPI routers and Pydantic models:
-
-Request:
-
-```json
-{
-  "name": "World"
-}
-```
-
-Response:
-
-```json
-{
-  "message": "Hello, World!",
-  "name": "World"
-}
-```
-
-### GET /mbxai-definition
-
-Returns the definition of all API endpoints, including their paths, methods, request schemas, and response schemas. This is useful for automatic client generation and documentation.
-
-Example response:
-
-```json
-[
-  {
-    "endpoint": "/echo",
-    "method": "POST",
-    "request_schema": {
-      "title": "EchoRequest",
-      "type": "object",
-      "properties": {
-        "message": {
-          "title": "Message",
-          "type": "string",
-          "description": "Message to echo back"
-        },
-        "count": {
-          "title": "Count",
-          "type": "integer",
-          "description": "Number of times to repeat the message",
-          "default": 1
-        }
-      },
-      "required": ["message"]
-    },
-    "response_schema": {
-      "title": "EchoResponse",
-      "type": "object",
-      "properties": {
-        "response": {
-          "title": "Response",
-          "type": "string",
-          "description": "Echoed message"
-        },
-        "request_length": {
-          "title": "Request Length",
-          "type": "integer",
-          "description": "Length of the original message"
-        }
-      },
-      "required": ["response", "request_length"]
-    }
-  }
-]
-```
-
-## Project Structure
-
-The service is organized into several key directories:
-
-- `src/{{cookiecutter.package_name}}/api/`: Core API functionality including the main FastAPI server
-- `src/{{cookiecutter.package_name}}/project/`: Project-level API endpoints and business logic
-- `src/{{cookiecutter.package_name}}/clients/`: Client libraries for external services (like OpenRouter)
-- `config/`: Configuration files
-- `data/`: Data storage directory
-- `logs/`: Log files
-
-To add new project-level endpoints:
-
-1. Define your API in `src/{{cookiecutter.package_name}}/project/api.py` or create new modules
-2. The router is automatically included in the main API
-
-## Configuration
-
-Configuration is handled through environment variables with the prefix `{{cookiecutter.project_slug.upper()}}_` and through `.env` files in the project root.
-
-Available settings:
-
-- `NAME`: Service name (default: "{{cookiecutter.project_name}}")
-- `VERSION`: Service version (default: package version or 0.1.0)
-- `LOG_LEVEL`: Python logging level (default: 20 - INFO)
-
-### OpenRouter Integration
-
-This service includes a pre-configured OpenRouter API client. To use it, set the following environment variables:
-
-```
-{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY=your_api_key_here
-{{cookiecutter.project_slug.upper()}}_OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
-```
-
-Available models are defined in `src/{{cookiecutter.package_name}}/clients/models.py` and can be easily extended to add custom models.
-
-Example:
+### Docker Deployment
 
 ```bash
-export {{cookiecutter.project_slug.upper()}}_NAME="Custom Service Name"
-export {{cookiecutter.project_slug.upper()}}_LOG_LEVEL=10  # DEBUG
-uv run service
-```
-
-Or in a `.env` file:
-
-```
-{{cookiecutter.project_slug.upper()}}_NAME=Custom Service Name
-{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=10
-{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY=your_api_key_here
-```
-
-## Deployment
-
-### Docker
-
-Build and run the service with Docker:
-
-```bash
+# Build the Docker image
 docker build -t {{cookiecutter.project_slug}} .
+
+# Run the container
 docker run -p 5000:5000 {{cookiecutter.project_slug}}
 ```
 
-Or use docker-compose:
+Or with docker-compose:
 
 ```bash
 docker-compose up
 ```
 
-### Kubernetes
+### API Endpoints
 
-This service can be deployed to a Kubernetes cluster using the MbxAiResource CustomResource Definition:
+The template includes several API endpoints:
 
-```bash
-kubectl apply -f kubernetes/mbxai-resource.yaml
+- `GET /ident`: Returns basic service identity information
+- `GET /mbxai-definition`: Returns the definition of all API endpoints
+- Project-specific endpoints in the `/api` path
+
+### AI Clients
+
+The template includes two AI clients for different use cases:
+
+1. **OpenRouter API Client** (`openrouter.py`): A direct client for the OpenRouter API that supports chat completions, structured output parsing, and tool execution.
+
+2. **Model Context Protocol Client** (`mcp.py`): A client that implements the Model Context Protocol for tool discovery and execution, providing a more standardized approach to tool handling.
+
+Both clients can be used independently or together, depending on your needs.
+
+### OpenRouter API Client
+
+The OpenRouter API client supports:
+
+- Chat completions
+- Structured output parsing
+- Tool registration and execution
+- Agent mode with multiple rounds of tool calls
+- Streaming agent responses
+
+#### Basic Usage
+
+```python
+from mbxai.clients.openrouter import OpenRouterApiClient, OpenRouterModel
+
+# Initialize the client
+client = OpenRouterApiClient()
+
+# Send a message
+response = await client.chat_completion(
+    messages=[{"role": "user", "content": "Hello, world!"}]
+)
+print(response["content"])
 ```
 
-The CustomResource automatically deploys the service with the appropriate configuration. Modify `kubernetes/mbxai-resource.yaml` to adjust deployment parameters.
+#### Structured Output
+
+```python
+from pydantic import BaseModel
+
+class UserInfo(BaseModel):
+    name: str
+    age: int
+
+# Parse structured output
+response = await client.chat_parse(
+    messages=[{"role": "user", "content": "My name is John and I am 30 years old."}],
+    structured_output=UserInfo
+)
+print(response["parsed"])  # UserInfo(name="John", age=30)
+```
+
+#### Tool Registration
+
+```python
+async def search_database(query: str) -> str:
+    # Implement database search
+    return f"Results for: {query}"
+
+# Register a tool
+client.register_tool(
+    name="search_database",
+    description="Search the database for information",
+    function=search_database,
+    parameters={
+        "type": "object",
+        "properties": {
+            "query": {"type": "string", "description": "The search query"}
+        },
+        "required": ["query"]
+    }
+)
+```
+
+#### Agent Mode
+
+```python
+# Run an agent that can use tools
+response = await client.agent(
+    messages=[{"role": "user", "content": "Find information about John"}],
+    max_iterations=5
+)
+print(response["content"])
+print(response["tool_calls"])
+print(response["tool_results"])
+```
+
+#### Streaming Agent Responses
+
+```python
+# Stream agent responses
+async for step in client.agent_stream(
+    messages=[{"role": "user", "content": "Find information about John"}]
+):
+    if step["is_final"]:
+        print("Final response:", step["content"])
+    else:
+        print(f"Iteration {step['iteration']}:", step["content"])
+        if step["tool_calls"]:
+            print("Tool calls:", step["tool_calls"])
+            print("Tool results:", step["tool_results"])
+```
+
+### Model Context Protocol (MCP) Client
+
+The MCP client supports:
+
+- Connecting to MCP servers
+- Discovering tools from servers
+- Executing tools through the MCP protocol
+- Agent mode with MCP tools
+- Streaming agent responses
+
+#### Basic Usage
+
+```python
+from mbxai.clients.mcp import McpClient
+from modelcontextprotocol import StdioServerParameters
+
+# Initialize the client
+client = McpClient()
+
+# Connect to the weather tool server
+server_params = StdioServerParameters(
+    command=["python", "weather_tool_server.py"],
+    env={"PYTHONPATH": "."}
+)
+await client.add_mcp_server(server_params)
+
+# Get available tools
+tools = client.get_available_tools()
+print("Available tools:", [tool["function"]["name"] for tool in tools])
+```
+
+#### Agent Mode with MCP Tools
+
+```python
+# Run an agent that can use MCP tools
+response = await client.agent(
+    messages=[{"role": "user", "content": "What's the weather like in Paris?"}],
+    max_iterations=5
+)
+print(response["content"])
+print(response["tool_calls"])
+print(response["tool_results"])
+```
+
+#### Streaming Agent Responses
+
+```python
+# Stream agent responses
+async for step in client.agent_stream(
+    messages=[{"role": "user", "content": "What's the weather like in Paris?"}]
+):
+    if step["is_final"]:
+        print("Final response:", step["content"])
+    else:
+        print(f"Iteration {step['iteration']}:", step["content"])
+        if step["tool_calls"]:
+            print("Tool calls:", step["tool_calls"])
+            print("Tool results:", step["tool_results"])
+```
+
+### Creating a Simple Tool
+
+Here's an example of how to create a simple tool using the MCP approach:
+
+#### 1. Create an MCP Server
+
+```python
+# weather_tool_server.py
+import asyncio
+import json
+from modelcontextprotocol import Server, StdioServerTransport, Tool
+
+# Define the tool
+weather_tool = Tool(
+    name="get_weather",
+    description="Get the current weather for a location",
+    input_schema={
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "The city and country, e.g. 'London, UK'"
+            }
+        },
+        "required": ["location"]
+    }
+)
+
+# Define the tool handler
+async def get_weather_handler(request):
+    location = request.arguments.get("location", "Unknown")
+    # In a real implementation, you would call a weather API
+    return {
+        "location": location,
+        "temperature": 22,
+        "condition": "Sunny",
+        "humidity": 65
+    }
+
+# Create the server
+server = Server(name="weather-tool-server", version="1.0.0")
+server.add_tool(weather_tool, get_weather_handler)
+
+# Run the server
+async def main():
+    transport = StdioServerTransport()
+    await server.serve(transport)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+#### 2. Use the Tool with the MCP Client
+
+```python
+from mbxai.clients.mcp import McpClient
+from modelcontextprotocol import StdioServerParameters
+
+# Initialize the client
+client = McpClient()
+
+# Connect to the weather tool server
+server_params = StdioServerParameters(
+    command=["python", "weather_tool_server.py"],
+    env={"PYTHONPATH": "."}
+)
+await client.add_mcp_server(server_params)
+
+# Run an agent that uses the weather tool
+response = await client.agent(
+    messages=[{"role": "user", "content": "What's the weather like in Paris?"}],
+    max_iterations=3
+)
+print(response["content"])
+```
+
+#### 3. Create a Tool with the OpenRouter Client
+
+```python
+from mbxai.clients.openrouter import OpenRouterApiClient
+
+# Initialize the client
+client = OpenRouterApiClient()
+
+# Define the tool handler
+async def get_weather(query: str) -> str:
+    location = query
+    # In a real implementation, you would call a weather API
+    return json.dumps({
+        "location": location,
+        "temperature": 22,
+        "condition": "Sunny",
+        "humidity": 65
+    })
+
+# Register the tool
+client.register_tool(
+    name="get_weather",
+    description="Get the current weather for a location",
+    function=get_weather,
+    parameters={
+        "type": "object",
+        "properties": {
+            "location": {"type": "string", "description": "The city and country, e.g. 'London, UK'"}
+        },
+        "required": ["location"]
+    }
+)
+
+# Run an agent that uses the weather tool
+response = await client.agent(
+    messages=[{"role": "user", "content": "What's the weather like in Paris?"}],
+    max_iterations=3
+)
+print(response["content"])
+```
+
+## Configuration
+
+The service can be configured using environment variables with the prefix `{{cookiecutter.project_slug.upper()}}_`:
+
+```
+{{cookiecutter.project_slug.upper()}}_NAME=Custom Service Name
+{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=10  # DEBUG
+{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY=your_api_key_here
+```
 
 ## Development
-
-{% if cookiecutter.use_ruff == 'y' %}
-
-### Linting
-
-```bash
-ruff check .
-```
-
-{% endif %}
-
-{% if cookiecutter.use_mypy == 'y' %}
-
-### Type Checking
-
-```bash
-mypy src
-```
-
-{% endif %}
-
-{% if cookiecutter.use_pytest == 'y' %}
 
 ### Testing
 
@@ -231,4 +392,23 @@ mypy src
 pytest
 ```
 
-{% endif %}
+### Linting
+
+```bash
+ruff check .
+```
+
+### Type Checking
+
+```bash
+mypy src
+```
+
+## Requirements
+
+- Python 3.12+
+- Cookiecutter 2.5.0+
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

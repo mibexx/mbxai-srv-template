@@ -1,243 +1,188 @@
 # MIBEXX AI Service Template
 
-A cookiecutter template for creating AI Services that can be launched in the Mibexx AI Orchestrator to expose ai features.
+A template for creating AI services with FastAPI, Pydantic, SQLAlchemy, and Docker support.
 
 ## Features
 
-- FastAPI for REST API implementation
-- Pydantic for data validation
-- SQLAlchemy for ORM
-- Alembic for database migrations
-- Docker support
-- Testing with pytest
-- Type checking with mypy
-- Code linting with ruff
-- Modern Python 3.12+ features
-- OpenRouter API client with tool and agent support
+- FastAPI for high-performance API development
+- Pydantic for data validation and settings management
+- SQLAlchemy for database operations
+- Docker support for containerization
+- OpenRouter API client for AI model interactions
+- Model Context Protocol (MCP) client for tool and agent handling
+- Comprehensive testing setup with pytest
+- Code quality tools: mypy, ruff
+- GitHub Actions for CI/CD
 
 ## Usage
+
+### Creating a New Project
 
 ```bash
 cookiecutter gh:mibexx/mbxai-srv-template
 ```
 
-## Requirements
+Follow the prompts to configure your project:
 
-- Python 3.12+
-- Cookiecutter 2.1.0+
+- `project_name`: The name of your project
+- `project_slug`: The slug for your project (used in paths and imports)
+- `package_name`: The name of your Python package
+- `description`: A short description of your project
+- `author_name`: Your name
+- `author_email`: Your email
+- `open_source_license`: The license for your project
+- `use_pytest`: Whether to include pytest for testing
+- `use_mypy`: Whether to include mypy for type checking
+- `use_ruff`: Whether to include ruff for linting
 
-## OpenRouter API Client Guide
+### Project Structure
 
-The template includes a powerful OpenRouter API client that supports both chat completions and structured parsing, with advanced tool and agent capabilities.
+The template creates a well-organized project structure:
 
-### Basic Usage
+```
+your-project/
+├── src/
+│   └── your_package/
+│       ├── api/                  # Core API functionality
+│       ├── clients/              # Client libraries
+│       ├── project/              # Project-specific code
+│       ├── config.py             # Configuration management
+│       └── __init__.py           # Package initialization
+├── tests/                        # Test suite
+├── data/                         # Data storage
+├── logs/                         # Log files
+├── kubernetes/                   # Kubernetes deployment files
+├── Dockerfile                    # Docker configuration
+├── docker-compose.yml            # Docker Compose configuration
+├── pyproject.toml                # Project metadata and dependencies
+└── README.md                     # Project documentation
+```
+
+## AI Clients
+
+### OpenRouter API Client
+
+The template includes an OpenRouter API client for interacting with AI models. Here's how to use it:
 
 ```python
-from {{cookiecutter.package_name}}.clients.openrouter import OpenRouterApiClient, OpenRouterModel
+from your_package.clients.openrouter import OpenRouterApiClient, OpenRouterModel
 
 # Initialize the client
 client = OpenRouterApiClient(model=OpenRouterModel.GPT_41)
 
 # Simple chat completion
-messages = [
-    {"role": "user", "content": "Tell me about Python programming language"}
-]
-response = await client.chat_completion(messages)
-print(response["content"])
+response = await client.chat_completion(
+    messages=[
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+)
+print(response.choices[0].message.content)
 
-# Structured output with chat_parse
-from pydantic import BaseModel, Field
-from typing import list
+# Chat completion with structured output
+from pydantic import BaseModel
 
-class ProgrammingLanguage(BaseModel):
-    name: str = Field(..., description="The name of the programming language")
-    description: str = Field(..., description="A brief description of the language")
-    features: list[str] = Field(..., description="Key features of the language")
+class UserInfo(BaseModel):
+    name: str
+    age: int
 
-structured_output = ProgrammingLanguage
 response = await client.chat_parse(
-    messages,
-    structured_output=structured_output
+    messages=[
+        {"role": "user", "content": "My name is John and I am 30 years old."}
+    ],
+    structured_output=UserInfo
 )
-print(response["parsed"])
+print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
 ```
 
-### Using Tools
+### Model Context Protocol (MCP) Client
 
-The client supports registering and using tools with the OpenRouter API:
+The template includes an MCP client for tool and agent handling. The MCP client can connect to both local and remote MCP servers.
+
+#### Connecting to MCP Servers
 
 ```python
-import json
-from typing import Any
+from your_package.clients.mcp import McpClient
+from modelcontextprotocol import StdioServerParameters
 
-# Define tool schemas
-search_schema = {
-    "type": "object",
-    "properties": {
-        "query": {
-            "type": "string",
-            "description": "The search query"
-        }
-    },
-    "required": ["query"]
-}
+# Initialize the client
+client = McpClient()
 
-summarize_schema = {
-    "type": "object",
-    "properties": {
-        "text": {
-            "type": "string",
-            "description": "The text to summarize"
-        },
-        "max_length": {
-            "type": "integer",
-            "description": "Maximum length of the summary"
-        }
-    },
-    "required": ["text"]
-}
-
-# Define tool handlers
-async def search_handler(args: dict[str, Any]) -> Any:
-    query = args["query"]
-    # Implement your search logic here
-    return f"Search results for: {query}"
-
-async def summarize_handler(args: dict[str, Any]) -> Any:
-    text = args["text"]
-    max_length = args.get("max_length", 100)
-    # Implement your summarization logic here
-    return f"Summary of {text[:max_length]}..."
-
-# Register tools
-client.register_tool("search", search_schema, search_handler)
-client.register_tool("summarize", summarize_schema, summarize_handler)
-
-# Use tools in chat completion
-messages = [
-    {"role": "user", "content": "Find information about Python and summarize it"}
-]
-response = await client.chat_completion(
-    messages,
-    call_tools=True  # Enable tool calling
+# Connect to a local MCP server
+server_params = StdioServerParameters(
+    command=["python", "path/to/your/mcp_server.py"]
 )
-print(response["content"])
-print("Tool calls:", response["tool_calls"])
+await client.add_mcp_server(server_params)
+
+# Connect to a remote MCP server
+await client.add_mcp_server("https://your-mcp-server.com/api/")
+
+# Get available tools
+tools = client.get_available_tools()
+print(f"Available tools: {[tool['function']['name'] for tool in tools]}")
 ```
 
-### Using the Agent Mode
-
-The client supports an agent mode that can execute multiple rounds of tool calls:
+#### Using the MCP Client with an Agent
 
 ```python
-# Enable agent mode to automatically execute tools
-response = await client.chat_completion(
-    messages,
-    call_tools=True,
-    use_agent=True  # Enable agent mode
+from your_package.clients.mcp import McpClient
+from pydantic import BaseModel
+
+# Initialize the client and connect to MCP servers
+client = McpClient()
+await client.add_mcp_server("https://your-mcp-server.com/api/")
+
+# Define a structured output for the agent
+class WeatherInfo(BaseModel):
+    location: str
+    temperature: float
+    conditions: str
+
+# Run the agent with structured output
+response = await client.agent(
+    messages=[
+        {"role": "user", "content": "What's the weather in New York?"}
+    ],
+    structured_output=WeatherInfo
 )
-print(response["content"])
-print("All tool calls:", response["tool_calls"])
-print("All tool results:", response["tool_results"])
+
+# Access the parsed result and tool calls
+print(f"Weather info: {response['parsed']}")
+print(f"Tool calls: {response['tool_calls']}")
+print(f"Tool results: {response['tool_results']}")
+
+# Stream the agent's responses
+async for step in client.agent_stream(
+    messages=[
+        {"role": "user", "content": "What's the weather in New York?"}
+    ],
+    structured_output=WeatherInfo
+):
+    print(f"Iteration {step['iteration']}: {step['parsed']}")
+    if step['tool_calls']:
+        print(f"Tool calls: {step['tool_calls']}")
+    if step['tool_results']:
+        print(f"Tool results: {step['tool_results']}")
+    if step['is_final']:
+        print("Agent completed")
 ```
 
-### Advanced Agent Usage
+#### MCP Client Features
 
-The agent can handle complex workflows with multiple rounds of tool calls:
+The MCP client provides the following features:
 
-```python
-# Define a more complex tool schema
-web_search_schema = {
-    "type": "object",
-    "properties": {
-        "query": {
-            "type": "string",
-            "description": "The search query"
-        },
-        "num_results": {
-            "type": "integer",
-            "description": "Number of results to return"
-        }
-    },
-    "required": ["query"]
-}
+- **Multiple Server Connections**: Connect to multiple MCP servers simultaneously
+- **Automatic Tool Discovery**: Automatically discover tools from connected servers
+- **Structured Output**: Support for structured output using Pydantic models
+- **Agent Loop**: Run an agent that can use tools from connected servers
+- **Streaming**: Stream the agent's responses as they are generated
+- **Retry Logic**: Automatic retry for failed operations
+- **Error Handling**: Comprehensive error handling for API calls and tool execution
 
-data_analysis_schema = {
-    "type": "object",
-    "properties": {
-        "data": {
-            "type": "string",
-            "description": "The data to analyze"
-        },
-        "analysis_type": {
-            "type": "string",
-            "enum": ["sentiment", "keywords", "summary"],
-            "description": "Type of analysis to perform"
-        }
-    },
-    "required": ["data", "analysis_type"]
-}
+## Requirements
 
-# Register the tools
-client.register_tool("web_search", web_search_schema, web_search_handler)
-client.register_tool("analyze_data", data_analysis_schema, analyze_data_handler)
+- Python 3.12+
+- Cookiecutter 2.5.0+
 
-# Use the agent with a complex task
-messages = [
-    {"role": "user", "content": "Search for recent news about AI, analyze the sentiment of the results, and summarize the key points"}
-]
+## License
 
-# The agent will:
-# 1. Call web_search to find news
-# 2. Call analyze_data with sentiment analysis on the results
-# 3. Call analyze_data with summary on the results
-# 4. Provide a final response
-response = await client.chat_completion(
-    messages,
-    call_tools=True,
-    use_agent=True
-)
-print(response["content"])
-```
-
-### Tool Choice Control
-
-You can control which tools the model can use:
-
-```python
-# Set tool choice to "auto" (default)
-client.set_tool_choice("auto")
-
-# Set tool choice to "none" to disable tool calling
-client.set_tool_choice("none")
-
-# Set tool choice to a specific tool
-client.set_tool_choice("search")
-
-# Override tool choice for a specific request
-response = await client.chat_completion(
-    messages,
-    call_tools=True,
-    tool_choice="summarize"  # Override for this request only
-)
-```
-
-### Structured Output with Tools
-
-You can combine structured output with tools:
-
-```python
-class ResearchSummary(BaseModel):
-    topic: str = Field(..., description="The research topic")
-    findings: list[str] = Field(..., description="Key findings from the research")
-    sources: list[str] = Field(..., description="Sources of information")
-
-structured_output = ResearchSummary.model_json_schema()
-response = await client.chat_parse(
-    messages,
-    structured_output=structured_output,
-    call_tools=True,
-    use_agent=True
-)
-print(response["parsed"])
-```
+This project is licensed under the MIT License - see the LICENSE file for details.

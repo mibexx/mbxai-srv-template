@@ -16,6 +16,7 @@ dependencies = [
     "uvicorn>=0.27.1",
     "python-dotenv>=1.0.0",
     "openai>=1.66.0",
+    "modelcontextprotocol>=0.1.0",
     {% if cookiecutter.use_pytest == 'y' -%}
     "pytest>=8.0.0",
     {% endif -%}

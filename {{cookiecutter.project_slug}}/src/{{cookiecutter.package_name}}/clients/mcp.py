@@ -1,6 +1,7 @@
+import json
 import logging
 import asyncio
-import json
+import httpx
 from typing import (
     Any,
     Optional,
@@ -9,14 +10,13 @@ from typing import (
     Type,
     Union,
     AsyncGenerator,
+    Dict,
+    List,
 )
 
-from openai import (
-    AsyncOpenAI,
-    OpenAIError,
-)
-from openai._types import NOT_GIVEN
+from openai import AsyncOpenAI, OpenAIError
 from pydantic import BaseModel
+from modelcontextprotocol import Client, StdioClientTransport, StdioServerParameters
 
 from ..config import get_openrouter_api_config
 from .models import OpenRouterModel
@@ -25,7 +25,12 @@ from .models import OpenRouterModel
 logger = logging.getLogger(__name__)
 
 
-class OpenRouterApiClient:
+class McpClient:
+    """
+    A client for the Model Context Protocol (MCP) that can connect to MCP servers,
+    discover tools, and use them with an LLM.
+    """
+    
     def __init__(
         self,
         model: OpenRouterModel = OpenRouterModel.GPT_41,
@@ -33,7 +38,7 @@ class OpenRouterApiClient:
         retry_delay: int = 2,
     ) -> None:
         """
-        Initializes the OpenRouterApiClient with the specified model.
+        Initializes the McpClient with the specified model.
 
         Args:
             model (OpenRouterModel): The model to use for API calls, defaults to GPT_41.
@@ -51,86 +56,116 @@ class OpenRouterApiClient:
         self.default_model = model
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        self._registered_tools = {}
-        self._tool_choice = "auto"
-        self._tool_handlers = {}
-
-    def register_tool(
-        self, 
-        tool_name: str, 
-        tool_schema: dict[str, Any],
-        handler: Optional[Callable[[dict[str, Any]], Awaitable[Any]]] = None
-    ) -> None:
+        
+        # MCP-specific attributes
+        self._mcp_clients: Dict[str, Client] = {}  # Map of tool name to MCP client
+        self._available_tools: List[Dict[str, Any]] = []  # List of available tools
+        self._messages: List[Dict[str, Any]] = []  # Conversation history
+        self._http_client = httpx.AsyncClient(timeout=30.0)
+        
+    async def add_mcp_server(self, server_params: Union[StdioServerParameters, str]) -> None:
         """
-        Register a tool with the OpenRouter client.
+        Connect to an MCP server and discover its tools.
         
         Args:
-            tool_name (str): The name of the tool to register.
-            tool_schema (dict[str, Any]): The JSON schema for the tool.
-            handler (Optional[Callable[[dict[str, Any]], Awaitable[Any]]]): Async function to handle tool calls.
+            server_params (Union[StdioServerParameters, str]): 
+                - If StdioServerParameters: Parameters for connecting to a local MCP server via stdio
+                - If str: URL for connecting to a remote MCP server via HTTP
         """
-        self._registered_tools[tool_name] = tool_schema
-        if handler:
-            self._tool_handlers[tool_name] = handler
-        logger.info(f"Registered tool: {tool_name}")
-
-    def unregister_tool(self, tool_name: str) -> None:
-        """
-        Unregister a tool from the OpenRouter client.
-        
-        Args:
-            tool_name (str): The name of the tool to unregister.
-        """
-        if tool_name in self._registered_tools:
-            del self._registered_tools[tool_name]
-            if tool_name in self._tool_handlers:
-                del self._tool_handlers[tool_name]
-            logger.info(f"Unregistered tool: {tool_name}")
+        if isinstance(server_params, str):
+            await self.add_http_mcp_server(server_params)
         else:
-            logger.warning(f"Attempted to unregister non-existent tool: {tool_name}")
-
-    def set_tool_choice(self, tool_choice: str) -> None:
+            await self.add_stdio_mcp_server(server_params)
+    
+    async def add_stdio_mcp_server(self, server_params: StdioServerParameters) -> None:
         """
-        Set the tool choice strategy for the client.
+        Connect to a local MCP server via stdio and discover its tools.
         
         Args:
-            tool_choice (str): The tool choice strategy. Can be "auto", "none", or a specific tool name.
+            server_params (StdioServerParameters): Parameters for connecting to the MCP server.
         """
-        self._tool_choice = tool_choice
-        logger.info(f"Set tool choice to: {tool_choice}")
-
-    def get_registered_tools(self) -> dict[str, dict[str, Any]]:
+        try:
+            # Connect to MCP server
+            transport = StdioClientTransport(server_params)
+            mcp = Client(name="mbxai-mcp-client", version="1.0.0")
+            await mcp.connect(transport)
+            
+            # Get tools from server
+            tools_result = await mcp.list_tools()
+            
+            logger.info(f"Connected to MCP server with tools: {[tool.name for tool in tools_result.tools]}")
+            
+            # Add tools to available tools
+            for tool in tools_result.tools:
+                self._mcp_clients[tool.name] = mcp
+                self._available_tools.append({
+                    "type": "function",
+                    "function": {
+                        "name": tool.name,
+                        "description": tool.description,
+                        "parameters": tool.input_schema,
+                    }
+                })
+        except Exception as e:
+            logger.error(f"Error connecting to MCP server: {e}")
+            raise
+    
+    async def add_http_mcp_server(self, server_url: str) -> None:
         """
-        Get all registered tools.
-        
-        Returns:
-            dict[str, dict[str, Any]]: A dictionary of registered tools and their schemas.
-        """
-        return self._registered_tools.copy()
-
-    async def _execute_tool(self, tool_name: str, arguments: dict[str, Any]) -> Any:
-        """
-        Execute a registered tool with the given arguments.
+        Connect to a remote MCP server via HTTP and discover its tools.
         
         Args:
-            tool_name (str): The name of the tool to execute.
-            arguments (dict[str, Any]): The arguments to pass to the tool.
-            
-        Returns:
-            Any: The result of the tool execution.
-            
-        Raises:
-            ValueError: If the tool is not registered or has no handler.
+            server_url (str): URL of the remote MCP server.
         """
-        if tool_name not in self._registered_tools:
-            raise ValueError(f"Tool '{tool_name}' is not registered")
+        try:
+            # Ensure the URL ends with a slash
+            if not server_url.endswith('/'):
+                server_url += '/'
+                
+            # Get tools from server
+            tools_url = f"{server_url}tools"
+            logger.info(f"Discovering tools from MCP server at {tools_url}")
             
-        if tool_name not in self._tool_handlers:
-            raise ValueError(f"Tool '{tool_name}' has no handler registered")
+            response = await self._http_client.get(tools_url)
+            response.raise_for_status()
             
-        handler = self._tool_handlers[tool_name]
-        return await handler(arguments)
-
+            tools_data = response.json()
+            tools = tools_data.get("tools", [])
+            
+            logger.info(f"Connected to MCP server with tools: {[tool['name'] for tool in tools]}")
+            
+            # Add tools to available tools
+            for tool in tools:
+                tool_name = tool.get("name")
+                if not tool_name:
+                    logger.warning(f"Skipping tool without name: {tool}")
+                    continue
+                    
+                self._available_tools.append({
+                    "type": "function",
+                    "function": {
+                        "name": tool_name,
+                        "description": tool.get("description", ""),
+                        "parameters": tool.get("input_schema", {}),
+                    }
+                })
+                
+                # Store the server URL for this tool
+                self._mcp_clients[tool_name] = server_url
+                
+        except Exception as e:
+            logger.error(f"Error connecting to MCP server at {server_url}: {e}")
+            raise
+    
+    def get_available_tools(self) -> List[Dict[str, Any]]:
+        """
+        Get all available tools from connected MCP servers.
+        
+        Returns:
+            List[Dict[str, Any]]: A list of available tools.
+        """
+        return self._available_tools.copy()
+    
     async def _execute_with_retry(
         self, operation_name: str, operation_func, *args, **kwargs
     ):
@@ -201,10 +236,10 @@ class OpenRouterApiClient:
             # Wait before retrying
             await asyncio.sleep(self.retry_delay * attempt)  # Exponential backoff
             logger.info(f"Retrying {operation_name}...")
-
+    
     async def _process_tool_calls(self, message, messages):
         """
-        Process tool calls from a message and execute them.
+        Process tool calls from a message and execute them using MCP clients.
         
         Args:
             message: The message containing tool calls.
@@ -229,18 +264,33 @@ class OpenRouterApiClient:
                 for tool_call in message.tool_calls
             ]
             
-            # Execute tools
+            # Execute tools using MCP clients
             for tool_call in tool_calls:
                 try:
                     tool_name = tool_call["function"]["name"]
-                    arguments = json.loads(tool_call["function"]["arguments"])
-                    result = await self._execute_tool(tool_name, arguments)
-                    tool_results.append({
-                        "tool_call_id": tool_call["id"],
-                        "role": "tool",
-                        "name": tool_name,
-                        "content": json.dumps(result)
-                    })
+                    tool_args = json.loads(tool_call["function"]["arguments"])
+                    
+                    # Get the appropriate MCP client for this tool
+                    mcp_client = self._mcp_clients.get(tool_name)
+                    if mcp_client:
+                        result = await mcp_client.call_tool({
+                            "name": tool_name,
+                            "arguments": tool_args
+                        })
+                        tool_results.append({
+                            "tool_call_id": tool_call["id"],
+                            "role": "tool",
+                            "name": tool_name,
+                            "content": result.content[0].text
+                        })
+                    else:
+                        logger.error(f"No MCP client found for tool: {tool_name}")
+                        tool_results.append({
+                            "tool_call_id": tool_call["id"],
+                            "role": "tool",
+                            "name": tool_name,
+                            "content": f"Error: No MCP client found for tool: {tool_name}"
+                        })
                 except Exception as e:
                     logger.error(f"Error executing tool {tool_call['function']['name']}: {e}")
                     tool_results.append({
@@ -261,12 +311,12 @@ class OpenRouterApiClient:
             return tool_calls, tool_results, updated_messages
             
         return tool_calls, tool_results, messages
-
+    
     async def _call_llm(
         self,
         model_value: str,
-        messages: list[dict[str, Any]],
-        extra_headers: dict[str, str],
+        messages: List[Dict[str, Any]],
+        extra_headers: Dict[str, str],
         response_format=None,
         structured_output=None,
         tools=None,
@@ -319,35 +369,30 @@ class OpenRouterApiClient:
                     params["tool_choice"] = tool_choice
                     
             return await self._client.chat.completions.create(**params)
-
+    
     async def agent(
         self,
-        messages: list[dict[str, str]],
-        structured_output: Optional[Union[Type[BaseModel], dict[str, Any]]] = None,
+        messages: List[Dict[str, str]],
+        structured_output: Optional[Union[Type[BaseModel], Dict[str, Any]]] = None,
         model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[dict[str, str]] = None,
-        call_tools: bool = False,
-        tool_choice: Optional[str] = None,
+        extra_headers: Optional[Dict[str, str]] = None,
         max_iterations: int = 5,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
-        Unified method for interacting with the OpenRouter API.
-        Automatically chooses between chat_completion and chat_parse based on whether structured_output is provided.
+        Run an agent that can use tools from connected MCP servers.
         
         Args:
-            messages (list[dict[str, str]]): A list of messages to send to the chat.
-            structured_output (Optional[Union[Type[BaseModel], dict[str, Any]]]): 
+            messages (List[Dict[str, str]]): A list of messages to send to the chat.
+            structured_output (Optional[Union[Type[BaseModel], Dict[str, Any]]]): 
                 - If a Pydantic model class is provided, it will be used for structured parsing.
                 - If a dict is provided, it will be used as a response format for chat completion.
                 - If None, a regular chat completion will be performed.
             model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default model.
-            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request.
-            call_tools (bool): Whether to include tool calls in the response, defaults to False.
-            tool_choice (Optional[str]): Override the default tool choice strategy for this request.
+            extra_headers (Optional[Dict[str, str]]): Additional headers to include in the API request.
             max_iterations (int): Maximum number of iterations for the agent loop, defaults to 5.
             
         Returns:
-            dict[str, Any]: A dictionary containing the response content, parsed response (if structured_output is a Pydantic model),
+            Dict[str, Any]: A dictionary containing the response content, parsed response (if structured_output is a Pydantic model),
                           tool calls, and tool results if any.
         """
         model = model or self.default_model
@@ -355,15 +400,6 @@ class OpenRouterApiClient:
             "Content-Type": "application/json; charset=utf-8",
             **(extra_headers or {}),
         }
-        
-        tools = None
-        if call_tools and self._registered_tools:
-            tools = [
-                {"type": "function", "function": {"name": name, "parameters": schema}}
-                for name, schema in self._registered_tools.items()
-            ]
-            
-        tool_choice_param = tool_choice or self._tool_choice
         
         # Determine if we're using structured parsing or chat completion
         is_structured_parse = False
@@ -398,8 +434,8 @@ class OpenRouterApiClient:
                 headers,
                 response_format=response_format,
                 structured_output=structured_output_schema if is_structured_parse else None,
-                tools=tools,
-                tool_choice=tool_choice_param,
+                tools=self._available_tools,
+                tool_choice="auto",
             )
             
             # Extract the message from the response
@@ -432,49 +468,36 @@ class OpenRouterApiClient:
                 "tool_calls": all_tool_calls,
                 "tool_results": all_tool_results
             }
-
+    
     async def agent_stream(
         self,
-        messages: list[dict[str, str]],
-        structured_output: Optional[Union[Type[BaseModel], dict[str, Any]]] = None,
+        messages: List[Dict[str, str]],
+        structured_output: Optional[Union[Type[BaseModel], Dict[str, Any]]] = None,
         model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[dict[str, str]] = None,
-        call_tools: bool = False,
-        tool_choice: Optional[str] = None,
+        extra_headers: Optional[Dict[str, str]] = None,
         max_iterations: int = 5,
-    ) -> AsyncGenerator[dict[str, Any], None]:
+    ) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Stream the agent's responses, yielding each step of the process.
         
         Args:
-            messages (list[dict[str, str]]): A list of messages to send to the chat.
-            structured_output (Optional[Union[Type[BaseModel], dict[str, Any]]]): 
+            messages (List[Dict[str, str]]): A list of messages to send to the chat.
+            structured_output (Optional[Union[Type[BaseModel], Dict[str, Any]]]): 
                 - If a Pydantic model class is provided, it will be used for structured parsing.
                 - If a dict is provided, it will be used as a response format for chat completion.
                 - If None, a regular chat completion will be performed.
             model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default model.
-            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request.
-            call_tools (bool): Whether to include tool calls in the response, defaults to False.
-            tool_choice (Optional[str]): Override the default tool choice strategy for this request.
+            extra_headers (Optional[Dict[str, str]]): Additional headers to include in the API request.
             max_iterations (int): Maximum number of iterations for the agent loop, defaults to 5.
             
         Yields:
-            dict[str, Any]: A dictionary containing the current state of the agent.
+            Dict[str, Any]: A dictionary containing the current state of the agent.
         """
         model = model or self.default_model
         headers = {
             "Content-Type": "application/json; charset=utf-8",
             **(extra_headers or {}),
         }
-        
-        tools = None
-        if call_tools and self._registered_tools:
-            tools = [
-                {"type": "function", "function": {"name": name, "parameters": schema}}
-                for name, schema in self._registered_tools.items()
-            ]
-            
-        tool_choice_param = tool_choice or self._tool_choice
         
         # Determine if we're using structured parsing or chat completion
         is_structured_parse = False
@@ -509,8 +532,8 @@ class OpenRouterApiClient:
                 headers,
                 response_format=response_format,
                 structured_output=structured_output_schema if is_structured_parse else None,
-                tools=tools,
-                tool_choice=tool_choice_param,
+                tools=self._available_tools,
+                tool_choice="auto",
             )
             
             # Extract the message from the response
@@ -583,78 +606,4 @@ class OpenRouterApiClient:
                 "tool_results": all_tool_results,
                 "iteration": iteration,
                 "is_final": True
-            }
-
-    async def chat_parse(
-        self,
-        messages: list[dict[str, str]],
-        structured_output: Union[Type[BaseModel], dict[str, Any]],
-        model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[dict[str, str]] = None,
-        call_tools: bool = False,
-        tool_choice: Optional[str] = None,
-        use_agent: bool = False,
-    ) -> dict[str, Any]:
-        """
-        Sends a chat completion request to the API and returns the structured response content.
-
-        Args:
-            messages (list[dict[str, str]]): A list of messages to send to the chat.
-            structured_output (Union[Type[BaseModel], dict[str, Any]]): The schema defining the structure of the response.
-            model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default model.
-            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request.
-            call_tools (bool): Whether to include tool calls in the response, defaults to False.
-            tool_choice (Optional[str]): Override the default tool choice strategy for this request.
-            use_agent (bool): Whether to execute tools when they are called, defaults to False.
-
-        Returns:
-            dict[str, Any]: A dictionary containing the parsed response, tool calls, and tool results if any.
-        """
-        # Pass the structured_output directly without conversion
-        return await self.agent(
-            messages=messages,
-            structured_output=structured_output,
-            model=model,
-            extra_headers=extra_headers,
-            call_tools=call_tools,
-            tool_choice=tool_choice,
-            max_iterations=1 if not use_agent else 5,
-        )
-
-    async def chat_completion(
-        self,
-        messages: list[dict[str, str]],
-        model: Optional[OpenRouterModel] = None,
-        extra_headers: Optional[dict[str, str]] = None,
-        structured_output: Optional[dict[str, Any]] = None,
-        call_tools: bool = False,
-        tool_choice: Optional[str] = None,
-        use_agent: bool = False,
-    ) -> dict[str, Any]:
-        """
-        Sends a chat completion request to the API and returns the response content.
-
-        Args:
-            messages (list[dict[str, str]]): A list of messages to send to the chat.
-            model (Optional[OpenRouterModel]): The model to use for this request, defaults to the instance's default
-            model.
-            extra_headers (Optional[dict[str, str]]): Additional headers to include in the API request, defaults to
-            an empty dict.
-            structured_output (Optional[dict[str, Any]]): Specifies the desired structure of the response,
-            defaults to NOT_GIVEN.
-            call_tools (bool): Whether to include tool calls in the response, defaults to False.
-            tool_choice (Optional[str]): Override the default tool choice strategy for this request.
-            use_agent (bool): Whether to execute tools when they are called, defaults to False.
-
-        Returns:
-            dict[str, Any]: A dictionary containing the content, tool calls, and tool results if any.
-        """
-        return await self.agent(
-            messages=messages,
-            structured_output=structured_output,
-            model=model,
-            extra_headers=extra_headers,
-            call_tools=call_tools,
-            tool_choice=tool_choice,
-            max_iterations=1 if not use_agent else 5,
-        ) 
+            } 

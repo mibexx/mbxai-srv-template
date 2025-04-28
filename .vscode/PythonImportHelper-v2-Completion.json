@@ -97,7 +97,7 @@
         "documentation": {}
     },
     {
-        "label": "dict",
+        "label": "Callable",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -105,7 +105,63 @@
         "documentation": {}
     },
     {
-        "label": "list",
+        "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -122,6 +178,30 @@
     },
     {
         "label": "Awaitable",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Type",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncGenerator",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -209,6 +289,22 @@
         "documentation": {}
     },
     {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "Field",
         "importPath": "pydantic",
         "description": "pydantic",
@@ -268,11 +364,12 @@
         "documentation": {}
     },
     {
-        "label": "Enum",
-        "importPath": "enum",
-        "description": "enum",
+        "label": "json",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "enum",
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
@@ -285,12 +382,12 @@
         "documentation": {}
     },
     {
-        "label": "json",
+        "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
+        "importPath": "httpx",
+        "description": "httpx",
+        "detail": "httpx",
         "documentation": {}
     },
     {
@@ -307,6 +404,54 @@
         "description": "openai",
         "isExtraImport": true,
         "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "AsyncOpenAI",
+        "importPath": "openai",
+        "description": "openai",
+        "isExtraImport": true,
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "OpenAIError",
+        "importPath": "openai",
+        "description": "openai",
+        "isExtraImport": true,
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
+        "label": "Client",
+        "importPath": "modelcontextprotocol",
+        "description": "modelcontextprotocol",
+        "isExtraImport": true,
+        "detail": "modelcontextprotocol",
+        "documentation": {}
+    },
+    {
+        "label": "StdioClientTransport",
+        "importPath": "modelcontextprotocol",
+        "description": "modelcontextprotocol",
+        "isExtraImport": true,
+        "detail": "modelcontextprotocol",
+        "documentation": {}
+    },
+    {
+        "label": "StdioServerParameters",
+        "importPath": "modelcontextprotocol",
+        "description": "modelcontextprotocol",
+        "isExtraImport": true,
+        "detail": "modelcontextprotocol",
+        "documentation": {}
+    },
+    {
+        "label": "Enum",
+        "importPath": "enum",
+        "description": "enum",
+        "isExtraImport": true,
+        "detail": "enum",
         "documentation": {}
     },
     {
@@ -402,6 +547,24 @@
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
         "peekOfCode": "app = FastAPI(\n    title=\"{{cookiecutter.project_name}}\",\n    description=\"{{cookiecutter.description}}\",\n)\n# Include project routers\napp.include_router(project_router)\nclass IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str\n    version: str",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "McpClient",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "peekOfCode": "class McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nclass McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
         "documentation": {}
     },
     {
