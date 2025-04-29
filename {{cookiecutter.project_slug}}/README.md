@@ -210,16 +210,15 @@ The MCP client supports:
 #### Basic Usage
 
 ```python
-from mbxai.clients.mcp import McpClient
-from modelcontextprotocol import StdioServerParameters
+from your_package.clients.mcp import McpClient
+from mcp import StdioServerParameters
 
 # Initialize the client
 client = McpClient()
 
-# Connect to the weather tool server
+# Connect to a local MCP server
 server_params = StdioServerParameters(
-    command=["python", "weather_tool_server.py"],
-    env={"PYTHONPATH": "."}
+    command=["python", "path/to/your/mcp_server.py"]
 )
 await client.add_mcp_server(server_params)
 
@@ -264,41 +263,16 @@ Here's an example of how to create a simple tool using the MCP approach:
 #### 1. Create an MCP Server
 
 ```python
-# weather_tool_server.py
-import asyncio
-import json
-from modelcontextprotocol import Server, StdioServerTransport, Tool
+from mcp import Server, StdioServerTransport, Tool
 
-# Define the tool
-weather_tool = Tool(
-    name="get_weather",
-    description="Get the current weather for a location",
-    input_schema={
-        "type": "object",
-        "properties": {
-            "location": {
-                "type": "string",
-                "description": "The city and country, e.g. 'London, UK'"
-            }
-        },
-        "required": ["location"]
-    }
-)
+# Create a server
+server = Server("my-server")
 
-# Define the tool handler
-async def get_weather_handler(request):
-    location = request.arguments.get("location", "Unknown")
-    # In a real implementation, you would call a weather API
-    return {
-        "location": location,
-        "temperature": 22,
-        "condition": "Sunny",
-        "humidity": 65
-    }
-
-# Create the server
-server = Server(name="weather-tool-server", version="1.0.0")
-server.add_tool(weather_tool, get_weather_handler)
+# Define a tool
+@server.tool()
+async def get_weather(location: str) -> str:
+    """Get the weather for a location."""
+    return f"The weather in {location} is sunny."
 
 # Run the server
 async def main():
@@ -312,18 +286,12 @@ if __name__ == "__main__":
 #### 2. Use the Tool with the MCP Client
 
 ```python
-from mbxai.clients.mcp import McpClient
-from modelcontextprotocol import StdioServerParameters
+from mcp import StdioServerParameters
 
-# Initialize the client
-client = McpClient()
-
-# Connect to the weather tool server
+# Create server parameters
 server_params = StdioServerParameters(
-    command=["python", "weather_tool_server.py"],
-    env={"PYTHONPATH": "."}
+    command=["python", "path/to/your/mcp_server.py"]
 )
-await client.add_mcp_server(server_params)
 
 # Run an agent that uses the weather tool
 response = await client.agent(

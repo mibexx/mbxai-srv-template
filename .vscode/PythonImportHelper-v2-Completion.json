@@ -1,141 +1,5 @@
 [
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "create_model",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
         "label": "inspect",
         "kind": 6,
         "isExtraImport": true,
@@ -345,11 +209,123 @@
         "documentation": {}
     },
     {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "APIRoute",
         "importPath": "fastapi.routing",
         "description": "fastapi.routing",
         "isExtraImport": true,
         "detail": "fastapi.routing",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "create_model",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
         "documentation": {}
     },
     {
@@ -456,26 +432,26 @@
     },
     {
         "label": "Client",
-        "importPath": "modelcontextprotocol",
-        "description": "modelcontextprotocol",
+        "importPath": "mcp",
+        "description": "mcp",
         "isExtraImport": true,
-        "detail": "modelcontextprotocol",
+        "detail": "mcp",
         "documentation": {}
     },
     {
         "label": "StdioClientTransport",
-        "importPath": "modelcontextprotocol",
-        "description": "modelcontextprotocol",
+        "importPath": "mcp",
+        "description": "mcp",
         "isExtraImport": true,
-        "detail": "modelcontextprotocol",
+        "detail": "mcp",
         "documentation": {}
     },
     {
         "label": "StdioServerParameters",
-        "importPath": "modelcontextprotocol",
-        "description": "modelcontextprotocol",
+        "importPath": "mcp",
+        "description": "mcp",
         "isExtraImport": true,
-        "detail": "modelcontextprotocol",
+        "detail": "mcp",
         "documentation": {}
     },
     {
@@ -525,33 +501,6 @@
         "description": "pydantic_settings",
         "isExtraImport": true,
         "detail": "pydantic_settings",
-        "documentation": {}
-    },
-    {
-        "label": "WeatherRequest",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "peekOfCode": "class WeatherRequest(BaseModel):\n    \"\"\"Request model for weather information.\"\"\"\n    location: str\nclass WeatherResponse(BaseModel):\n    \"\"\"Response model for weather information.\"\"\"\n    weather_info: str\nrouter = APIRouter(prefix=\"/weather\", tags=[\"weather\"])\n@router.post(\"\", response_model=WeatherResponse)\nasync def get_weather(request: WeatherRequest) -> WeatherResponse:\n    \"\"\"",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "documentation": {}
-    },
-    {
-        "label": "WeatherResponse",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "peekOfCode": "class WeatherResponse(BaseModel):\n    \"\"\"Response model for weather information.\"\"\"\n    weather_info: str\nrouter = APIRouter(prefix=\"/weather\", tags=[\"weather\"])\n@router.post(\"\", response_model=WeatherResponse)\nasync def get_weather(request: WeatherRequest) -> WeatherResponse:\n    \"\"\"\n    Get weather information for a location using OpenAI with MCP tools.\n    Args:\n        request (WeatherRequest): The request containing the location.",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "documentation": {}
-    },
-    {
-        "label": "router",
-        "kind": 5,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
-        "peekOfCode": "router = APIRouter(prefix=\"/weather\", tags=[\"weather\"])\n@router.post(\"\", response_model=WeatherResponse)\nasync def get_weather(request: WeatherRequest) -> WeatherResponse:\n    \"\"\"\n    Get weather information for a location using OpenAI with MCP tools.\n    Args:\n        request (WeatherRequest): The request containing the location.\n    Returns:\n        WeatherResponse: The weather information for the location.\n    Raises:",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
         "documentation": {}
     },
     {

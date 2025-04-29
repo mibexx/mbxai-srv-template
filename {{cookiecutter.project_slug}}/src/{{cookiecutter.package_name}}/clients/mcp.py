@@ -14,7 +14,7 @@ from typing import (
 
 from openai import AsyncOpenAI, OpenAIError
 from pydantic import BaseModel
-from modelcontextprotocol import Client, StdioClientTransport, StdioServerParameters
+from mcp import Client, StdioClientTransport, StdioServerParameters
 
 from ..config import get_openrouter_api_config
 from .models import OpenRouterModel

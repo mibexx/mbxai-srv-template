@@ -102,7 +102,7 @@ The template includes an MCP client for tool and agent handling. The MCP client 
 
 ```python
 from your_package.clients.mcp import McpClient
-from modelcontextprotocol import StdioServerParameters
+from mcp import StdioServerParameters
 
 # Initialize the client
 client = McpClient()
