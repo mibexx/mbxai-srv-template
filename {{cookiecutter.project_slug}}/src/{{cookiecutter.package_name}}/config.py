@@ -47,6 +47,19 @@ class OpenRouterAPIConfig(BaseSettings):
     )
 
 
+class MCPConfig(BaseSettings):
+    """MCP server configuration."""
+
+    server_url: str | None = None
+
+    model_config = SettingsConfigDict(
+        env_prefix=SERVICE_NAME + "MCP_",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+
 @lru_cache
 def get_config() -> ApplicationConfig:
     """Get the application configuration singleton."""
@@ -57,3 +70,9 @@ def get_config() -> ApplicationConfig:
 def get_openrouter_api_config() -> OpenRouterAPIConfig:
     """Get the OpenRouter API configuration singleton."""
     return OpenRouterAPIConfig()
+
+
+@lru_cache
+def get_mcp_config() -> MCPConfig:
+    """Get the MCP configuration singleton."""
+    return MCPConfig()

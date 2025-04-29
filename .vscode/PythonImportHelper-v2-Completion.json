@@ -1,5 +1,53 @@
 [
     {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "inspect",
         "kind": 6,
         "isExtraImport": true,
@@ -145,6 +193,14 @@
         "documentation": {}
     },
     {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Optional",
         "importPath": "typing",
         "description": "typing",
@@ -201,38 +257,6 @@
         "documentation": {}
     },
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "APIRoute",
         "importPath": "fastapi.routing",
         "description": "fastapi.routing",
@@ -250,6 +274,14 @@
     },
     {
         "label": "create_model",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -480,6 +512,15 @@
         "documentation": {}
     },
     {
+        "label": "router",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
+        "peekOfCode": "router = APIRouter(prefix=\"/weather\", tags=[\"weather\"])\n@router.get(\"/{location}\")\nasync def get_weather(location: str) -> dict:\n    \"\"\"Get weather information for a location using the MCP weather tool.\"\"\"\n    try:\n        mcp_config = get_mcp_config()\n        if not mcp_config.server_url:\n            raise HTTPException(\n                status_code=500,\n                detail=\"MCP server URL not configured. Set MCP_SERVER_URL environment variable.\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.routes.weather",
+        "documentation": {}
+    },
+    {
         "label": "MbxDefinitionBuilder",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.definition",
@@ -549,6 +590,42 @@
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
         "peekOfCode": "logger = logging.getLogger(__name__)\nclass McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
+        "documentation": {}
+    },
+    {
+        "label": "ToolSchema",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "peekOfCode": "class ToolSchema(BaseModel):\n    \"\"\"Schema for a tool's input parameters.\"\"\"\n    properties: dict[str, Any]\n    required: list[str]\n    title: str\n    type: str\nclass Tool(BaseModel):\n    \"\"\"Model representing a tool from the MCP server.\"\"\"\n    description: str\n    inputSchema: ToolSchema",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "documentation": {}
+    },
+    {
+        "label": "Tool",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "peekOfCode": "class Tool(BaseModel):\n    \"\"\"Model representing a tool from the MCP server.\"\"\"\n    description: str\n    inputSchema: ToolSchema\n    internal_url: str\n    name: str\n    service: str\nclass ToolsResponse(BaseModel):\n    \"\"\"Response from the MCP server tools endpoint.\"\"\"\n    tools: list[Tool]",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "documentation": {}
+    },
+    {
+        "label": "ToolsResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "peekOfCode": "class ToolsResponse(BaseModel):\n    \"\"\"Response from the MCP server tools endpoint.\"\"\"\n    tools: list[Tool]\nclass MCPClient:\n    \"\"\"Client for interacting with MCP server tools.\"\"\"\n    def __init__(self) -> None:\n        self.config = get_mcp_config()\n        if not self.config.server_url:\n            raise ValueError(\"MCP server URL not configured. Set MCP_SERVER_URL environment variable.\")\n        self.base_url = self.config.server_url.rstrip(\"/\")",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "documentation": {}
+    },
+    {
+        "label": "MCPClient",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
+        "peekOfCode": "class MCPClient:\n    \"\"\"Client for interacting with MCP server tools.\"\"\"\n    def __init__(self) -> None:\n        self.config = get_mcp_config()\n        if not self.config.server_url:\n            raise ValueError(\"MCP server URL not configured. Set MCP_SERVER_URL environment variable.\")\n        self.base_url = self.config.server_url.rstrip(\"/\")\n    async def get_tools(self) -> list[Tool]:\n        \"\"\"Get all available tools from the MCP server.\"\"\"\n        async with httpx.AsyncClient() as client:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
         "documentation": {}
     },
     {
@@ -624,11 +701,20 @@
         "documentation": {}
     },
     {
+        "label": "MCPConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = None\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME + \"MCP_\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\n@lru_cache",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
         "label": "get_config",
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_config() -> ApplicationConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return ApplicationConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()",
+        "peekOfCode": "def get_config() -> ApplicationConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return ApplicationConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -637,7 +723,16 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()",
+        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_mcp_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

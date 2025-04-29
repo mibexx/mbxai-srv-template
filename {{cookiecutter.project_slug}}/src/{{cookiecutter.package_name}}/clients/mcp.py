@@ -113,47 +113,67 @@ class McpClient:
         Connect to a remote MCP server via HTTP and discover its tools.
         
         Args:
-            server_url (str): URL of the remote MCP server.
+            server_url (str): URL of the MCP server.
         """
         try:
-            # Ensure the URL ends with a slash
-            if not server_url.endswith('/'):
-                server_url += '/'
+            # Fetch tools from the server
+            async with self._http_client as client:
+                response = await client.get(f"{server_url.rstrip('/')}/api/tools")
+                response.raise_for_status()
+                tools_data = response.json()
                 
-            # Get tools from server
-            tools_url = f"{server_url}tools"
-            logger.info(f"Discovering tools from MCP server at {tools_url}")
-            
-            response = await self._http_client.get(tools_url)
-            response.raise_for_status()
-            
-            tools_data = response.json()
-            tools = tools_data.get("tools", [])
-            
-            logger.info(f"Connected to MCP server with tools: {[tool['name'] for tool in tools]}")
-            
-            # Add tools to available tools
-            for tool in tools:
-                tool_name = tool.get("name")
-                if not tool_name:
-                    logger.warning(f"Skipping tool without name: {tool}")
-                    continue
-                    
-                self._available_tools.append({
-                    "type": "function",
-                    "function": {
-                        "name": tool_name,
-                        "description": tool.get("description", ""),
-                        "parameters": tool.get("input_schema", {}),
+                logger.info(f"Connected to MCP server with tools: {[tool['name'] for tool in tools_data['tools']]}")
+                
+                # Add tools to available tools
+                for tool in tools_data["tools"]:
+                    self._available_tools.append({
+                        "type": "function",
+                        "function": {
+                            "name": tool["name"],
+                            "description": tool["description"],
+                            "parameters": tool["inputSchema"]
+                        }
+                    })
+                    # Store the internal URL for direct invocation
+                    self._mcp_clients[tool["name"]] = {
+                        "internal_url": tool["internal_url"]
                     }
-                })
-                
-                # Store the server URL for this tool
-                self._mcp_clients[tool_name] = server_url
-                
         except Exception as e:
-            logger.error(f"Error connecting to MCP server at {server_url}: {e}")
+            logger.error(f"Failed to connect to MCP server: {str(e)}")
             raise
+
+    async def invoke_tool(self, tool_name: str, **kwargs: Any) -> Any:
+        """
+        Directly invoke a tool by name with the given parameters.
+        
+        Args:
+            tool_name (str): Name of the tool to invoke
+            **kwargs: Parameters to pass to the tool
+            
+        Returns:
+            Any: The tool's response
+            
+        Raises:
+            ValueError: If the tool is not found
+        """
+        if tool_name not in self._mcp_clients:
+            raise ValueError(f"Tool {tool_name} not found")
+            
+        tool_info = self._mcp_clients[tool_name]
+        if isinstance(tool_info, dict) and "internal_url" in tool_info:
+            # External MCP server tool
+            async with self._http_client as client:
+                response = await client.post(tool_info["internal_url"], json=kwargs)
+                response.raise_for_status()
+                return response.json()
+        else:
+            # Local MCP server tool
+            return await self._execute_with_retry(
+                "invoke_tool",
+                tool_info.invoke_tool,
+                tool_name,
+                kwargs
+            )
     
     def get_available_tools(self) -> list[dict[str, Any]]:
         """
