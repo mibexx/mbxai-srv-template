@@ -145,14 +145,6 @@
         "documentation": {}
     },
     {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
         "label": "Optional",
         "importPath": "typing",
         "description": "typing",
@@ -266,14 +258,6 @@
     },
     {
         "label": "create_model",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -573,42 +557,6 @@
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
         "peekOfCode": "logger = logging.getLogger(__name__)\nclass McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "documentation": {}
-    },
-    {
-        "label": "ToolSchema",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "peekOfCode": "class ToolSchema(BaseModel):\n    \"\"\"Schema for a tool's input parameters.\"\"\"\n    properties: dict[str, Any]\n    required: list[str]\n    title: str\n    type: str\nclass Tool(BaseModel):\n    \"\"\"Model representing a tool from the MCP server.\"\"\"\n    description: str\n    inputSchema: ToolSchema",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "documentation": {}
-    },
-    {
-        "label": "Tool",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "peekOfCode": "class Tool(BaseModel):\n    \"\"\"Model representing a tool from the MCP server.\"\"\"\n    description: str\n    inputSchema: ToolSchema\n    internal_url: str\n    name: str\n    service: str\nclass ToolsResponse(BaseModel):\n    \"\"\"Response from the MCP server tools endpoint.\"\"\"\n    tools: list[Tool]",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "documentation": {}
-    },
-    {
-        "label": "ToolsResponse",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "peekOfCode": "class ToolsResponse(BaseModel):\n    \"\"\"Response from the MCP server tools endpoint.\"\"\"\n    tools: list[Tool]\nclass MCPClient:\n    \"\"\"Client for interacting with MCP server tools.\"\"\"\n    def __init__(self) -> None:\n        self.config = get_mcp_config()\n        if not self.config.server_url:\n            raise ValueError(\"MCP server URL not configured. Set MCP_SERVER_URL environment variable.\")\n        self.base_url = self.config.server_url.rstrip(\"/\")",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "documentation": {}
-    },
-    {
-        "label": "MCPClient",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
-        "peekOfCode": "class MCPClient:\n    \"\"\"Client for interacting with MCP server tools.\"\"\"\n    def __init__(self) -> None:\n        self.config = get_mcp_config()\n        if not self.config.server_url:\n            raise ValueError(\"MCP server URL not configured. Set MCP_SERVER_URL environment variable.\")\n        self.base_url = self.config.server_url.rstrip(\"/\")\n    async def get_tools(self) -> list[Tool]:\n        \"\"\"Get all available tools from the MCP server.\"\"\"\n        async with httpx.AsyncClient() as client:",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp_client",
         "documentation": {}
     },
     {
