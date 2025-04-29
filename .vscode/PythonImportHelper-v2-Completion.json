@@ -415,15 +415,7 @@
         "documentation": {}
     },
     {
-        "label": "Client",
-        "importPath": "mcp",
-        "description": "mcp",
-        "isExtraImport": true,
-        "detail": "mcp",
-        "documentation": {}
-    },
-    {
-        "label": "StdioClientTransport",
+        "label": "ClientSession",
         "importPath": "mcp",
         "description": "mcp",
         "isExtraImport": true,
@@ -432,10 +424,18 @@
     },
     {
         "label": "StdioServerParameters",
-        "importPath": "mcp",
-        "description": "mcp",
+        "importPath": "mcp.client.stdio",
+        "description": "mcp.client.stdio",
         "isExtraImport": true,
-        "detail": "mcp",
+        "detail": "mcp.client.stdio",
+        "documentation": {}
+    },
+    {
+        "label": "stdio_client",
+        "importPath": "mcp.client.stdio",
+        "description": "mcp.client.stdio",
+        "isExtraImport": true,
+        "detail": "mcp.client.stdio",
         "documentation": {}
     },
     {
