@@ -178,6 +178,60 @@ The MCP client provides the following features:
 - **Retry Logic**: Automatic retry for failed operations
 - **Error Handling**: Comprehensive error handling for API calls and tool execution
 
+## Project Endpoints
+
+The template includes several project-level endpoints that demonstrate how to use the AI clients:
+
+### Hello World Endpoint
+
+A simple hello world endpoint that demonstrates basic FastAPI and Pydantic usage:
+
+```bash
+curl -X POST http://localhost:8000/api/hello \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John"}'
+```
+
+Response:
+
+```json
+{
+  "message": "Hello, John!",
+  "name": "John"
+}
+```
+
+### Weather Endpoint
+
+A weather endpoint that demonstrates how to use the MCP client with OpenAI to get weather information:
+
+```bash
+curl -X POST http://localhost:8000/api/weather \
+  -H "Content-Type: application/json" \
+  -d '{"location": "London"}'
+```
+
+Response:
+
+```json
+{
+  "weather_info": "The weather information for London..."
+}
+```
+
+This endpoint:
+
+1. Connects to an MCP server to discover available tools
+2. Uses OpenAI to process the weather request
+3. Lets OpenAI decide how to use the available tools to get weather information
+
+To use this endpoint, you need to set the following environment variables:
+
+```bash
+export MBXAI_MCP_SERVER_URL="http://your-mcp-server"
+export MBXAI_OPENROUTER_API_KEY="your-openrouter-api-key"
+```
+
 ## Requirements
 
 - Python 3.12+
