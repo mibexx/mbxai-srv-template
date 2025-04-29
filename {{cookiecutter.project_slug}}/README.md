@@ -54,12 +54,30 @@ cookiecutter gh:mibexx/mbxai-srv-template
 
 Follow the prompts to configure your project.
 
+### Installing Dependencies with uv
+
+This project uses [uv](https://github.com/astral-sh/uv) for fast and reliable dependency management:
+
+```bash
+# Install uv if you don't have it already
+pip install uv
+
+# Install dependencies
+uv sync
+
+# Run the service
+uv run service
+```
+
+Or with command-line arguments:
+
+```bash
+uv run service -- --host 127.0.0.1 --port 5000 --reload
+```
+
 ### Running the Service
 
 ```bash
-# Install dependencies
-pip install -e .
-
 # Run the service
 python -m src.{{cookiecutter.package_name}}.api.run
 ```
@@ -346,10 +364,45 @@ print(response["content"])
 
 The service can be configured using environment variables with the prefix `{{cookiecutter.project_slug.upper()}}_`:
 
+### Required Environment Variables
+
+Based on the configuration in `src/{{cookiecutter.package_name}}/config.py`, the following environment variables are required:
+
+#### Application Configuration
+
 ```
 {{cookiecutter.project_slug.upper()}}_NAME=Custom Service Name
-{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=10  # DEBUG
-{{cookiecutter.project_slug.upper()}}_OPENROUTER_API_KEY=your_api_key_here
+{{cookiecutter.project_slug.upper()}}_VERSION=1.0.0
+{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=20  # INFO (10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR, 50=CRITICAL)
+```
+
+#### OpenRouter API Configuration
+
+```
+{{cookiecutter.project_slug.upper()}}OPENROUTER_API_KEY=your_openrouter_api_key_here
+{{cookiecutter.project_slug.upper()}}OPENROUTER_BASE_URL=https://openrouter.ai/api/v1  # Optional, defaults to this value
+```
+
+#### MCP Configuration
+
+```
+{{cookiecutter.project_slug.upper()}}MCP_SERVER_URL=http://your-mcp-server  # Required for MCP client functionality
+```
+
+### Environment File
+
+You can create a `.env` file in the project root with these variables:
+
+```
+# Application Configuration
+{{cookiecutter.project_slug.upper()}}_NAME={{cookiecutter.project_name}}
+{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=20
+
+# OpenRouter API Configuration
+{{cookiecutter.project_slug.upper()}}OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# MCP Configuration
+{{cookiecutter.project_slug.upper()}}MCP_SERVER_URL=http://your-mcp-server
 ```
 
 ## Development
