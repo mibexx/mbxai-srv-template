@@ -645,7 +645,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class OpenRouterAPIConfig(BaseSettings):\n    \"\"\"OpenRouter API configuration.\"\"\"\n    api_key: str\n    base_url: str = \"https://openrouter.ai/api/v1\"\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME + \"OPENROUTER_\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
+        "peekOfCode": "class OpenRouterAPIConfig(BaseSettings):\n    \"\"\"OpenRouter API configuration.\"\"\"\n    api_key: str = Field(alias=\"OPENROUTER_TOKEN\")\n    base_url: str = Field(default=\"https://openrouter.ai/api/v1\", alias=\"OPENROUTER_BASE_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -654,7 +654,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = None\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME + \"MCP_\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\n@lru_cache",
+        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = Field(default=None, alias=\"MCP_SERVER_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\n@lru_cache",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

@@ -36,11 +36,11 @@ class ApplicationConfig(BaseSettings):
 class OpenRouterAPIConfig(BaseSettings):
     """OpenRouter API configuration."""
 
-    api_key: str
-    base_url: str = "https://openrouter.ai/api/v1"
+    api_key: str = Field(alias="OPENROUTER_TOKEN")
+    base_url: str = Field(default="https://openrouter.ai/api/v1", alias="OPENROUTER_BASE_URL")
 
     model_config = SettingsConfigDict(
-        env_prefix=SERVICE_NAME + "OPENROUTER_",
+        env_prefix="",
         env_file=ROOT_DIR / ".env",
         env_file_encoding="utf-8",
         extra="ignore",
@@ -50,10 +50,10 @@ class OpenRouterAPIConfig(BaseSettings):
 class MCPConfig(BaseSettings):
     """MCP server configuration."""
 
-    server_url: str | None = None
+    server_url: str | None = Field(default=None, alias="MCP_SERVER_URL")
 
     model_config = SettingsConfigDict(
-        env_prefix=SERVICE_NAME + "MCP_",
+        env_prefix="",
         env_file=ROOT_DIR / ".env",
         env_file_encoding="utf-8",
         extra="ignore",

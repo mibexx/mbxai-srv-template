@@ -14,6 +14,26 @@ A template for creating AI services with FastAPI, Pydantic, SQLAlchemy, and Dock
 - Code quality tools: mypy, ruff
 - GitHub Actions for CI/CD
 
+## Configuration
+
+The service requires the following environment variables:
+
+### Application Configuration
+
+These variables are prefixed with `{{cookiecutter.project_slug.upper()}}_`:
+
+- `{{cookiecutter.project_slug.upper()}}_NAME`: Name of your service (default: "{{cookiecutter.project_name}}")
+- `{{cookiecutter.project_slug.upper()}}_VERSION`: Version of your service (default: package version)
+- `{{cookiecutter.project_slug.upper()}}_LOG_LEVEL`: Logging level (default: 20 for INFO)
+
+### AI Service Configuration
+
+- `OPENROUTER_TOKEN`: Your OpenRouter API token for AI model interactions
+- `OPENROUTER_BASE_URL`: Base URL for OpenRouter API (default: "https://openrouter.ai/api/v1")
+- `MCP_SERVER_URL`: URL of the Model Context Protocol server (optional)
+
+These can be set in your environment or in a `.env` file in the project root.
+
 ## Project Structure
 
 The template creates a well-organized project structure:
@@ -358,51 +378,6 @@ response = await client.agent(
     max_iterations=3
 )
 print(response["content"])
-```
-
-## Configuration
-
-The service can be configured using environment variables with the prefix `{{cookiecutter.project_slug.upper()}}_`:
-
-### Required Environment Variables
-
-Based on the configuration in `src/{{cookiecutter.package_name}}/config.py`, the following environment variables are required:
-
-#### Application Configuration
-
-```
-{{cookiecutter.project_slug.upper()}}_NAME=Custom Service Name
-{{cookiecutter.project_slug.upper()}}_VERSION=1.0.0
-{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=20  # INFO (10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR, 50=CRITICAL)
-```
-
-#### OpenRouter API Configuration
-
-```
-{{cookiecutter.project_slug.upper()}}OPENROUTER_API_KEY=your_openrouter_api_key_here
-{{cookiecutter.project_slug.upper()}}OPENROUTER_BASE_URL=https://openrouter.ai/api/v1  # Optional, defaults to this value
-```
-
-#### MCP Configuration
-
-```
-{{cookiecutter.project_slug.upper()}}MCP_SERVER_URL=http://your-mcp-server  # Required for MCP client functionality
-```
-
-### Environment File
-
-You can create a `.env` file in the project root with these variables:
-
-```
-# Application Configuration
-{{cookiecutter.project_slug.upper()}}_NAME={{cookiecutter.project_name}}
-{{cookiecutter.project_slug.upper()}}_LOG_LEVEL=20
-
-# OpenRouter API Configuration
-{{cookiecutter.project_slug.upper()}}OPENROUTER_API_KEY=your_openrouter_api_key_here
-
-# MCP Configuration
-{{cookiecutter.project_slug.upper()}}MCP_SERVER_URL=http://your-mcp-server
 ```
 
 ## Development
