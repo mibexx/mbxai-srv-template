@@ -2,7 +2,7 @@ from ..config import get_openrouter_api_config, get_mcp_config
 
 from mbxai.openrouter import OpenRouterModel, OpenRouterClient
 from mbxai.mcp import MCPClient
-from mbxai.tool import ToolClient
+from mbxai.tools import ToolClient
 
 def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:
     """Get the OpenRouter client."""
