@@ -4,8 +4,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from ..clients.mcp import McpClient
-from ..config import get_mcp_config
+from ..utils.client import get_openrouter_client
 
 # Create a router for project-level endpoints
 router = APIRouter(prefix="/api", tags=["api"])
@@ -53,16 +52,8 @@ async def get_weather(request: WeatherRequest) -> WeatherResponse:
     uses OpenAI to process the weather request using available tools.
     """
     try:
-        mcp_config = get_mcp_config()
-        if not mcp_config.server_url:
-            raise HTTPException(
-                status_code=500,
-                detail="MCP server URL not configured. Set MCP_SERVER_URL environment variable."
-            )
-
         # Initialize MCP client and connect to server
-        client = McpClient()
-        await client.add_http_mcp_server(mcp_config.server_url)
+        client = get_openrouter_client()
 
         # Create the prompt for OpenAI
         messages = [
@@ -73,12 +64,12 @@ async def get_weather(request: WeatherRequest) -> WeatherResponse:
         ]
 
         # Use the agent to get weather information
-        response = await client.agent(
+        response = client.create(
             messages=messages,
             max_iterations=3  # Limit iterations since we just need one tool call
         )
 
-        return WeatherResponse(weather_info=response["content"])
+        return WeatherResponse(weather_info=response.choices[0].message.content)
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
