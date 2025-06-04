@@ -81,55 +81,7 @@
         "documentation": {}
     },
     {
-        "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
         "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Callable",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Awaitable",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Type",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Union",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "AsyncGenerator",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -138,62 +90,6 @@
     },
     {
         "label": "Any",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Callable",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Awaitable",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Type",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Union",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "AsyncGenerator",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Optional",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -281,23 +177,15 @@
         "documentation": {}
     },
     {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
         "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
         "isExtraImport": true,
@@ -356,12 +244,12 @@
         "documentation": {}
     },
     {
-        "label": "json",
+        "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
+        "importPath": "httpx",
+        "description": "httpx",
+        "detail": "httpx",
         "documentation": {}
     },
     {
@@ -374,84 +262,35 @@
         "documentation": {}
     },
     {
-        "label": "httpx",
-        "kind": 6,
+        "label": "OpenRouterModel",
+        "importPath": "mbxai.openrouter",
+        "description": "mbxai.openrouter",
         "isExtraImport": true,
-        "importPath": "httpx",
-        "description": "httpx",
-        "detail": "httpx",
+        "detail": "mbxai.openrouter",
         "documentation": {}
     },
     {
-        "label": "AsyncOpenAI",
-        "importPath": "openai",
-        "description": "openai",
+        "label": "OpenRouterClient",
+        "importPath": "mbxai.openrouter",
+        "description": "mbxai.openrouter",
         "isExtraImport": true,
-        "detail": "openai",
+        "detail": "mbxai.openrouter",
         "documentation": {}
     },
     {
-        "label": "OpenAIError",
-        "importPath": "openai",
-        "description": "openai",
+        "label": "MCPClient",
+        "importPath": "mbxai.mcp",
+        "description": "mbxai.mcp",
         "isExtraImport": true,
-        "detail": "openai",
+        "detail": "mbxai.mcp",
         "documentation": {}
     },
     {
-        "label": "AsyncOpenAI",
-        "importPath": "openai",
-        "description": "openai",
+        "label": "ToolClient",
+        "importPath": "mbxai.tools",
+        "description": "mbxai.tools",
         "isExtraImport": true,
-        "detail": "openai",
-        "documentation": {}
-    },
-    {
-        "label": "OpenAIError",
-        "importPath": "openai",
-        "description": "openai",
-        "isExtraImport": true,
-        "detail": "openai",
-        "documentation": {}
-    },
-    {
-        "label": "ClientSession",
-        "importPath": "mcp",
-        "description": "mcp",
-        "isExtraImport": true,
-        "detail": "mcp",
-        "documentation": {}
-    },
-    {
-        "label": "StdioServerParameters",
-        "importPath": "mcp.client.stdio",
-        "description": "mcp.client.stdio",
-        "isExtraImport": true,
-        "detail": "mcp.client.stdio",
-        "documentation": {}
-    },
-    {
-        "label": "stdio_client",
-        "importPath": "mcp.client.stdio",
-        "description": "mcp.client.stdio",
-        "isExtraImport": true,
-        "detail": "mcp.client.stdio",
-        "documentation": {}
-    },
-    {
-        "label": "Enum",
-        "importPath": "enum",
-        "description": "enum",
-        "isExtraImport": true,
-        "detail": "enum",
-        "documentation": {}
-    },
-    {
-        "label": "NOT_GIVEN",
-        "importPath": "openai._types",
-        "description": "openai._types",
-        "isExtraImport": true,
-        "detail": "openai._types",
+        "detail": "mbxai.tools",
         "documentation": {}
     },
     {
@@ -542,51 +381,6 @@
         "documentation": {}
     },
     {
-        "label": "McpClient",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "peekOfCode": "class McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "documentation": {}
-    },
-    {
-        "label": "logger",
-        "kind": 5,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass McpClient:\n    \"\"\"\n    A client for the Model Context Protocol (MCP) that can connect to MCP servers,\n    discover tools, and use them with an LLM.\n    \"\"\"\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.mcp",
-        "documentation": {}
-    },
-    {
-        "label": "OpenRouterModel",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
-        "peekOfCode": "class OpenRouterModel(Enum):\n    \"\"\"Available models from OpenRouter.\n    This enum can be extended or modified to add custom models as needed.\n    \"\"\"\n    GPT_4O = \"openai/gpt-4o\"\n    GPT_41 = \"openai/gpt-4.1\"\n    GPT_4O_MINI = \"openai/gpt-4o-mini\"\n    # Additional models can be added here\n    # ANTHROPIC_CLAUDE_3_OPUS = \"anthropic/claude-3-opus-20240229\"\n    # ANTHROPIC_CLAUDE_3_SONNET = \"anthropic/claude-3-sonnet-20240229\"",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.models",
-        "documentation": {}
-    },
-    {
-        "label": "OpenRouterApiClient",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "peekOfCode": "class OpenRouterApiClient:\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,\n    ) -> None:\n        \"\"\"\n        Initializes the OpenRouterApiClient with the specified model.\n        Args:",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "documentation": {}
-    },
-    {
-        "label": "logger",
-        "kind": 5,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass OpenRouterApiClient:\n    def __init__(\n        self,\n        model: OpenRouterModel = OpenRouterModel.GPT_41,\n        max_retries: int = 3,\n        retry_delay: int = 2,\n    ) -> None:\n        \"\"\"\n        Initializes the OpenRouterApiClient with the specified model.",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.clients.openrouter",
-        "documentation": {}
-    },
-    {
         "label": "HelloRequest",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
@@ -632,6 +426,42 @@
         "documentation": {}
     },
     {
+        "label": "ServiceApiClient",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "peekOfCode": "class ServiceApiClient:\n    \"\"\"Client for making API calls to other services using the job system.\"\"\"\n    def __init__(self, timeout: int = 3600, max_retries: int = 3, retry_delay: int = 5, poll_interval: int = 10):\n        \"\"\"Initialize the service API client.\n        Args:\n            timeout: Overall timeout in seconds (default: 3600s = 60 minutes)\n            max_retries: Maximum number of retries for 503 errors (default: 3)\n            retry_delay: Delay between retries in seconds (default: 5)\n            poll_interval: Interval in seconds to poll for job status (default: 10)\n        \"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "documentation": {}
+    },
+    {
+        "label": "get_openrouter_client",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "peekOfCode": "def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:\n    \"\"\"Get the OpenRouter client.\"\"\"\n    return OpenRouterClient(api_key=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)\ndef get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return ToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "documentation": {}
+    },
+    {
+        "label": "get_tool_client",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "peekOfCode": "def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return ToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "documentation": {}
+    },
+    {
+        "label": "get_mcp_client",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "peekOfCode": "def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "documentation": {}
+    },
+    {
         "label": "ApplicationConfig",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
@@ -654,7 +484,16 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = Field(default=None, alias=\"MCP_SERVER_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\n@lru_cache",
+        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = Field(default=None, alias=\"MCP_SERVER_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\nclass ServiceAPIConfig(BaseSettings):",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "ServiceAPIConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class ServiceAPIConfig(BaseSettings):\n    \"\"\"Service API configuration.\"\"\"\n    api_url: str = Field(default=\"https://api.mbxai.cloud/api\", alias=\"MBXAI_API_URL\")\n    token: str = Field(default=\"\", alias=\"MBXAI_API_TOKEN\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -672,7 +511,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()",
+        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -681,7 +520,16 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()",
+        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_service_api_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

@@ -59,6 +59,18 @@ class MCPConfig(BaseSettings):
         extra="ignore",
     )
 
+class ServiceAPIConfig(BaseSettings):
+    """Service API configuration."""
+
+    api_url: str = Field(default="https://api.mbxai.cloud/api", alias="MBXAI_API_URL")
+    token: str = Field(default="", alias="MBXAI_API_TOKEN")
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 @lru_cache
 def get_config() -> ApplicationConfig:
@@ -76,3 +88,8 @@ def get_openrouter_api_config() -> OpenRouterAPIConfig:
 def get_mcp_config() -> MCPConfig:
     """Get the MCP configuration singleton."""
     return MCPConfig()
+
+@lru_cache
+def get_service_api_config() -> ServiceAPIConfig:
+    """Get the service api configuration singleton."""
+    return ServiceAPIConfig()
