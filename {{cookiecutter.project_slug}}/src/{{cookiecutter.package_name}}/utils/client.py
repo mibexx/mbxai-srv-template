@@ -78,7 +78,17 @@ class ServiceApiClient:
             await asyncio.sleep(self.poll_interval)
             
         # Step 3: Get job result
-        return await self._get_job_result(job_id)
+        result = await self._get_job_result(job_id)
+        
+        # Step 4: Delete the job after successful retrieval
+        try:
+            await self._delete_job(job_id)
+            self.logger.info(f"Successfully deleted job {job_id}")
+        except Exception as e:
+            # Log warning but don't fail the entire operation
+            self.logger.warning(f"Failed to delete job {job_id}: {str(e)}")
+        
+        return result
     
     async def _create_job(self, namespace: str, service_name: str, endpoint: str, method: str, data: dict[str, Any] | None) -> str:
         """Create a job to execute a service endpoint.
@@ -218,7 +228,34 @@ class ServiceApiClient:
         except Exception as e:
             self.logger.error(f"Error getting result for job {job_id}: {str(e)}")
             raise
+    
+    async def _delete_job(self, job_id: str) -> None:
+        """Delete a job after it has been processed.
         
+        Args:
+            job_id: The job ID to delete
+        """
+        delete_url = f"{self.base_url}/job/delete/{job_id}"
+        
+        # Set up headers with authentication token
+        headers = {}
+        if self.token:
+            headers["Authorization"] = f"Bearer {self.token}"
+            
+        try:
+            self.logger.debug(f"Deleting job {job_id} at {delete_url}")
+            response = await self.client.delete(delete_url, headers=headers)
+            response.raise_for_status()
+            self.logger.debug(f"Successfully deleted job {job_id}")
+            
+        except httpx.HTTPStatusError as e:
+            self.logger.error(f"HTTP error {e.response.status_code} deleting job {job_id}")
+            raise
+            
+        except Exception as e:
+            self.logger.error(f"Error deleting job {job_id}: {str(e)}")
+            raise
+    
     async def close(self):
         """Close the HTTP client."""
         await self.client.aclose()
