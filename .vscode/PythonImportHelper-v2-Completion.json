@@ -493,7 +493,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class ServiceAPIConfig(BaseSettings):\n    \"\"\"Service API configuration.\"\"\"\n    api_url: str = Field(default=\"https://api.mbxai.cloud/api\", alias=\"MBXAI_API_URL\")\n    token: str = Field(default=\"\", alias=\"MBXAI_API_TOKEN\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
+        "peekOfCode": "class ServiceAPIConfig(BaseSettings):\n    \"\"\"Service API configuration.\"\"\"\n    api_url: str = Field(default=\"https://api.mbxai.cloud/api\", alias=\"MBXAI_API_URL\")\n    token: str = Field(default=\"\", alias=\"MBXAI_API_TOKEN\")\n    service_namespace: str = Field(default=\"mbxai-srv\", alias=\"SERVICE_NAMESPACE\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

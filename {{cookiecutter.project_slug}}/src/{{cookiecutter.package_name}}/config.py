@@ -64,6 +64,7 @@ class ServiceAPIConfig(BaseSettings):
 
     api_url: str = Field(default="https://api.mbxai.cloud/api", alias="MBXAI_API_URL")
     token: str = Field(default="", alias="MBXAI_API_TOKEN")
+    service_namespace: str = Field(default="mbxai-srv", alias="SERVICE_NAMESPACE")
 
     model_config = SettingsConfigDict(
         env_prefix="",
