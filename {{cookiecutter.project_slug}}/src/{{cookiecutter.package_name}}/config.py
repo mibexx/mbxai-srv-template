@@ -31,7 +31,25 @@ class ApplicationConfig(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
-
+    
+class UiConfig(BaseSettings):
+    
+    APP_NAME: str = "{{cookiecutter.project_name}}"
+    DEBUG: bool = False
+    TESTING: bool = False
+    
+    HOST: str = "0.0.0.0"
+    PORT: int = 8080
+    
+    # API Configuration for connecting to the CSV2JSON API
+    API_URL: str = Field(default="http://localhost:5000")
+    
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 class OpenRouterAPIConfig(BaseSettings):
     """OpenRouter API configuration."""
@@ -77,6 +95,11 @@ class ServiceAPIConfig(BaseSettings):
 def get_config() -> ApplicationConfig:
     """Get the application configuration singleton."""
     return ApplicationConfig()
+
+@lru_cache
+def get_ui_config() -> UiConfig:
+    """Get the application configuration singleton."""
+    return UiConfig()
 
 
 @lru_cache

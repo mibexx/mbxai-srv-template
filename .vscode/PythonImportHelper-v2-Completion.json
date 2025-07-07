@@ -244,6 +244,89 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "flash",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "CSRFProtect",
+        "importPath": "flask_wtf.csrf",
+        "description": "flask_wtf.csrf",
+        "isExtraImport": true,
+        "detail": "flask_wtf.csrf",
+        "documentation": {}
+    },
+    {
+        "label": "FlaskForm",
+        "importPath": "flask_wtf",
+        "description": "flask_wtf",
+        "isExtraImport": true,
+        "detail": "flask_wtf",
+        "documentation": {}
+    },
+    {
         "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
@@ -426,6 +509,33 @@
         "documentation": {}
     },
     {
+        "label": "create_app",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "peekOfCode": "def create_app() -> Flask:\n    \"\"\"Create and configure the Flask application.\"\"\"\n    app = Flask(__name__)\n    # Load configuration\n    config = get_ui_config()\n    app.config.from_object(config)\n    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')\n    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size\n    # Configure logging\n    if config.DEBUG:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "documentation": {}
+    },
+    {
+        "label": "run_dev_server",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "peekOfCode": "def run_dev_server() -> None:\n    \"\"\"Run development server.\"\"\"\n    app = create_app()\n    config = get_ui_config()\n    app.run(\n        host=config.HOST,\n        port=config.PORT,\n        debug=config.DEBUG\n    )\ndef run_server() -> None:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "documentation": {}
+    },
+    {
+        "label": "run_server",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "peekOfCode": "def run_server() -> None:\n    \"\"\"Run production server.\"\"\"\n    app = create_app()\n    config = get_ui_config()\n    app.run(\n        host=config.HOST,\n        port=config.PORT,\n        debug=False\n    )\nif __name__ == \"__main__\":",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.ui.app",
+        "documentation": {}
+    },
+    {
         "label": "ServiceApiClient",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
@@ -471,6 +581,15 @@
         "documentation": {}
     },
     {
+        "label": "UiConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class UiConfig(BaseSettings):\n    APP_NAME: str = \"{{cookiecutter.project_name}}\"\n    DEBUG: bool = False\n    TESTING: bool = False\n    HOST: str = \"0.0.0.0\"\n    PORT: int = 8080\n    # API Configuration for connecting to the CSV2JSON API\n    API_URL: str = Field(default=\"http://localhost:5000\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
         "label": "OpenRouterAPIConfig",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
@@ -502,7 +621,16 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_config() -> ApplicationConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return ApplicationConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"",
+        "peekOfCode": "def get_config() -> ApplicationConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return ApplicationConfig()\n@lru_cache\ndef get_ui_config() -> UiConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return UiConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_ui_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_ui_config() -> UiConfig:\n    \"\"\"Get the application configuration singleton.\"\"\"\n    return UiConfig()\n@lru_cache\ndef get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

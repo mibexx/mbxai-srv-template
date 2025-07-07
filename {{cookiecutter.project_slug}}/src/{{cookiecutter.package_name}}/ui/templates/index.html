@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{cookiecutter.project_name}} - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-0" id="estimation-app">
+  <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
+    <div class="px-4 py-5 sm:p-6">
+      <div class="sm:flex sm:items-start sm:justify-between">
+        <div>
+          <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+            {{cookiecutter.project_name}}
+          </h1>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            {{cookiecutter.description}}
+          </p>
+          <div class="mt-2 flex items-center text-xs text-gray-400">
+            <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            Auto-save enabled
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estimation Process Accordion -->
+  <div class="space-y-4">
+    <!-- Include Task Templates -->
+    {% include 'tasks/hello.html' %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/estimation.js') }}"></script>
+{% endblock %} 
