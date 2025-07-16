@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% raw %}{% extends "base.html" %}
 
-{% block title %}{{cookiecutter.project_name}} - {{ super() }}{% endblock %}
+{% block title %}{% endraw %}{{cookiecutter.project_name}}{% raw %} - {{ super() }}{% endblock %}
 
-{% block content %}
+{% block content %}{% endraw %}
 <div class="px-4 sm:px-0" id="estimation-app">
   <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
     <div class="px-4 py-5 sm:p-6">
@@ -28,11 +28,11 @@
   <!-- Estimation Process Accordion -->
   <div class="space-y-4">
     <!-- Include Task Templates -->
-    {% include 'tasks/hello.html' %}
+    {% raw %}{% include 'tasks/hello.html' %}{% endraw %}
   </div>
 </div>
-{% endblock %}
+{% raw %}{% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/estimation.js') }}"></script>
-{% endblock %} 
+{% endblock %}{% endraw %} 
