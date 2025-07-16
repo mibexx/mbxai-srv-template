@@ -81,6 +81,14 @@
         "documentation": {}
     },
     {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Optional",
         "importPath": "typing",
         "description": "typing",
@@ -177,6 +185,14 @@
         "documentation": {}
     },
     {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "Field",
         "importPath": "pydantic",
         "description": "pydantic",
@@ -241,6 +257,31 @@
         "description": "pathlib",
         "isExtraImport": true,
         "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "MCPServer",
+        "importPath": "mbxai.mcp.server",
+        "description": "mbxai.mcp.server",
+        "isExtraImport": true,
+        "detail": "mbxai.mcp.server",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "FastMCP",
+        "importPath": "mcp.server.fastmcp",
+        "description": "mcp.server.fastmcp",
+        "isExtraImport": true,
+        "detail": "mcp.server.fastmcp",
         "documentation": {}
     },
     {
@@ -333,15 +374,6 @@
         "importPath": "httpx",
         "description": "httpx",
         "detail": "httpx",
-        "documentation": {}
-    },
-    {
-        "label": "asyncio",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
         "documentation": {}
     },
     {
@@ -461,6 +493,60 @@
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
         "peekOfCode": "app = FastAPI(\n    title=\"{{cookiecutter.project_name}}\",\n    description=\"{{cookiecutter.description}}\",\n)\n# Include project routers\napp.include_router(project_router)\nclass IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str\n    version: str",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "config",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "config = get_config()\n# Import the tools\nfrom ..project.mcp.weather import get_weather\n# Initialize mbxai server\nserver = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "server",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "server = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    await server.add_tool(get_weather)",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "app = server.app\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    await server.add_tool(get_weather)",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.run",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.run",
+        "peekOfCode": "def main():\n    \"\"\"Entry point for the service.\"\"\"\n    asyncio.run(async_main())\nif __name__ == \"__main__\":\n    main()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.run",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherInput",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
+        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n@mcp.tool()\nasync def get_weather(input: WeatherInput) -> dict[str, Any]:\n    \"\"\"Get weather information for a location.\n    Args:\n        input: WeatherInput model containing location and units preference\n    \"\"\"\n    # This is a mock implementation",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
+        "documentation": {}
+    },
+    {
+        "label": "mcp",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
+        "peekOfCode": "mcp = FastMCP(\"weather\")\nclass WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n@mcp.tool()\nasync def get_weather(input: WeatherInput) -> dict[str, Any]:\n    \"\"\"Get weather information for a location.\n    Args:\n        input: WeatherInput model containing location and units preference\n    \"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
         "documentation": {}
     },
     {
