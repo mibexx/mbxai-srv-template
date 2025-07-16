@@ -30,6 +30,8 @@ dependencies = [
 
 [project.scripts]
 service = "src.{{cookiecutter.package_name}}.api.run:main"
+mcp = "src.{{cookiecutter.package_name}}.mcp.run:main"
+ui = "src.{{cookiecutter.package_name}}.ui.app:run_server"
 
 [tool.hatch.build.targets.sdist]
 include = ["src"]
