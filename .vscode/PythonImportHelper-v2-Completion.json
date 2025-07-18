@@ -377,6 +377,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "OpenRouterModel",
         "importPath": "mbxai.openrouter",
         "description": "mbxai.openrouter",
@@ -626,7 +635,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "class ServiceApiClient:\n    \"\"\"Client for making API calls to other services using the job system.\"\"\"\n    def __init__(self, timeout: int = 3600, max_retries: int = 3, retry_delay: int = 5, poll_interval: int = 10):\n        \"\"\"Initialize the service API client.\n        Args:\n            timeout: Overall timeout in seconds (default: 3600s = 60 minutes)\n            max_retries: Maximum number of retries for 503 errors (default: 3)\n            retry_delay: Delay between retries in seconds (default: 5)\n            poll_interval: Interval in seconds to poll for job status (default: 10)\n        \"\"\"",
+        "peekOfCode": "class ServiceApiClient:\n    \"\"\"Client for making API calls to other services using direct calls or the job system.\"\"\"\n    def __init__(self, timeout: int = 3600, max_retries: int = 3, retry_delay: int = 5, poll_interval: int = 10):\n        \"\"\"Initialize the service API client.\n        Args:\n            timeout: Overall timeout in seconds (default: 3600s = 60 minutes)\n            max_retries: Maximum number of retries for 503 errors (default: 3)\n            retry_delay: Delay between retries in seconds (default: 5)\n            poll_interval: Interval in seconds to poll for job status (default: 10)\n        Raises:",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },

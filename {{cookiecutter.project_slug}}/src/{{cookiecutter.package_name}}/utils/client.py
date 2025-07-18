@@ -3,6 +3,7 @@ from typing import Any
 import httpx
 import asyncio
 import logging
+import time
 from pydantic import BaseModel
 
 from mbxai.openrouter import OpenRouterModel, OpenRouterClient
@@ -10,7 +11,7 @@ from mbxai.mcp import MCPClient
 from mbxai.tools import ToolClient
 
 class ServiceApiClient:
-    """Client for making API calls to other services using the job system."""
+    """Client for making API calls to other services using direct calls or the job system."""
     
     def __init__(self, timeout: int = 3600, max_retries: int = 3, retry_delay: int = 5, poll_interval: int = 10):
         """Initialize the service API client.
@@ -20,7 +21,19 @@ class ServiceApiClient:
             max_retries: Maximum number of retries for 503 errors (default: 3)
             retry_delay: Delay between retries in seconds (default: 5)
             poll_interval: Interval in seconds to poll for job status (default: 10)
+            
+        Raises:
+            ValueError: If timeout or other parameters are invalid
         """
+        if timeout <= 0:
+            raise ValueError("Timeout must be positive")
+        if max_retries < 0:
+            raise ValueError("Max retries must be non-negative")
+        if retry_delay <= 0:
+            raise ValueError("Retry delay must be positive")
+        if poll_interval <= 0:
+            raise ValueError("Poll interval must be positive")
+            
         service_api_config = get_service_api_config()
         self.base_url = service_api_config.api_url
         self.token = service_api_config.token
@@ -31,6 +44,62 @@ class ServiceApiClient:
         self.client = httpx.AsyncClient(timeout=timeout)
         self.logger = logging.getLogger(__name__)
         
+    def _validate_parameters(self, namespace: str, service_name: str, endpoint: str) -> None:
+        """Validate required parameters.
+        
+        Args:
+            namespace: The namespace of the service
+            service_name: The name of the service
+            endpoint: The endpoint to call
+            
+        Raises:
+            ValueError: If any parameter is invalid
+        """
+        if not namespace or not namespace.strip():
+            raise ValueError("Namespace is required and cannot be empty")
+        if not service_name or not service_name.strip():
+            raise ValueError("Service name is required and cannot be empty")
+        if not endpoint or not endpoint.strip():
+            raise ValueError("Endpoint is required and cannot be empty")
+        
+    def _get_auth_headers(self) -> dict[str, str]:
+        """Get authentication headers.
+        
+        Returns:
+            Dictionary with authentication headers
+        """
+        headers = {}
+        if self.token:
+            headers["Authorization"] = f"Bearer {self.token}"
+        return headers
+        
+    async def request_service(self, namespace: str, service_name: str, endpoint: str, method: str = "POST", data: dict[str, Any] | BaseModel | None = None) -> dict[str, Any]:
+        """Make a direct API call to a service endpoint (no job system).
+        
+        Args:
+            namespace: The namespace of the service
+            service_name: The name of the service
+            endpoint: The endpoint to call
+            method: The HTTP method to use (default: POST)
+            data: The data to send in the request body, either a dict or Pydantic model
+        
+        Returns:
+            The response data from the API
+            
+        Raises:
+            ValueError: If parameters are invalid
+            httpx.HTTPStatusError: If the API call fails
+        """
+        self._validate_parameters(namespace, service_name, endpoint)
+        
+        # Convert Pydantic model to dict if provided
+        if isinstance(data, BaseModel):
+            json_data = data.model_dump()
+        else:
+            json_data = data
+            
+        return await self._request_api(namespace, service_name, endpoint, method, json_data)   
+            
     async def call_service(self, namespace: str, service_name: str, endpoint: str, method: str = "POST", data: dict[str, Any] | BaseModel | None = None) -> dict[str, Any]:
         """Call a service endpoint using the job system with polling.
         
@@ -38,12 +107,19 @@ class ServiceApiClient:
             namespace: The namespace of the service
             service_name: The name of the service
             endpoint: The endpoint to call
-            method: The HTTP method to use
+            method: The HTTP method to use (default: POST)
             data: The data to send in the request body, either a dict or Pydantic model
             
         Returns:
             The response data from the job
+            
+        Raises:
+            ValueError: If parameters are invalid
+            TimeoutError: If the job times out
+            RuntimeError: If the job fails
         """
+        self._validate_parameters(namespace, service_name, endpoint)
+        
         # Convert Pydantic model to dict if provided
         if isinstance(data, BaseModel):
             json_data = data.model_dump()
@@ -57,10 +133,10 @@ class ServiceApiClient:
         self.logger.info(f"Created job {job_id} for {namespace}/{service_name}/{endpoint}")
         
         # Step 2: Poll for job completion
-        start_time = asyncio.get_event_loop().time()
+        start_time = time.time()
         while True:
             # Check if we've exceeded the timeout
-            elapsed_time = asyncio.get_event_loop().time() - start_time
+            elapsed_time = time.time() - start_time
             if elapsed_time > self.timeout:
                 raise TimeoutError(f"Job {job_id} timed out after {self.timeout}s")
                 
@@ -90,6 +166,30 @@ class ServiceApiClient:
         
         return result
     
+    async def _request_api(self, namespace: str, service_name: str, endpoint: str, method: str, data: dict[str, Any] | None) -> dict[str, Any]:
+        """Request an API endpoint directly.
+
+        Args:
+            namespace: The namespace of the service
+            service_name: The name of the service
+            endpoint: The endpoint to call
+            method: The HTTP method to use
+            data: The request data
+
+        Returns:
+            The response data from the API
+            
+        Raises:
+            httpx.HTTPStatusError: If the API call fails
+        """
+        api_url = f"{self.base_url}/api/{namespace}/{service_name}/api/{endpoint}"
+        headers = self._get_auth_headers()
+            
+        response = await self.client.request(method, api_url, json=data, headers=headers)
+        response.raise_for_status()
+        return response.json()
+        
+    
     async def _create_job(self, namespace: str, service_name: str, endpoint: str, method: str, data: dict[str, Any] | None) -> str:
         """Create a job to execute a service endpoint.
         
@@ -104,11 +204,7 @@ class ServiceApiClient:
             The job ID
         """
         job_url = f"{self.base_url}/job/{namespace}/{service_name}/api/{endpoint}"
-        
-        # Set up headers with authentication token
-        headers = {}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
+        headers = self._get_auth_headers()
             
         # Initialize retry counter
         retries = 0
@@ -155,11 +251,7 @@ class ServiceApiClient:
             The job status ('running', 'success', or 'failed')
         """
         status_url = f"{self.base_url}/job/status/{job_id}"
-        
-        # Set up headers with authentication token
-        headers = {}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
+        headers = self._get_auth_headers()
             
         try:
             response = await self.client.get(status_url, headers=headers)
@@ -182,11 +274,7 @@ class ServiceApiClient:
             The job result data
         """
         result_url = f"{self.base_url}/job/result/{job_id}"
-        
-        # Set up headers with authentication token
-        headers = {}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
+        headers = self._get_auth_headers()
         
         self.logger.info(f"Fetching job result for job {job_id} from {result_url}")
             
@@ -236,11 +324,7 @@ class ServiceApiClient:
             job_id: The job ID to delete
         """
         delete_url = f"{self.base_url}/job/delete/{job_id}"
-        
-        # Set up headers with authentication token
-        headers = {}
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
+        headers = self._get_auth_headers()
             
         try:
             self.logger.debug(f"Deleting job {job_id} at {delete_url}")
@@ -259,6 +343,14 @@ class ServiceApiClient:
     async def close(self):
         """Close the HTTP client."""
         await self.client.aclose()
+        
+    async def __aenter__(self):
+        """Async context manager entry."""
+        return self
+        
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        await self.close()
 
 def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:
     """Get the OpenRouter client."""
