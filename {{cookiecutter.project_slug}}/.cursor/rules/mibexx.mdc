@@ -1,0 +1,24 @@
+
+---
+description: General rules for MBXAI services
+globs:
+alwaysApply: true
+---
+
+## Python Version
+- Always use Python 3.12 or higher
+
+## Application Architecture
+- There are 3 main applications: api, mcp, and ui
+- Logic in UI should use an endpoint in api with proxy in frontend app
+
+## API Design
+- All endpoints must have ONE pydantic model as request and response
+
+## AI Communication
+- For AI communication use the mbxai package with McpClient (check utils/client -> get_mcp_client)
+- Always use the "parse" method of McpClient
+- Pydantic models for parse must always have only required fields
+
+## Development Practices
+- Never write tests when it's not explicitly required
