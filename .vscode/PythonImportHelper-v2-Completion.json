@@ -1,11 +1,130 @@
 [
     {
-        "label": "inspect",
-        "kind": 6,
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
         "isExtraImport": true,
-        "importPath": "inspect",
-        "description": "inspect",
-        "detail": "inspect",
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "create_model",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -89,7 +208,7 @@
         "documentation": {}
     },
     {
-        "label": "Optional",
+        "label": "Any",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -105,43 +224,52 @@
         "documentation": {}
     },
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "HelloRequest",
+        "importPath": "models.request",
+        "description": "models.request",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "models.request",
         "documentation": {}
     },
     {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "WeatherRequest",
+        "importPath": "models.request",
+        "description": "models.request",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "models.request",
         "documentation": {}
     },
     {
-        "label": "FastAPI",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "WeatherInput",
+        "importPath": "models.request",
+        "description": "models.request",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "models.request",
         "documentation": {}
     },
     {
-        "label": "APIRouter",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "HelloResponse",
+        "importPath": "models.response",
+        "description": "models.response",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "models.response",
         "documentation": {}
     },
     {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
+        "label": "WeatherResponse",
+        "importPath": "models.response",
+        "description": "models.response",
         "isExtraImport": true,
-        "detail": "fastapi",
+        "detail": "models.response",
+        "documentation": {}
+    },
+    {
+        "label": "inspect",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "inspect",
+        "description": "inspect",
+        "detail": "inspect",
         "documentation": {}
     },
     {
@@ -150,70 +278,6 @@
         "description": "fastapi.routing",
         "isExtraImport": true,
         "detail": "fastapi.routing",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "create_model",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "BaseModel",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
-        "documentation": {}
-    },
-    {
-        "label": "Field",
-        "importPath": "pydantic",
-        "description": "pydantic",
-        "isExtraImport": true,
-        "detail": "pydantic",
         "documentation": {}
     },
     {
@@ -260,11 +324,43 @@
         "documentation": {}
     },
     {
+        "label": "router",
+        "importPath": "project.api",
+        "description": "project.api",
+        "isExtraImport": true,
+        "detail": "project.api",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "importPath": "project.demo",
+        "description": "project.demo",
+        "isExtraImport": true,
+        "detail": "project.demo",
+        "documentation": {}
+    },
+    {
+        "label": "FastMCP",
+        "importPath": "mcp.server.fastmcp",
+        "description": "mcp.server.fastmcp",
+        "isExtraImport": true,
+        "detail": "mcp.server.fastmcp",
+        "documentation": {}
+    },
+    {
         "label": "MCPServer",
         "importPath": "mbxai.mcp.server",
         "description": "mbxai.mcp.server",
         "isExtraImport": true,
         "detail": "mbxai.mcp.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_weather",
+        "importPath": "project.weather",
+        "description": "project.weather",
+        "isExtraImport": true,
+        "detail": "project.weather",
         "documentation": {}
     },
     {
@@ -274,14 +370,6 @@
         "importPath": "asyncio",
         "description": "asyncio",
         "detail": "asyncio",
-        "documentation": {}
-    },
-    {
-        "label": "FastMCP",
-        "importPath": "mcp.server.fastmcp",
-        "description": "mcp.server.fastmcp",
-        "isExtraImport": true,
-        "detail": "mcp.server.fastmcp",
         "documentation": {}
     },
     {
@@ -418,6 +506,39 @@
         "documentation": {}
     },
     {
+        "label": "chromadb",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "chromadb",
+        "description": "chromadb",
+        "detail": "chromadb",
+        "documentation": {}
+    },
+    {
+        "label": "Settings",
+        "importPath": "chromadb.config",
+        "description": "chromadb.config",
+        "isExtraImport": true,
+        "detail": "chromadb.config",
+        "documentation": {}
+    },
+    {
+        "label": "embedding_functions",
+        "importPath": "chromadb.utils",
+        "description": "chromadb.utils",
+        "isExtraImport": true,
+        "detail": "chromadb.utils",
+        "documentation": {}
+    },
+    {
+        "label": "OpenAI",
+        "importPath": "openai",
+        "description": "openai",
+        "isExtraImport": true,
+        "detail": "openai",
+        "documentation": {}
+    },
+    {
         "label": "importlib.metadata",
         "kind": 6,
         "isExtraImport": true,
@@ -448,6 +569,60 @@
         "description": "pydantic_settings",
         "isExtraImport": true,
         "detail": "pydantic_settings",
+        "documentation": {}
+    },
+    {
+        "label": "HelloRequest",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "peekOfCode": "class HelloRequest(BaseModel):\n    \"\"\"Hello world request model.\"\"\"\n    name: str = Field(\"World\", description=\"Name to greet\")\nclass WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"\n    location: str = Field(..., description=\"Location to get weather for\")",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherRequest",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "peekOfCode": "class WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"\n    location: str = Field(..., description=\"Location to get weather for\")",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.request",
+        "documentation": {}
+    },
+    {
+        "label": "HelloResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "peekOfCode": "class HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\nclass WeatherResponse(BaseModel):\n    \"\"\"Weather response model.\"\"\"\n    weather_info: str",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "peekOfCode": "class WeatherResponse(BaseModel):\n    \"\"\"Weather response model.\"\"\"\n    weather_info: str",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.models.response",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.api",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.api",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"api\"])",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.api",
+        "documentation": {}
+    },
+    {
+        "label": "router",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.demo",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.demo",
+        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"api\"])\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:\n    \"\"\"A simple hello world endpoint.\n    This is an example of a project-level endpoint that is automatically\n    included in the main API.\n    \"\"\"\n    return HelloResponse(\n        message=f\"Hello, {request.name}!\",\n        name=request.name,",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.project.demo",
         "documentation": {}
     },
     {
@@ -500,8 +675,26 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
-        "peekOfCode": "app = FastAPI(\n    title=\"{{cookiecutter.project_name}}\",\n    description=\"{{cookiecutter.description}}\",\n)\n# Include project routers\napp.include_router(project_router)\nclass IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str\n    version: str",
+        "peekOfCode": "app = FastAPI(\n    title=\"{{cookiecutter.project_name}}\",\n    description=\"{{cookiecutter.description}}\",\n)\n# Include project routers\napp.include_router(project_router)\napp.include_router(demo_router)\nclass IdentResponse(BaseModel):\n    \"\"\"Identity response model.\"\"\"\n    name: str",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "WeatherInput",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
+        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
+        "documentation": {}
+    },
+    {
+        "label": "mcp",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.weather",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.weather",
+        "peekOfCode": "mcp = FastMCP(\"weather\")\n@mcp.tool()\nasync def get_weather(input: WeatherInput) -> dict[str, Any]:\n    \"\"\"Get weather information for a location.\n    Args:\n        input: WeatherInput model containing location and units preference\n    \"\"\"\n    # This is a mock implementation\n    temperature = 20 if input.units == \"celsius\" else 68  # Convert to fahrenheit if needed\n    return {",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.weather",
         "documentation": {}
     },
     {
@@ -509,7 +702,7 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "config = get_config()\n# Import the tools\nfrom ..project.mcp.weather import get_weather\n# Initialize mbxai server\nserver = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app",
+        "peekOfCode": "config = get_config()\n# Import the tools\nfrom project.weather import get_weather\n# Initialize mbxai server\nserver = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
@@ -538,69 +731,6 @@
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.run",
         "peekOfCode": "def main():\n    \"\"\"Entry point for the service.\"\"\"\n    asyncio.run(async_main())\nif __name__ == \"__main__\":\n    main()",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.run",
-        "documentation": {}
-    },
-    {
-        "label": "WeatherInput",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n@mcp.tool()\nasync def get_weather(input: WeatherInput) -> dict[str, Any]:\n    \"\"\"Get weather information for a location.\n    Args:\n        input: WeatherInput model containing location and units preference\n    \"\"\"\n    # This is a mock implementation",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "documentation": {}
-    },
-    {
-        "label": "mcp",
-        "kind": 5,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "peekOfCode": "mcp = FastMCP(\"weather\")\nclass WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n@mcp.tool()\nasync def get_weather(input: WeatherInput) -> dict[str, Any]:\n    \"\"\"Get weather information for a location.\n    Args:\n        input: WeatherInput model containing location and units preference\n    \"\"\"",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.mcp.weather",
-        "documentation": {}
-    },
-    {
-        "label": "HelloRequest",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "peekOfCode": "class HelloRequest(BaseModel):\n    \"\"\"Hello world request model.\"\"\"\n    name: str = Field(\"World\", description=\"Name to greet\")\nclass HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\nclass WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"\n    location: str = Field(..., description=\"Location to get weather for\")",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "documentation": {}
-    },
-    {
-        "label": "HelloResponse",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "peekOfCode": "class HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\nclass WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"\n    location: str = Field(..., description=\"Location to get weather for\")\nclass WeatherResponse(BaseModel):\n    \"\"\"Weather response model.\"\"\"\n    weather_info: str",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "documentation": {}
-    },
-    {
-        "label": "WeatherRequest",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "peekOfCode": "class WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"\n    location: str = Field(..., description=\"Location to get weather for\")\nclass WeatherResponse(BaseModel):\n    \"\"\"Weather response model.\"\"\"\n    weather_info: str\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:\n    \"\"\"A simple hello world endpoint.\n    This is an example of a project-level endpoint that is automatically",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "documentation": {}
-    },
-    {
-        "label": "WeatherResponse",
-        "kind": 6,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "peekOfCode": "class WeatherResponse(BaseModel):\n    \"\"\"Weather response model.\"\"\"\n    weather_info: str\n@router.post(\"/hello\", response_model=HelloResponse)\nasync def hello_world(request: HelloRequest) -> HelloResponse:\n    \"\"\"A simple hello world endpoint.\n    This is an example of a project-level endpoint that is automatically\n    included in the main API.\n    \"\"\"\n    return HelloResponse(",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "documentation": {}
-    },
-    {
-        "label": "router",
-        "kind": 5,
-        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
-        "peekOfCode": "router = APIRouter(prefix=\"/api\", tags=[\"api\"])\nclass HelloRequest(BaseModel):\n    \"\"\"Hello world request model.\"\"\"\n    name: str = Field(\"World\", description=\"Name to greet\")\nclass HelloResponse(BaseModel):\n    \"\"\"Hello world response model.\"\"\"\n    message: str\n    name: str\nclass WeatherRequest(BaseModel):\n    \"\"\"Weather request model.\"\"\"",
-        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.project.api",
         "documentation": {}
     },
     {
@@ -667,6 +797,33 @@
         "documentation": {}
     },
     {
+        "label": "ChromaCollectionManager",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "peekOfCode": "class ChromaCollectionManager:\n    \"\"\"\n    A utility class for managing ChromaDB collections with OpenAI embeddings.\n    This class provides a clean interface for creating, retrieving, listing,\n    and deleting collections in ChromaDB using OpenAI's embedding models.\n    \"\"\"\n    def __init__(\n        self,\n        chromadb_config: ChromaDBConfig | None = None,\n        openai_config: OpenAIConfig | None = None,",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "documentation": {}
+    },
+    {
+        "label": "create_collection_manager",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "peekOfCode": "def create_collection_manager(\n    chromadb_config: ChromaDBConfig | None = None,\n    openai_config: OpenAIConfig | None = None,\n) -> ChromaCollectionManager:\n    \"\"\"\n    Factory function to create a ChromaCollectionManager instance.\n    Args:\n        chromadb_config: Optional ChromaDB configuration. Uses environment if None.\n        openai_config: Optional OpenAI configuration. Uses environment if None.\n    Returns:",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef _convert_list_metadata_for_chromadb(metadata: dict[str, Any]) -> dict[str, Any]:\n    \"\"\"\n    Convert list values in metadata to comma-separated strings for ChromaDB compatibility.\n    ChromaDB metadata only supports scalar values (string, int, float, bool).\n    This function converts list values to comma-separated strings.\n    Args:\n        metadata: Original metadata dictionary that may contain lists\n    Returns:\n        Metadata dictionary with lists converted to comma-separated strings",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.vector",
+        "documentation": {}
+    },
+    {
         "label": "ApplicationConfig",
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
@@ -712,6 +869,24 @@
         "documentation": {}
     },
     {
+        "label": "OpenAIConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class OpenAIConfig(BaseSettings):\n    \"\"\"OpenAI API configuration.\"\"\"\n    api_key: str = Field(alias=\"OPENAI_API_KEY\")\n    embedding_model: str = Field(default=\"text-embedding-3-small\", alias=\"OPENAI_EMBEDDING_MODEL\")\n    organization: str | None = Field(default=None, alias=\"OPENAI_ORGANIZATION\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "ChromaDBConfig",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class ChromaDBConfig(BaseSettings):\n    \"\"\"ChromaDB configuration.\"\"\"\n    persist_directory: str = Field(default=\"./chroma_db\", alias=\"CHROMA_PERSIST_DIRECTORY\")\n    host: str | None = Field(default=None, alias=\"CHROMA_HOST\")\n    port: int | None = Field(default=None, alias=\"CHROMA_PORT\")\n    ssl: bool = Field(default=False, alias=\"CHROMA_SSL\")\n    headers: dict[str, str] | None = Field(default=None, alias=\"CHROMA_HEADERS\")\n    # Authentication settings\n    auth_token: str | None = Field(default=None, alias=\"CHROMA_AUTH_TOKEN\")\n    auth_token_type: str = Field(default=\"Bearer\", alias=\"CHROMA_AUTH_TOKEN_TYPE\")",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
         "label": "get_config",
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
@@ -743,7 +918,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()",
+        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()\n@lru_cache\ndef get_openai_config() -> OpenAIConfig:\n    \"\"\"Get the OpenAI configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -752,7 +927,25 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()",
+        "peekOfCode": "def get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()\n@lru_cache\ndef get_openai_config() -> OpenAIConfig:\n    \"\"\"Get the OpenAI configuration singleton.\"\"\"\n    return OpenAIConfig()\n@lru_cache\ndef get_chromadb_config() -> ChromaDBConfig:\n    \"\"\"Get the ChromaDB configuration singleton.\"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_openai_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_openai_config() -> OpenAIConfig:\n    \"\"\"Get the OpenAI configuration singleton.\"\"\"\n    return OpenAIConfig()\n@lru_cache\ndef get_chromadb_config() -> ChromaDBConfig:\n    \"\"\"Get the ChromaDB configuration singleton.\"\"\"\n    return ChromaDBConfig()",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_chromadb_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_chromadb_config() -> ChromaDBConfig:\n    \"\"\"Get the ChromaDB configuration singleton.\"\"\"\n    return ChromaDBConfig()",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

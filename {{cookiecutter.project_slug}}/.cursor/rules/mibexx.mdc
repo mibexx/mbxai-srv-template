@@ -7,18 +7,34 @@ alwaysApply: true
 
 ## Python Version
 - Always use Python 3.12 or higher
+- Use always dict and list instead of Dict and List
 
 ## Application Architecture
 - There are 3 main applications: api, mcp, and ui
+    - api: API for the application in src/{{cookiecutter.package_name}}/api
+    - mcp: MCP server for the application in src/{{cookiecutter.package_name}}/mcp
+    - ui: UI for the application in src/{{cookiecutter.package_name}}/ui
 - Logic in UI should use an endpoint in api with proxy in frontend app
 
 ## API Design
 - All endpoints must have ONE pydantic model as request and response
 
 ## AI Communication
+- Only in the api application layer
 - For AI communication use the mbxai package with McpClient (check utils/client -> get_mcp_client)
 - Always use the "parse" method of McpClient
 - Pydantic models for parse must always have only required fields
 
+## UI Logic
+- Implement endpoints always first in the ui app
+- When AI logic is required, use the api endpoints in the ui app as proxy to the api layer
+
 ## Development Practices
 - Never write tests when it's not explicitly required
+
+## Process
+- Always use the following process:
+    - Understand the problem
+    - Analyze the code
+    - Create a solution approach
+    - Implement the solution

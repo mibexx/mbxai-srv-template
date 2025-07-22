@@ -1,34 +1,14 @@
 """Project-level API endpoints."""
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
 from typing import Optional
 
-from ..utils.client import get_openrouter_client
+from ...utils.client import get_openrouter_client
+from models.request import HelloRequest, WeatherRequest
+from models.response import HelloResponse, WeatherResponse
 
 # Create a router for project-level endpoints
 router = APIRouter(prefix="/api", tags=["api"])
-
-
-class HelloRequest(BaseModel):
-    """Hello world request model."""
-    name: str = Field("World", description="Name to greet")
-
-
-class HelloResponse(BaseModel):
-    """Hello world response model."""
-    message: str
-    name: str
-
-
-class WeatherRequest(BaseModel):
-    """Weather request model."""
-    location: str = Field(..., description="Location to get weather for")
-
-
-class WeatherResponse(BaseModel):
-    """Weather response model."""
-    weather_info: str
 
 
 @router.post("/hello", response_model=HelloResponse)

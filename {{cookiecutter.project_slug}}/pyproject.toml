@@ -16,7 +16,8 @@ dependencies = [
     "uvicorn>=0.27.1",
     "python-dotenv>=1.0.0",
     "openai>=1.66.0",
-    "mbxai>=1.4.0",
+    "mbxai>=1.6.0",
+    "chromadb>=1.0.15",
     {% if cookiecutter.use_pytest == 'y' -%}
     "pytest>=8.0.0",
     {% endif -%}
@@ -32,6 +33,7 @@ dependencies = [
 service = "src.{{cookiecutter.package_name}}.api.run:main"
 mcp = "src.{{cookiecutter.package_name}}.mcp.run:main"
 ui = "src.{{cookiecutter.package_name}}.ui.app:run_server"
+uidev = "src.{{cookiecutter.package_name}}.ui.app:run_dev_server"
 
 [tool.hatch.build.targets.sdist]
 include = ["src"]

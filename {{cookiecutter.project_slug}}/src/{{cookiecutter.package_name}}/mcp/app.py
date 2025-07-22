@@ -4,7 +4,7 @@ from ..config import get_config
 config = get_config()
 
 # Import the tools
-from ..project.mcp.weather import get_weather
+from project.weather import get_weather
 
 # Initialize mbxai server
 server = MCPServer(

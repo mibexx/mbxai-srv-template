@@ -90,6 +90,45 @@ class ServiceAPIConfig(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+    
+class OpenAIConfig(BaseSettings):
+    """OpenAI API configuration."""
+
+    api_key: str = Field(alias="OPENAI_API_KEY")
+    embedding_model: str = Field(default="text-embedding-3-small", alias="OPENAI_EMBEDDING_MODEL")
+    organization: str | None = Field(default=None, alias="OPENAI_ORGANIZATION")
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+
+class ChromaDBConfig(BaseSettings):
+    """ChromaDB configuration."""
+
+    persist_directory: str = Field(default="./chroma_db", alias="CHROMA_PERSIST_DIRECTORY")
+    host: str | None = Field(default=None, alias="CHROMA_HOST")
+    port: int | None = Field(default=None, alias="CHROMA_PORT")
+    ssl: bool = Field(default=False, alias="CHROMA_SSL")
+    headers: dict[str, str] | None = Field(default=None, alias="CHROMA_HEADERS")
+    
+    # Authentication settings
+    auth_token: str | None = Field(default=None, alias="CHROMA_AUTH_TOKEN")
+    auth_token_type: str = Field(default="Bearer", alias="CHROMA_AUTH_TOKEN_TYPE")
+    
+    # Collection settings
+    default_collection_name: str = Field(default="default_collection", alias="CHROMA_DEFAULT_COLLECTION")
+    default_distance_function: str = Field(default="cosine", alias="CHROMA_DISTANCE_FUNCTION")
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 @lru_cache
 def get_config() -> ApplicationConfig:
@@ -117,3 +156,15 @@ def get_mcp_config() -> MCPConfig:
 def get_service_api_config() -> ServiceAPIConfig:
     """Get the service api configuration singleton."""
     return ServiceAPIConfig()
+
+
+@lru_cache
+def get_openai_config() -> OpenAIConfig:
+    """Get the OpenAI configuration singleton."""
+    return OpenAIConfig()
+
+
+@lru_cache
+def get_chromadb_config() -> ChromaDBConfig:
+    """Get the ChromaDB configuration singleton."""
+    return ChromaDBConfig()

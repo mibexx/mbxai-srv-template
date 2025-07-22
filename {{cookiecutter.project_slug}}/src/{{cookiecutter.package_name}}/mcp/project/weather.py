@@ -1,13 +1,10 @@
 from typing import Any
-from pydantic import BaseModel
 from mcp.server.fastmcp import FastMCP
+
+from models.request import WeatherInput
 
 # Create a FastMCP instance for this module
 mcp = FastMCP("weather")
-
-class WeatherInput(BaseModel):
-    location: str
-    units: str = "celsius"  # Default to celsius, can be "fahrenheit" or "celsius"
 
 @mcp.tool()
 async def get_weather(input: WeatherInput) -> dict[str, Any]:

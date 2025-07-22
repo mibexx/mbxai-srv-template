@@ -4,7 +4,8 @@ from typing import Dict, List, Any
 
 from ..config import get_config
 from .definition import MbxDefinitionBuilder
-from ..project.api import router as project_router
+from project.api import router as project_router
+from project.demo import router as demo_router
 
 # Initialize the FastAPI app
 app = FastAPI(
@@ -14,6 +15,7 @@ app = FastAPI(
 
 # Include project routers
 app.include_router(project_router)
+app.include_router(demo_router)
 
 
 class IdentResponse(BaseModel):
