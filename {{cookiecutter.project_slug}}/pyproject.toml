@@ -18,6 +18,8 @@ dependencies = [
     "openai>=1.66.0",
     "mbxai>=1.6.0",
     "chromadb>=1.0.15",
+    "flask>=3.1.1",
+    "flask-wtf>=1.2.2",
     {% if cookiecutter.use_pytest == 'y' -%}
     "pytest>=8.0.0",
     {% endif -%}
