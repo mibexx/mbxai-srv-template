@@ -354,7 +354,7 @@ class ServiceApiClient:
 
 def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:
     """Get the OpenRouter client."""
-    return OpenRouterClient(api_key=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
+    return OpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
 
 def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:
     """Get the Tool client."""
