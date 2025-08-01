@@ -380,6 +380,228 @@ response = await client.agent(
 print(response["content"])
 ```
 
+## How to develop UI
+
+The UI layer follows a clear separation of concerns architecture designed to provide a responsive frontend while keeping AI and backend logic properly organized.
+
+### Architecture Overview
+
+The UI architecture consists of three main layers:
+
+1. **UI Layer** (`ui/app.py`): Flask-based frontend that serves HTML templates and handles user interactions
+2. **Backend API Layer** (`api/`): FastAPI-based service that handles business logic and AI processing  
+3. **Client Utilities** (`utils/client.py`): Provides standardized clients for AI and external service calls
+
+### UI → Backend Communication
+
+The UI should **never** make direct AI calls or handle complex business logic. Instead, follow this pattern:
+
+```python
+# In ui/app.py - Proxy pattern
+@app.route('/api/your-endpoint', methods=['POST'])
+@csrf.exempt
+def your_endpoint_proxy():
+    """Proxy the request to the backend API."""
+    try:
+        request_data = request.get_json()
+        
+        # Forward to backend API
+        api_url = f"{config.API_URL}/api/your-endpoint"
+        response = requests.post(
+            api_url,
+            json=request_data,
+            headers={'Content-Type': 'application/json'},
+            timeout=300
+        )
+        
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return jsonify({'error': 'Backend error'}), response.status_code
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+```
+
+### Backend API Implementation
+
+Your backend API endpoints should handle the actual business logic and AI processing:
+
+```python
+# In api/project/your_endpoints.py
+from ...utils.client import get_mcp_client
+from models.request import YourRequest
+from models.response import YourResponse
+
+@router.post("/your-endpoint", response_model=YourResponse)
+async def your_endpoint(request: YourRequest) -> YourResponse:
+    """Process your request with AI assistance."""
+    try:
+        # Get the MCP client for AI calls
+        client = get_mcp_client()
+        
+        # Create messages for AI processing
+        messages = [
+            {
+                "role": "user", 
+                "content": f"Process this request: {request.your_field}"
+            }
+        ]
+        
+        # Use parse method with Pydantic model for structured output
+        response = client.parse(
+            messages=messages,
+            response_format=YourResponse,
+        )
+        
+        # Return the parsed response
+        return response.choices[0].message.parsed
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+### Configuration and Client Usage
+
+#### Using API_URL for Backend Calls
+
+The UI uses `API_URL` from config to communicate with the backend:
+
+```python
+# In ui/app.py
+config = get_ui_config()
+api_url = f"{config.API_URL}/api/your-endpoint"
+```
+
+#### Using utils.client for External Services
+
+For calling external services or other AI services, use the client utilities:
+
+```python
+# For AI calls - Always use McpClient
+from ...utils.client import get_mcp_client
+
+client = get_mcp_client()
+response = client.parse(
+    messages=messages,
+    response_format=YourPydanticModel,
+)
+
+# For other service calls
+from ...utils.client import ServiceApiClient
+
+service_client = ServiceApiClient()
+result = await service_client.call_service(
+    namespace="your-namespace",
+    service_name="service-name", 
+    endpoint="endpoint-name",
+    data={"key": "value"}
+)
+```
+
+### AI Integration Best Practices
+
+#### 1. Always Use McpClient for AI Calls
+
+```python
+# ✅ Correct way
+client = get_mcp_client()
+response = client.parse(
+    messages=[{"role": "user", "content": "Your prompt"}],
+    response_format=YourResponseModel,
+)
+result = response.choices[0].message.parsed
+```
+
+#### 2. Define Proper Pydantic Models
+
+```python
+# In models/response.py
+from pydantic import BaseModel
+from typing import Optional
+
+class YourResponse(BaseModel):
+    """Response model for your endpoint."""
+    result: str
+    confidence: Optional[float] = None
+    metadata: Optional[dict] = None
+```
+
+#### 3. Handle Errors Gracefully
+
+```python
+try:
+    response = client.parse(
+        messages=messages,
+        response_format=YourResponse,
+    )
+    
+    if not response or not response.choices:
+        raise ValueError("Empty response from AI")
+        
+    if not hasattr(response.choices[0].message, "parsed"):
+        raise ValueError("No parsed response from AI")
+        
+    return response.choices[0].message.parsed
+    
+except Exception as e:
+    logger.error(f"AI processing failed: {str(e)}")
+    raise HTTPException(status_code=500, detail=f"AI processing failed: {str(e)}")
+```
+
+### Frontend JavaScript Integration
+
+For frontend interactions, use standard AJAX calls to your UI proxy endpoints:
+
+```javascript
+// In your JavaScript files
+async function callBackendAPI(endpoint, data) {
+    try {
+        const response = await fetch(`/api/${endpoint}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf_token  // Get from template context
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('API call failed:', error);
+        throw error;
+    }
+}
+
+// Usage
+const result = await callBackendAPI('your-endpoint', {
+    field1: 'value1',
+    field2: 'value2'
+});
+```
+
+### Development Workflow
+
+1. **Design your data models** in `models/request.py` and `models/response.py`
+2. **Implement backend logic** in `api/project/` with proper AI integration using `McpClient`
+3. **Create UI proxy endpoints** in `ui/app.py` that forward requests to backend
+4. **Build frontend templates** with JavaScript that calls your proxy endpoints
+5. **Test the full flow** from UI → Proxy → Backend API → AI Service
+
+### Example: Complete Implementation
+
+See `api/project/demo.py` for a complete example that demonstrates:
+- Proper use of `get_mcp_client()`
+- Using `client.parse()` with Pydantic models
+- Error handling and response processing
+- Integration with the UI layer
+
+This architecture ensures clean separation of concerns, maintainable code, and proper handling of AI services while keeping the UI responsive and user-friendly.
+
 ## Development
 
 ### Testing

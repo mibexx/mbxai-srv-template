@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-    <title>{% block title %}{{ config.APP_NAME }}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ "{{" }} url_for('static', filename='favicon.png') {{ "}}" }}">
+    <title>{{ "{%" }} block title {{ "%}" }}{{ config.APP_NAME }}{{ "{%" }} endblock {{ "%}" }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/mermaid@11.7.0/dist/mermaid.min.js"></script>
@@ -418,7 +418,7 @@
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <img src="{{ url_for('static', filename='logo.png') }}" alt="{{ config.APP_NAME }} AI Logo" class="h-8 w-8 mr-2">
+              <img src="{{ "{{" }} url_for('static', filename='logo.png') {{ "}}" }}" alt="{{ config.APP_NAME }} AI Logo" class="h-8 w-8 mr-2">
               <span class="text-lg font-bold text-indigo-600"
                 >{{ config.APP_NAME }}</span
               >
@@ -466,6 +466,7 @@
     <main class="flex-grow">
       <div class="max-w-screen-2xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Flash Messages -->
+        {% raw %}
         {% with messages = get_flashed_messages(with_categories=true) %} {% if
         messages %}
         <div class="mb-4">
@@ -527,7 +528,8 @@
           </div>
           {% endfor %}
         </div>
-        {% endif %} {% endwith %} {% block content %}{% endblock %}
+        {% endif %} {% endwith %}
+        {% endraw %} {{ "{%" }} block content {{ "%}" }}{{ "{%" }} endblock {{ "%}" }}
       </div>
     </main>
 
@@ -538,6 +540,6 @@
         </p>
       </div>
     </footer>
-         {% block scripts %}{% endblock %}
+         {{ "{%" }} block scripts {{ "%}" }}{{ "{%" }} endblock {{ "%}" }}
   </body>
 </html>

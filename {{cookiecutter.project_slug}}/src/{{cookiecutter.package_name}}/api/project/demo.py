@@ -1,14 +1,17 @@
 """Project-level API endpoints."""
 
+import logging
+
 from fastapi import APIRouter, HTTPException
 from typing import Optional
 
-from ...utils.client import get_openrouter_client
+from ...utils.client import get_mcp_client
 from models.request import HelloRequest, WeatherRequest
 from models.response import HelloResponse, WeatherResponse
 
 # Create a router for project-level endpoints
 router = APIRouter(prefix="/api", tags=["api"])
+logger = logging.getLogger(__name__)
 
 
 @router.post("/hello", response_model=HelloResponse)
@@ -33,7 +36,7 @@ async def get_weather(request: WeatherRequest) -> WeatherResponse:
     """
     try:
         # Initialize MCP client and connect to server
-        client = get_openrouter_client()
+        client = get_mcp_client()
 
         # Create the prompt for OpenAI
         messages = [
@@ -44,12 +47,19 @@ async def get_weather(request: WeatherRequest) -> WeatherResponse:
         ]
 
         # Use the agent to get weather information
-        response = client.create(
+        response = client.parse(
             messages=messages,
-            max_iterations=3  # Limit iterations since we just need one tool call
+            response_format=WeatherResponse,
         )
+        
+        if not response or not response.choices:
+            raise ValueError("Received empty response from AI client")
+        
+        if not hasattr(response.choices[0].message, "parsed"):
+            logger.error(f"Received no parsed response from AI client: {response.choices[0].message}")
+            raise ValueError("Received no parsed response from AI client")
 
-        return WeatherResponse(weather_info=response.choices[0].message.content)
+        return response.choices[0].message.parsed
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
