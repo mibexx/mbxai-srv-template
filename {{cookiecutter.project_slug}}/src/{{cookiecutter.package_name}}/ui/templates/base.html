@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="{{ "{{" }} url_for('static', filename='favicon.png') {{ "}}" }}">
-    <title>{{ "{%" }} block title {{ "%}" }}{{ config.APP_NAME }}{{ "{%" }} endblock {{ "%}" }}</title>
+    <title>{{ "{%" }} block title {{ "%}" }}{{ "{{" }} config.APP_NAME {{ "}}" }}{{ "{%" }} endblock {{ "%}" }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/mermaid@11.7.0/dist/mermaid.min.js"></script>
@@ -418,16 +418,16 @@
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <img src="{{ "{{" }} url_for('static', filename='logo.png') {{ "}}" }}" alt="{{ config.APP_NAME }} AI Logo" class="h-8 w-8 mr-2">
+              <img src="{{ "{{" }} url_for('static', filename='logo.png') {{ "}}" }}" alt="{{ "{{" }} config.APP_NAME {{ "}}" }} AI Logo" class="h-8 w-8 mr-2">
               <span class="text-lg font-bold text-indigo-600"
-                >{{ config.APP_NAME }}</span
+                >{{ "{{" }} config.APP_NAME {{ "}}" }}</span
               >
             </div>
             <nav class="ml-6 flex space-x-8" id="main-nav">
               <!-- Home Link -->
               <a
                 href="/"
-                class="inline-flex items-center px-1 pt-1 border-b-2 {% if active_page == 'overview' %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} h-16"
+                class="inline-flex items-center px-1 pt-1 border-b-2 {{ "{%" }} if active_page == 'overview' {{ "%}" }}border-indigo-500 text-gray-900{{ "{%" }} else {{ "%}" }}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{{ "{%" }} endif {{ "%}" }} h-16"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +444,7 @@
               <!-- Sales Dropdown -->
               <div class="relative group">
                 <button
-                  class="inline-flex items-center px-1 pt-1 border-b-2 {% if active_page in ['create', 'comparison', 'pros_cons', 'rfp_analysis'] %}border-indigo-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} focus:outline-none h-16"
+                  class="inline-flex items-center px-1 pt-1 border-b-2 {{ "{%" }} if active_page in ['create', 'comparison', 'pros_cons', 'rfp_analysis'] {{ "%}" }}border-indigo-500 text-gray-900{{ "{%" }} else {{ "%}" }}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{{ "{%" }} endif {{ "%}" }} focus:outline-none h-16"
                 >
                   Tools
                   <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -453,7 +453,7 @@
                 </button>
                 <div class="invisible absolute left-0 top-full w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 ease-in-out">
                   <div class="py-1">
-                    <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {% if active_page == 'create' %}bg-gray-100 text-gray-900{% endif %}">Hello World</a>
+                    <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ "{%" }} if active_page == 'create' {{ "%}" }}bg-gray-100 text-gray-900{{ "{%" }} endif {{ "%}" }}">Hello World</a>
                   </div>
                 </div>
               </div>
@@ -536,7 +536,7 @@
     <footer class="bg-white">
       <div class="max-w-screen-2xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
         <p class="text-center text-sm text-gray-500">
-          © 2025 {{ config.APP_NAME }}
+          © 2025 {{ "{{" }} config.APP_NAME {{ "}}" }}
         </p>
       </div>
     </footer>
