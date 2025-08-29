@@ -1,11 +1,12 @@
 from ..config import get_openrouter_api_config, get_mcp_config, get_service_api_config
-from typing import Any
+from typing import Any, Union
 import httpx
 import asyncio
 import logging
 import time
 from pydantic import BaseModel
 
+from mbxai.agent import AgentClient
 from mbxai.openrouter import OpenRouterModel, OpenRouterClient
 from mbxai.mcp import MCPClient
 from mbxai.tools import ToolClient
@@ -369,3 +370,13 @@ def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:
         mcp_client.register_mcp_server("mcp-server", mcp_config.server_url)
     
     return mcp_client
+
+def get_agent_client(
+    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],
+    max_iterations: int = 2
+) -> AgentClient:
+    """Get the Agent client."""
+    return AgentClient(
+        ai_client=ai_client,
+        max_iterations=max_iterations
+    )

@@ -225,6 +225,14 @@
         "documentation": {}
     },
     {
+        "label": "Union",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "Any",
         "importPath": "typing",
         "description": "typing",
@@ -471,6 +479,14 @@
         "importPath": "time",
         "description": "time",
         "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "AgentClient",
+        "importPath": "mbxai.agent",
+        "description": "mbxai.agent",
+        "isExtraImport": true,
+        "detail": "mbxai.agent",
         "documentation": {}
     },
     {
@@ -801,7 +817,16 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client",
+        "peekOfCode": "def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client\ndef get_agent_client(\n    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],\n    max_iterations: int = 2",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "documentation": {}
+    },
+    {
+        "label": "get_agent_client",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
+        "peekOfCode": "def get_agent_client(\n    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],\n    max_iterations: int = 2\n) -> AgentClient:\n    \"\"\"Get the Agent client.\"\"\"\n    return AgentClient(\n        ai_client=ai_client,\n        max_iterations=max_iterations\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },
