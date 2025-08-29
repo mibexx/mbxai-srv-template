@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import Dict, List, Any
+from typing import Any
 
 from ..config import get_config
 from .definition import MbxDefinitionBuilder
@@ -36,7 +36,7 @@ async def ident() -> IdentResponse:
 
 
 @app.get("/mbxai-definition")
-async def mbxai_definition() -> List[Dict[str, Any]]:
+async def mbxai_definition() -> list[dict[str, Any]]:
     """Return the API definition for all endpoints.
 
     This endpoint generates documentation about all API endpoints

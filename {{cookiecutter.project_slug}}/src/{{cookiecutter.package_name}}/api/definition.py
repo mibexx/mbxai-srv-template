@@ -1,7 +1,7 @@
 """API definition builder module."""
 
 import inspect
-from typing import Any, Dict, List, Optional, Set, Type
+from typing import Any, , Optional, Set, Type
 
 from fastapi import APIRouter, FastAPI
 from fastapi.routing import APIRoute
@@ -32,7 +32,7 @@ class MbxDefinitionBuilder:
         # Always exclude the definition endpoint itself
         self.excluded_paths.add("/mbxai-definition")
         
-    def _extract_model_schema(self, model_type: Optional[Type]) -> Optional[Dict[str, Any]]:
+    def _extract_model_schema(self, model_type: Optional[Type]) -> Optional[dict[str, Any]]:
         """Extract JSON schema from a Pydantic model.
         
         Args:
@@ -86,7 +86,7 @@ class MbxDefinitionBuilder:
             
         return None
     
-    def build_definitions(self) -> List[Dict[str, Any]]:
+    def build_definitions(self) -> list[dict[str, Any]]:
         """Build definitions for all endpoints except excluded ones.
         
         Returns:
