@@ -71,7 +71,7 @@ from your_package.clients.openrouter import OpenRouterApiClient, OpenRouterModel
 client = OpenRouterApiClient(model=OpenRouterModel.GPT_41)
 
 # Simple chat completion
-response = await client.chat_completion(
+response = await client.create(
     messages=[
         {"role": "user", "content": "Hello, how are you?"}
     ]
@@ -85,7 +85,7 @@ class UserInfo(BaseModel):
     name: str
     age: int
 
-response = await client.chat_parse(
+response = await client.parse(
     messages=[
         {"role": "user", "content": "My name is John and I am 30 years old."}
     ],
