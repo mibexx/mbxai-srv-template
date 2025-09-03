@@ -1,206 +1,218 @@
 # MIBEXX AI Service Template
 
-A template for creating AI services with FastAPI, Pydantic, SQLAlchemy, and Docker support.
+A comprehensive template for creating AI-powered services with FastAPI, integrated AI clients, and production-ready infrastructure.
 
-## Features
+## Table of Contents
 
-- FastAPI for high-performance API development
-- Pydantic for data validation and settings management
-- SQLAlchemy for database operations
-- Docker support for containerization
-- OpenRouter API client for AI model interactions
-- Model Context Protocol (MCP) client for tool and agent handling
-- Comprehensive testing setup with pytest
-- Code quality tools: mypy, ruff
-- GitHub Actions for CI/CD
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [AI Clients Reference](#ai-clients-reference)
+- [Project Setup](#project-setup)
+- [API Usage Examples](#api-usage-examples)
+- [Configuration](#configuration)
+- [Requirements](#requirements)
 
-## Usage
+## Quick Start
 
-### Creating a New Project
+### 1. Create New Project
 
 ```bash
 cookiecutter gh:mibexx/mbxai-srv-template
 ```
 
-Follow the prompts to configure your project:
-
-- `project_name`: The name of your project
-- `project_slug`: The slug for your project (used in paths and imports)
-- `package_name`: The name of your Python package
-- `description`: A short description of your project
-- `author_name`: Your name
-- `author_email`: Your email
-- `open_source_license`: The license for your project
-- `use_pytest`: Whether to include pytest for testing
-- `use_mypy`: Whether to include mypy for type checking
-- `use_ruff`: Whether to include ruff for linting
-
-### Project Structure
-
-The template creates a well-organized project structure:
-
-```
-your-project/
-├── src/
-│   └── your_package/
-│       ├── api/                  # Core API functionality
-│       ├── clients/              # Client libraries
-│       ├── project/              # Project-specific code
-│       ├── config.py             # Configuration management
-│       └── __init__.py           # Package initialization
-├── tests/                        # Test suite
-├── data/                         # Data storage
-├── logs/                         # Log files
-├── kubernetes/                   # Kubernetes deployment files
-├── Dockerfile                    # Docker configuration
-├── docker-compose.yml            # Docker Compose configuration
-├── pyproject.toml                # Project metadata and dependencies
-└── README.md                     # Project documentation
-```
-
-## AI Clients
-
-### OpenRouter API Client
-
-The template includes an OpenRouter API client for interacting with AI models. Here's how to use it:
-
-```python
-from your_package.utils.client import get_openrouter_client
-from mbxai.openrouter import OpenRouterModel
-
-# Initialize the client
-client = get_openrouter_client(model=OpenRouterModel.GPT_41)
-
-# Simple chat completion
-response = await client.create(
-    messages=[
-        {"role": "user", "content": "Hello, how are you?"}
-    ]
-)
-print(response.choices[0].message.content)
-
-# Chat completion with structured output
-from pydantic import BaseModel
-
-class UserInfo(BaseModel):
-    name: str
-    age: int
-
-response = await client.parse(
-    messages=[
-        {"role": "user", "content": "My name is John and I am 30 years old."}
-    ],
-    response_format=UserInfo
-)
-print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
-```
-
-### Tool Client
-
-The ToolClient provides the same interface as OpenRouterClient but with enhanced tool capabilities. It supports the same `chat` and `parse` methods:
-
-```python
-from your_package.utils.client import get_tool_client
-from mbxai.openrouter import OpenRouterModel
-from pydantic import BaseModel
-
-# Initialize the client
-client = get_tool_client(model=OpenRouterModel.GPT_41)
-
-# Simple chat completion
-response = await client.chat(
-    messages=[
-        {"role": "user", "content": "Hello, how are you?"}
-    ]
-)
-print(response.choices[0].message.content)
-
-# Chat completion with structured output
-class UserInfo(BaseModel):
-    name: str
-    age: int
-
-response = await client.parse(
-    messages=[
-        {"role": "user", "content": "My name is John and I am 30 years old."}
-    ],
-    response_format=UserInfo
-)
-print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
-```
-
-### Model Context Protocol (MCP) Client
-
-The MCP Client is a child class of ToolClient and inherits the same `chat` and `parse` methods. It provides enhanced capabilities for tool and agent handling and can connect to MCP servers.
-
-#### Basic Usage
-
-The MCP Client uses the same interface as ToolClient:
+### 2. Basic AI Client Usage
 
 ```python
 from your_package.utils.client import get_mcp_client
-from mbxai.openrouter import OpenRouterModel
 from pydantic import BaseModel
 
-# Initialize the client (automatically connects to configured MCP servers)
-client = get_mcp_client(model=OpenRouterModel.GPT_41)
+# Initialize AI client
+client = get_mcp_client()
 
-# Simple chat completion (same as ToolClient)
-response = await client.chat(
-    messages=[
-        {"role": "user", "content": "Hello, how are you?"}
-    ]
-)
-print(response.choices[0].message.content)
-
-# Chat completion with structured output (same as ToolClient)
+# Define response structure
 class WeatherInfo(BaseModel):
     location: str
     temperature: float
     conditions: str
 
+# Get structured AI response
 response = await client.parse(
-    messages=[
-        {"role": "user", "content": "What's the weather in New York?"}
-    ],
+    messages=[{"role": "user", "content": "What's the weather in Paris?"}],
     response_format=WeatherInfo
 )
-print(response.choices[0].message.parsed)  # WeatherInfo(location="New York", ...)
+
+result = response.choices[0].message.parsed
+print(f"Weather: {result.temperature}°F, {result.conditions}")
 ```
 
-#### Advanced MCP Features
+### 3. Run the Service
+
+```bash
+cd your-project
+python -m your_package.api.run
+```
+
+## Features
+
+### Core Infrastructure
+- **FastAPI** - High-performance async API framework
+- **Pydantic** - Data validation and settings management
+- **SQLAlchemy** - Database operations with ORM
+- **Docker** - Complete containerization support
+
+### AI Integration
+- **OpenRouter Client** - Direct AI model access
+- **Tool Client** - Enhanced AI with tool capabilities
+- **MCP Client** - Model Context Protocol integration
+- **Structured Output** - Type-safe AI responses with Pydantic
+
+### Development Tools
+- **Testing** - Comprehensive pytest setup
+- **Type Checking** - mypy integration
+- **Code Quality** - ruff linting and formatting
+- **CI/CD** - GitHub Actions workflows
+
+## AI Clients Reference
+
+### Client Hierarchy
+
+```
+OpenRouterClient (base)
+└── ToolClient (extends OpenRouterClient)
+    └── MCPClient (extends ToolClient)
+```
+
+### OpenRouterClient
+
+**Methods:** `create()`, `parse()`
+**Use Case:** Direct AI model interactions
 
 ```python
-# Get available tools from connected MCP servers
-tools = client.get_available_tools()
-print(f"Available tools: {[tool['function']['name'] for tool in tools]}")
+from your_package.utils.client import get_openrouter_client
 
-# The client automatically uses MCP tools when making chat/parse requests
+client = get_openrouter_client()
+
+# Basic chat
+response = await client.create(
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Structured output
 response = await client.parse(
-    messages=[
-        {"role": "user", "content": "Get the current weather in Paris"}
-    ],
-    response_format=WeatherInfo
+    messages=[{"role": "user", "content": "Extract name and age"}],
+    response_format=UserInfo
 )
 ```
 
-#### MCP Client Features
+### ToolClient
 
-The MCP client provides the following features:
+**Methods:** `chat()`, `parse()`
+**Use Case:** AI with custom tool capabilities
 
-- **Inherits ToolClient**: All `chat` and `parse` methods work exactly like ToolClient
-- **Automatic MCP Integration**: Automatically connects to configured MCP servers
-- **Tool Discovery**: Automatically discovers tools from connected servers
-- **Structured Output**: Full support for structured output using Pydantic models
-- **Seamless Tool Usage**: Tools are automatically available in chat/parse calls
+```python
+from your_package.utils.client import get_tool_client
 
-## Project Endpoints
+client = get_tool_client()
 
-The template includes several project-level endpoints that demonstrate how to use the AI clients:
+# Basic chat (equivalent to create)
+response = await client.chat(
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Structured output (same interface)
+response = await client.parse(
+    messages=[{"role": "user", "content": "Process this data"}],
+    response_format=DataModel
+)
+```
+
+### MCPClient (Recommended)
+
+**Methods:** `chat()`, `parse()` (inherited from ToolClient)
+**Use Case:** AI with automatic MCP tool integration
+
+```python
+from your_package.utils.client import get_mcp_client
+
+client = get_mcp_client()
+
+# Automatically uses available MCP tools
+response = await client.chat(
+    messages=[{"role": "user", "content": "Get weather data"}]
+)
+
+# Structured output with tool usage
+response = await client.parse(
+    messages=[{"role": "user", "content": "Analyze this location"}],
+    response_format=LocationAnalysis
+)
+
+# Check available tools
+tools = client.get_available_tools()
+```
+
+### Method Comparison Table
+
+| Client | Chat Method | Parse Method | Tools | MCP Integration |
+|--------|-------------|--------------|-------|-----------------|
+| OpenRouterClient | `create()` | `parse()` | ❌ | ❌ |
+| ToolClient | `chat()` | `parse()` | ✅ | ❌ |
+| MCPClient | `chat()` | `parse()` | ✅ | ✅ |
+
+## Project Setup
+
+### Project Structure
+
+```
+your-project/
+├── src/your_package/
+│   ├── api/                  # FastAPI application
+│   │   ├── server.py         # Main FastAPI app
+│   │   ├── run.py           # Application runner
+│   │   └── project/         # Your API endpoints
+│   ├── mcp/                 # MCP server implementation
+│   ├── ui/                  # Web interface (optional)
+│   ├── worker/              # Background tasks
+│   ├── utils/               # Shared utilities
+│   │   └── client.py        # AI client factories
+│   └── config.py            # Configuration management
+├── tests/                   # Test suite
+├── docker-compose.yml       # Local development
+├── Dockerfile              # Production container
+└── pyproject.toml          # Dependencies & metadata
+```
+
+### Configuration Variables
+
+Set these environment variables:
+
+```bash
+# Required
+export MBXAI_OPENROUTER_API_KEY="your-api-key"
+
+# Optional
+export MBXAI_MCP_SERVER_URL="http://your-mcp-server"
+export MBXAI_SERVICE_API_URL="http://your-service"
+```
+
+### Cookiecutter Options
+
+When creating a project, configure:
+
+- **project_name** - Display name
+- **project_slug** - URL-safe identifier
+- **package_name** - Python package name
+- **description** - Brief description
+- **author_name** - Your name
+- **author_email** - Contact email
+- **open_source_license** - License type
+- **use_pytest** - Include testing (recommended: yes)
+- **use_mypy** - Type checking (recommended: yes)
+- **use_ruff** - Code quality (recommended: yes)
+
+## API Usage Examples
 
 ### Hello World Endpoint
-
-A simple hello world endpoint that demonstrates basic FastAPI and Pydantic usage:
 
 ```bash
 curl -X POST http://localhost:8000/api/hello \
@@ -209,17 +221,11 @@ curl -X POST http://localhost:8000/api/hello \
 ```
 
 Response:
-
 ```json
-{
-  "message": "Hello, John!",
-  "name": "John"
-}
+{"message": "Hello, John!", "name": "John"}
 ```
 
-### Weather Endpoint
-
-A weather endpoint that demonstrates how to use the MCP client to get weather information:
+### AI-Powered Weather Endpoint
 
 ```bash
 curl -X POST http://localhost:8000/api/weather \
@@ -228,30 +234,70 @@ curl -X POST http://localhost:8000/api/weather \
 ```
 
 Response:
-
 ```json
-{
-  "weather_info": "The weather information for London..."
-}
+{"weather_info": "Current weather in London: 18°C, partly cloudy"}
 ```
 
-This endpoint:
+**How it works:**
+1. Uses MCPClient with configured MCP servers
+2. Automatically discovers and uses weather tools
+3. Returns structured response via `parse()` method
 
-1. Uses the MCP client (which inherits from ToolClient)
-2. Automatically connects to configured MCP servers
-3. Uses the `parse` method with structured output to get weather information
+### Custom Endpoint Pattern
 
-To use this endpoint, you need to set the following environment variables:
+```python
+from fastapi import APIRouter
+from your_package.utils.client import get_mcp_client
+from pydantic import BaseModel
 
-```bash
-export MBXAI_MCP_SERVER_URL="http://your-mcp-server"
-export MBXAI_OPENROUTER_API_KEY="your-openrouter-api-key"
+router = APIRouter()
+
+class MyRequest(BaseModel):
+    query: str
+
+class MyResponse(BaseModel):
+    result: str
+
+@router.post("/my-endpoint", response_model=MyResponse)
+async def my_endpoint(request: MyRequest) -> MyResponse:
+    client = get_mcp_client()
+    
+    response = await client.parse(
+        messages=[{"role": "user", "content": request.query}],
+        response_format=MyResponse
+    )
+    
+    return response.choices[0].message.parsed
+```
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `MBXAI_OPENROUTER_API_KEY` | OpenRouter API key | Yes | - |
+| `MBXAI_OPENROUTER_BASE_URL` | API base URL | No | OpenRouter default |
+| `MBXAI_MCP_SERVER_URL` | MCP server endpoint | No | - |
+| `MBXAI_SERVICE_API_URL` | Service API URL | No | - |
+| `MBXAI_SERVICE_API_TOKEN` | Service API token | No | - |
+
+### Client Configuration
+
+```python
+from mbxai.openrouter import OpenRouterModel
+
+# Different models
+client = get_mcp_client(model=OpenRouterModel.GPT_41)      # GPT-4 Turbo
+client = get_mcp_client(model=OpenRouterModel.CLAUDE_35)   # Claude 3.5
+client = get_mcp_client(model=OpenRouterModel.GEMINI_PRO)  # Gemini Pro
 ```
 
 ## Requirements
 
-- Python 3.12+
-- Cookiecutter 2.5.0+
+- **Python 3.12+**
+- **Cookiecutter 2.5.0+**
+- **OpenRouter API Key** (get one at [openrouter.ai](https://openrouter.ai))
 
 ## License
 
