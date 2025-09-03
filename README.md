@@ -65,10 +65,11 @@ your-project/
 The template includes an OpenRouter API client for interacting with AI models. Here's how to use it:
 
 ```python
-from your_package.clients.openrouter import OpenRouterClient, OpenRouterModel
+from your_package.utils.client import get_openrouter_client
+from mbxai.openrouter import OpenRouterModel
 
 # Initialize the client
-client = OpenRouterClient(model=OpenRouterModel.GPT_41)
+client = get_openrouter_client(model=OpenRouterModel.GPT_41)
 
 # Simple chat completion
 response = await client.create(
@@ -94,89 +95,104 @@ response = await client.parse(
 print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
 ```
 
-### Model Context Protocol (MCP) Client
+### Tool Client
 
-The template includes an MCP client for tool and agent handling. The MCP client can connect to both local and remote MCP servers.
-
-#### Connecting to MCP Servers
+The ToolClient provides the same interface as OpenRouterClient but with enhanced tool capabilities. It supports the same `chat` and `parse` methods:
 
 ```python
-from your_package.clients.mcp import McpClient
-from mcp import StdioServerParameters
-
-# Initialize the client
-client = McpClient()
-
-# Connect to a local MCP server
-server_params = StdioServerParameters(
-    command=["python", "path/to/your/mcp_server.py"]
-)
-await client.add_mcp_server(server_params)
-
-# Connect to a remote MCP server
-await client.add_mcp_server("https://your-mcp-server.com/api/")
-
-# Get available tools
-tools = client.get_available_tools()
-print(f"Available tools: {[tool['function']['name'] for tool in tools]}")
-```
-
-#### Using the MCP Client with an Agent
-
-```python
-from your_package.clients.mcp import McpClient
+from your_package.utils.client import get_tool_client
+from mbxai.openrouter import OpenRouterModel
 from pydantic import BaseModel
 
-# Initialize the client and connect to MCP servers
-client = McpClient()
-await client.add_mcp_server("https://your-mcp-server.com/api/")
+# Initialize the client
+client = get_tool_client(model=OpenRouterModel.GPT_41)
 
-# Define a structured output for the agent
+# Simple chat completion
+response = await client.chat(
+    messages=[
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+)
+print(response.choices[0].message.content)
+
+# Chat completion with structured output
+class UserInfo(BaseModel):
+    name: str
+    age: int
+
+response = await client.parse(
+    messages=[
+        {"role": "user", "content": "My name is John and I am 30 years old."}
+    ],
+    response_format=UserInfo
+)
+print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
+```
+
+### Model Context Protocol (MCP) Client
+
+The MCP Client is a child class of ToolClient and inherits the same `chat` and `parse` methods. It provides enhanced capabilities for tool and agent handling and can connect to MCP servers.
+
+#### Basic Usage
+
+The MCP Client uses the same interface as ToolClient:
+
+```python
+from your_package.utils.client import get_mcp_client
+from mbxai.openrouter import OpenRouterModel
+from pydantic import BaseModel
+
+# Initialize the client (automatically connects to configured MCP servers)
+client = get_mcp_client(model=OpenRouterModel.GPT_41)
+
+# Simple chat completion (same as ToolClient)
+response = await client.chat(
+    messages=[
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+)
+print(response.choices[0].message.content)
+
+# Chat completion with structured output (same as ToolClient)
 class WeatherInfo(BaseModel):
     location: str
     temperature: float
     conditions: str
 
-# Run the agent with structured output
-response = await client.agent(
+response = await client.parse(
     messages=[
         {"role": "user", "content": "What's the weather in New York?"}
     ],
-    structured_output=WeatherInfo
+    response_format=WeatherInfo
 )
+print(response.choices[0].message.parsed)  # WeatherInfo(location="New York", ...)
+```
 
-# Access the parsed result and tool calls
-print(f"Weather info: {response['parsed']}")
-print(f"Tool calls: {response['tool_calls']}")
-print(f"Tool results: {response['tool_results']}")
+#### Advanced MCP Features
 
-# Stream the agent's responses
-async for step in client.agent_stream(
+```python
+# Get available tools from connected MCP servers
+tools = client.get_available_tools()
+print(f"Available tools: {[tool['function']['name'] for tool in tools]}")
+
+# The client automatically uses MCP tools when making chat/parse requests
+response = await client.parse(
     messages=[
-        {"role": "user", "content": "What's the weather in New York?"}
+        {"role": "user", "content": "Get the current weather in Paris"}
     ],
-    structured_output=WeatherInfo
-):
-    print(f"Iteration {step['iteration']}: {step['parsed']}")
-    if step['tool_calls']:
-        print(f"Tool calls: {step['tool_calls']}")
-    if step['tool_results']:
-        print(f"Tool results: {step['tool_results']}")
-    if step['is_final']:
-        print("Agent completed")
+    response_format=WeatherInfo
+)
 ```
 
 #### MCP Client Features
 
 The MCP client provides the following features:
 
-- **Multiple Server Connections**: Connect to multiple MCP servers simultaneously
-- **Automatic Tool Discovery**: Automatically discover tools from connected servers
-- **Structured Output**: Support for structured output using Pydantic models
-- **Agent Loop**: Run an agent that can use tools from connected servers
-- **Streaming**: Stream the agent's responses as they are generated
-- **Retry Logic**: Automatic retry for failed operations
-- **Error Handling**: Comprehensive error handling for API calls and tool execution
+- **Inherits ToolClient**: All `chat` and `parse` methods work exactly like ToolClient
+- **Automatic MCP Integration**: Automatically connects to configured MCP servers
+- **Tool Discovery**: Automatically discovers tools from connected servers
+- **Structured Output**: Full support for structured output using Pydantic models
+- **Seamless Tool Usage**: Tools are automatically available in chat/parse calls
 
 ## Project Endpoints
 
@@ -203,7 +219,7 @@ Response:
 
 ### Weather Endpoint
 
-A weather endpoint that demonstrates how to use the MCP client with OpenAI to get weather information:
+A weather endpoint that demonstrates how to use the MCP client to get weather information:
 
 ```bash
 curl -X POST http://localhost:8000/api/weather \
@@ -221,9 +237,9 @@ Response:
 
 This endpoint:
 
-1. Connects to an MCP server to discover available tools
-2. Uses OpenAI to process the weather request
-3. Lets OpenAI decide how to use the available tools to get weather information
+1. Uses the MCP client (which inherits from ToolClient)
+2. Automatically connects to configured MCP servers
+3. Uses the `parse` method with structured output to get weather information
 
 To use this endpoint, you need to set the following environment variables:
 
