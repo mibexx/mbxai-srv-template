@@ -65,10 +65,10 @@ your-project/
 The template includes an OpenRouter API client for interacting with AI models. Here's how to use it:
 
 ```python
-from your_package.clients.openrouter import OpenRouterApiClient, OpenRouterModel
+from your_package.clients.openrouter import OpenRouterClient, OpenRouterModel
 
 # Initialize the client
-client = OpenRouterApiClient(model=OpenRouterModel.GPT_41)
+client = OpenRouterClient(model=OpenRouterModel.GPT_41)
 
 # Simple chat completion
 response = await client.create(
@@ -89,7 +89,7 @@ response = await client.parse(
     messages=[
         {"role": "user", "content": "My name is John and I am 30 years old."}
     ],
-    structured_output=UserInfo
+    response_format=UserInfo
 )
 print(response.choices[0].message.parsed)  # UserInfo(name="John", age=30)
 ```
