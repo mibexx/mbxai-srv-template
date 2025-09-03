@@ -17,7 +17,7 @@ A comprehensive template for creating AI-powered services with FastAPI, integrat
 ### 1. Create New Project
 
 ```bash
-cookiecutter gh:mibexx/mbxai-srv-template
+uv tool run cookiecutter gh:mibexx/mbxai-srv-template
 ```
 
 ### 2. Basic AI Client Usage
@@ -45,11 +45,21 @@ result = response.choices[0].message.parsed
 print(f"Weather: {result.temperature}°F, {result.conditions}")
 ```
 
-### 3. Run the Service
+### 3. Setup and Run the Service
 
 ```bash
 cd your-project
-python -m your_package.api.run
+
+# Install dependencies
+uv sync
+
+# Run the API service
+uv run python -m your_package.api.run
+
+# Or run other services
+uv run python -m your_package.mcp.run    # MCP server
+uv run python -m your_package.ui.app     # Web UI
+uv run python -m your_package.worker.run # Background worker
 ```
 
 ## Features
@@ -74,13 +84,22 @@ python -m your_package.api.run
 
 ## AI Clients Reference
 
-### Client Hierarchy
+### Client Architecture
 
 ```
-OpenRouterClient (base)
-└── ToolClient (extends OpenRouterClient)
-    └── MCPClient (extends ToolClient)
+OpenRouterClient (core AI client)
+    ↓ (wrapped by)
+ToolClient (adds tool functionality)
+    ↓ (wrapped by)  
+MCPClient (adds MCP server integration)
+    ↓ (can be wrapped by)
+AgentClient (adds intelligent multi-step processing)
 ```
+
+**Architecture Pattern**: Composition over inheritance
+- ToolClient wraps OpenRouterClient to add tool capabilities
+- MCPClient wraps ToolClient to add MCP server integration
+- AgentClient wraps any AI client to add intelligent agent behavior
 
 ### OpenRouterClient
 
@@ -108,18 +127,19 @@ response = client.parse(
 
 **Methods:** `chat()`, `parse()`
 **Use Case:** AI with custom tool capabilities
+**Architecture:** Wraps OpenRouterClient and delegates `parse()` calls
 
 ```python
 from your_package.utils.client import get_tool_client
 
 client = get_tool_client()
 
-# Basic chat (equivalent to create)
+# Basic chat (delegates to OpenRouterClient.create internally)
 response = client.chat(
     messages=[{"role": "user", "content": "Hello!"}]
 )
 
-# Structured output (same interface)
+# Structured output (delegates to OpenRouterClient.parse internally)
 response = client.parse(
     messages=[{"role": "user", "content": "Process this data"}],
     response_format=DataModel
@@ -128,8 +148,9 @@ response = client.parse(
 
 ### MCPClient (Recommended)
 
-**Methods:** `chat()`, `parse()` (inherited from ToolClient)
+**Methods:** `chat()`, `parse()` (delegates through ToolClient to OpenRouterClient)
 **Use Case:** AI with automatic MCP tool integration
+**Architecture:** Wraps ToolClient to add MCP server functionality
 
 ```python
 from your_package.utils.client import get_mcp_client
@@ -151,13 +172,60 @@ response = client.parse(
 tools = client.get_available_tools()
 ```
 
+### AgentClient
+
+**Methods:** `agent()`
+**Use Case:** Intelligent multi-step processing with automatic quality improvement
+**Architecture:** Wraps any AI client (OpenRouterClient, ToolClient, or MCPClient)
+
+```python
+from your_package.utils.client import get_agent_client, get_mcp_client
+from pydantic import BaseModel, Field
+
+# Initialize agent with any AI client
+ai_client = get_mcp_client()
+agent = get_agent_client(ai_client, max_iterations=3)
+
+# Define structured response
+class TravelPlan(BaseModel):
+    destination: str = Field(description="Travel destination")
+    activities: list[str] = Field(description="Recommended activities")
+    budget: str = Field(description="Estimated budget")
+
+# Get intelligent response with automatic improvement
+response = agent.agent(
+    prompt="Plan a weekend trip to a mountain destination",
+    final_response_structure=TravelPlan,
+    ask_questions=False
+)
+
+# Access the improved result
+plan = response.final_response
+print(f"Destination: {plan.destination}")
+print(f"Activities: {', '.join(plan.activities)}")
+print(f"Budget: {plan.budget}")
+```
+
+#### AgentClient Features
+
+- **Quality Improvement**: Automatically refines responses through multiple iterations
+- **Structured Output**: Works with any Pydantic model for type-safe responses
+- **Flexible Base**: Can wrap any AI client (OpenRouter, Tool, or MCP)
+- **Configurable**: Set max_iterations to control processing depth
+- **Question Mode**: Optional interactive questioning for clarification
+
 ### Method Comparison Table
 
-| Client | Chat Method | Parse Method | Tools | MCP Integration |
-|--------|-------------|--------------|-------|-----------------|
-| OpenRouterClient | `create()` | `parse()` | ❌ | ❌ |
-| ToolClient | `chat()` | `parse()` | ✅ | ❌ |
-| MCPClient | `chat()` | `parse()` | ✅ | ✅ |
+| Client | Main Method | Parse Method | Tools | MCP Integration | Agent Processing | Architecture |
+|--------|-------------|--------------|-------|-----------------|------------------|--------------|
+| OpenRouterClient | `create()` | `parse()` | ❌ | ❌ | ❌ | Core AI client |
+| ToolClient | `chat()` | `parse()` | ✅ | ❌ | ❌ | Wraps OpenRouterClient |
+| MCPClient | `chat()` | `parse()` | ✅ | ✅ | ❌ | Wraps ToolClient |
+| AgentClient | `agent()` | - | ✅* | ✅* | ✅ | Wraps any AI client |
+
+**Notes:** 
+- All `parse()` calls ultimately delegate to `OpenRouterClient.parse()`
+- *AgentClient inherits tools/MCP from the wrapped client
 
 ## Project Setup
 
@@ -286,17 +354,24 @@ async def my_endpoint(request: MyRequest) -> MyResponse:
 
 ```python
 from mbxai.openrouter import OpenRouterModel
+from your_package.utils.client import get_mcp_client, get_agent_client
 
 # Different models
 client = get_mcp_client(model=OpenRouterModel.GPT_41)      # GPT-4 Turbo
 client = get_mcp_client(model=OpenRouterModel.CLAUDE_35)   # Claude 3.5
 client = get_mcp_client(model=OpenRouterModel.GEMINI_PRO)  # Gemini Pro
+
+# Agent configuration
+ai_client = get_mcp_client(model=OpenRouterModel.GPT_41)
+agent = get_agent_client(ai_client, max_iterations=5)      # More iterations for complex tasks
+agent = get_agent_client(ai_client, max_iterations=1)      # Single iteration for simple tasks
 ```
 
 ## Requirements
 
 - **Python 3.12+**
-- **Cookiecutter 2.5.0+**
+- **uv** (Python package manager) - Install with `pip install uv` or `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- **Cookiecutter 2.5.0+** - Install with `uv tool install cookiecutter`
 - **OpenRouter API Key** (get one at [openrouter.ai](https://openrouter.ai))
 
 ## License
