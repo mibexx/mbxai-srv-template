@@ -88,18 +88,20 @@ uv run python -m your_package.worker.run # Background worker
 
 ```
 OpenRouterClient (core AI client)
-    ↓ (wrapped by)
-ToolClient (adds tool functionality)
-    ↓ (wrapped by)  
-MCPClient (adds MCP server integration)
-    ↓ (can be wrapped by)
-AgentClient (adds intelligent multi-step processing)
+    ↓ (init param for)
+ToolClient (wraps OpenRouterClient, adds tools)
+    ↓ (inherited by)
+MCPClient (inherits ToolClient, adds MCP integration)
+
+AgentClient (separate wrapper)
+    ↓ (can wrap any of)
+OpenRouterClient | ToolClient | MCPClient
 ```
 
-**Architecture Pattern**: Composition over inheritance
-- ToolClient wraps OpenRouterClient to add tool capabilities
-- MCPClient wraps ToolClient to add MCP server integration
-- AgentClient wraps any AI client to add intelligent agent behavior
+**Architecture Pattern**: 
+- **ToolClient**: Takes OpenRouterClient as init param, wraps its logic
+- **MCPClient**: Inherits from ToolClient, adds MCP server capabilities  
+- **AgentClient**: Separate wrapper that can take any AI client for intelligent processing
 
 ### OpenRouterClient
 
@@ -148,9 +150,9 @@ response = client.parse(
 
 ### MCPClient (Recommended)
 
-**Methods:** `chat()`, `parse()` (delegates through ToolClient to OpenRouterClient)
+**Methods:** `chat()`, `parse()` (inherited from ToolClient)
 **Use Case:** AI with automatic MCP tool integration
-**Architecture:** Wraps ToolClient to add MCP server functionality
+**Architecture:** Inherits from ToolClient, adds MCP server functionality
 
 ```python
 from your_package.utils.client import get_mcp_client
@@ -176,7 +178,7 @@ tools = client.get_available_tools()
 
 **Methods:** `agent()`
 **Use Case:** Intelligent multi-step processing with automatic quality improvement
-**Architecture:** Wraps any AI client (OpenRouterClient, ToolClient, or MCPClient)
+**Architecture:** Separate wrapper that can take any AI client as input parameter
 
 ```python
 from your_package.utils.client import get_agent_client, get_mcp_client
@@ -220,8 +222,8 @@ print(f"Budget: {plan.budget}")
 |--------|-------------|--------------|-------|-----------------|------------------|--------------|
 | OpenRouterClient | `create()` | `parse()` | ❌ | ❌ | ❌ | Core AI client |
 | ToolClient | `chat()` | `parse()` | ✅ | ❌ | ❌ | Wraps OpenRouterClient |
-| MCPClient | `chat()` | `parse()` | ✅ | ✅ | ❌ | Wraps ToolClient |
-| AgentClient | `agent()` | - | ✅* | ✅* | ✅ | Wraps any AI client |
+| MCPClient | `chat()` | `parse()` | ✅ | ✅ | ❌ | Inherits ToolClient |
+| AgentClient | `agent()` | - | ✅* | ✅* | ✅ | Takes any AI client |
 
 **Notes:** 
 - All `parse()` calls ultimately delegate to `OpenRouterClient.parse()`
