@@ -161,7 +161,7 @@ from mbxai.clients.openrouter import OpenRouterApiClient, OpenRouterModel
 client = OpenRouterApiClient()
 
 # Send a message
-response = await client.chat_completion(
+response = await client.create(
     messages=[{"role": "user", "content": "Hello, world!"}]
 )
 print(response["content"])
@@ -177,7 +177,7 @@ class UserInfo(BaseModel):
     age: int
 
 # Parse structured output
-response = await client.chat_parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "My name is John and I am 30 years old."}],
     structured_output=UserInfo
 )
@@ -737,7 +737,7 @@ def ai_processing_task(prompt):
     from {{cookiecutter.package_name}}.utils import get_mcp_client
     
     client = get_mcp_client()
-    response = client.chat_completion(
+    response = client.create(
         messages=[{"role": "user", "content": prompt}]
     )
     return response["content"]
