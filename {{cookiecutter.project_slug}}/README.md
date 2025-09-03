@@ -817,6 +817,835 @@ purged_count = client.purge_queue('low_priority')
 print(f"Purged {purged_count} messages from queue")
 ```
 
+##### Dynamic Task Names and Cross-Application Tasks
+
+Task names in Celery are **completely dynamic** - they're just strings. This means you can call tasks from any application that shares the same message broker (RabbitMQ), not just tasks defined in your current application.
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+client = get_celery_client()
+
+# Call tasks from different applications
+# These can be from any service connected to the same RabbitMQ instance
+
+# Task from a user management service
+user_task_id = client.send_task(
+    'user_service.tasks.create_user',  # External application task
+    kwargs={
+        'email': 'user@example.com',
+        'name': 'John Doe'
+    }
+)
+
+# Task from a payment processing service
+payment_task_id = client.send_task(
+    'payment_service.workers.process_payment',  # Different naming convention
+    args=['order_123', 99.99],
+    kwargs={'currency': 'USD'}
+)
+
+# Task from a machine learning service
+ml_task_id = client.send_task(
+    'ml.inference.run_model',
+    kwargs={
+        'model_name': 'sentiment_analysis_v2',
+        'input_data': {'text': 'This is great!'}
+    }
+)
+
+# Task from your own application
+local_task_id = client.send_task(
+    '{{cookiecutter.package_name}}.worker.tasks.ai_processing_task',
+    kwargs={'prompt': 'Analyze this data'}
+)
+```
+
+**Key Points:**
+- Task names are arbitrary strings - no imports or local definitions needed
+- Tasks can be in any application connected to the same RabbitMQ broker
+- Different applications can use different naming conventions
+- You can call tasks even if the target application uses a different programming language (Python, Node.js, Go, etc.)
+
+##### Adding Tasks from External Applications
+
+When working with tasks from other applications, you need to know:
+
+1. **Task Name**: The full string identifier (e.g., `'other_app.module.task_function'`)
+2. **Arguments**: What parameters the task expects
+3. **Queue**: Which queue the target application listens to (optional)
+
+```python
+# Example: Calling tasks from different microservices
+external_tasks = [
+    {
+        'task_name': 'email_service.send_notification',
+        'kwargs': {
+            'recipient': 'user@example.com',
+            'template': 'welcome',
+            'data': {'name': 'John'}
+        },
+        'queue': 'email_queue'  # Specific queue for email service
+    },
+    {
+        'task_name': 'analytics.track_event', 
+        'kwargs': {
+            'event_type': 'user_signup',
+            'user_id': '12345',
+            'metadata': {'source': 'web'}
+        },
+        'queue': 'analytics_queue'
+    },
+    {
+        'task_name': 'file_processor.convert_document',
+        'args': ['document.pdf'],
+        'kwargs': {
+            'output_format': 'html',
+            'quality': 'high'
+        },
+        'queue': 'file_processing'
+    }
+]
+
+# Submit all external tasks in bulk
+task_ids = client.send_bulk_tasks(external_tasks)
+```
+
+##### Cross-Service Workflow Example
+
+Here's a complete example of orchestrating tasks across multiple services:
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+async def process_user_onboarding(user_data: dict):
+    """Orchestrate user onboarding across multiple services."""
+    client = get_celery_client()
+    
+    # Step 1: Create user in user service
+    user_task_id = client.send_task(
+        'user_service.create_user',
+        kwargs=user_data,
+        queue='user_management'
+    )
+    
+    # Step 2: Set up initial preferences in another service
+    preferences_task_id = client.send_task(
+        'preferences_service.initialize_defaults',
+        kwargs={'user_id': user_data['id']},
+        queue='preferences'
+    )
+    
+    # Step 3: Send welcome email
+    email_task_id = client.send_task(
+        'notification_service.send_welcome_email',
+        kwargs={
+            'email': user_data['email'],
+            'name': user_data['name']
+        },
+        queue='notifications'
+    )
+    
+    # Step 4: Generate AI-powered personalized recommendations
+    ai_task_id = client.send_task(
+        'ml_service.generate_recommendations',
+        kwargs={
+            'user_profile': user_data,
+            'model': 'user_onboarding_v3'
+        },
+        queue='ml_inference'
+    )
+    
+    # Wait for all onboarding tasks to complete
+    all_task_ids = [user_task_id, preferences_task_id, email_task_id, ai_task_id]
+    results = client.wait_for_all_tasks(
+        all_task_ids,
+        timeout=60,  # 1 minute timeout
+        poll_interval=2.0
+    )
+    
+    if results['completed']:
+        print(f"User onboarding completed successfully!")
+        return {
+            'status': 'success',
+            'user_creation': results['results'][user_task_id],
+            'preferences': results['results'][preferences_task_id],
+            'email_sent': results['results'][email_task_id],
+            'recommendations': results['results'][ai_task_id]
+        }
+    else:
+        print(f"Onboarding timed out. {results['pending_count']} tasks still pending")
+        return {
+            'status': 'timeout',
+            'completed_tasks': results['success_count'],
+            'failed_tasks': results['failure_count'],
+            'pending_tasks': results['pending_count']
+        }
+```
+
+##### Discovering and Managing External Tasks
+
+Since task names are dynamic strings, you might want to implement task discovery mechanisms:
+
+```python
+# Example: Service registry for task discovery
+KNOWN_SERVICES = {
+    'user_service': {
+        'tasks': [
+            'user_service.create_user',
+            'user_service.update_profile', 
+            'user_service.delete_user'
+        ],
+        'queue': 'user_management',
+        'timeout': 30
+    },
+    'email_service': {
+        'tasks': [
+            'email_service.send_notification',
+            'email_service.send_bulk_email',
+            'email_service.schedule_email'
+        ],
+        'queue': 'email_queue',
+        'timeout': 60
+    },
+    'ml_service': {
+        'tasks': [
+            'ml.inference.run_model',
+            'ml.training.start_training',
+            'ml.preprocessing.clean_data'
+        ],
+        'queue': 'ml_inference',
+        'timeout': 300
+    }
+}
+
+def send_service_task(service_name: str, task_suffix: str, **kwargs):
+    """Send a task to a known service with automatic configuration."""
+    if service_name not in KNOWN_SERVICES:
+        raise ValueError(f"Unknown service: {service_name}")
+    
+    service = KNOWN_SERVICES[service_name]
+    full_task_name = f"{service_name}.{task_suffix}"
+    
+    if full_task_name not in service['tasks']:
+        available_tasks = [t.split('.', 1)[1] for t in service['tasks']]
+        raise ValueError(f"Unknown task '{task_suffix}' for {service_name}. Available: {available_tasks}")
+    
+    client = get_celery_client()
+    return client.send_task(
+        full_task_name,
+        kwargs=kwargs,
+        queue=service['queue'],
+        soft_time_limit=service['timeout']
+    )
+
+# Usage
+user_task_id = send_service_task(
+    'user_service', 
+    'create_user',
+    email='user@example.com',
+    name='John Doe'
+)
+
+email_task_id = send_service_task(
+    'email_service',
+    'send_notification',
+    recipient='user@example.com',
+    template='welcome'
+)
+```
+
+##### Task Monitoring Across Services
+
+You can monitor tasks from multiple services using the bulk operations:
+
+```python
+def monitor_cross_service_workflow(task_mapping: dict[str, str]):
+    """Monitor tasks across multiple services.
+    
+    Args:
+        task_mapping: Dict of {service_name: task_id}
+    """
+    client = get_celery_client()
+    
+    all_task_ids = list(task_mapping.values())
+    
+    # Monitor progress
+    results = client.wait_for_all_tasks(
+        all_task_ids,
+        timeout=300,  # 5 minutes
+        poll_interval=5.0  # Check every 5 seconds
+    )
+    
+    # Create detailed report
+    service_results = {}
+    for service_name, task_id in task_mapping.items():
+        if task_id in results['results']:
+            service_results[service_name] = {
+                'status': 'success',
+                'result': results['results'][task_id]
+            }
+        elif task_id in results['errors']:
+            service_results[service_name] = {
+                'status': 'error',
+                'error': results['errors'][task_id]
+            }
+        else:
+            service_results[service_name] = {
+                'status': results['statuses'].get(task_id, 'unknown')
+            }
+    
+    return {
+        'overall_completed': results['completed'],
+        'services': service_results,
+        'summary': {
+            'success_count': results['success_count'],
+            'failure_count': results['failure_count'],
+            'pending_count': results['pending_count']
+        }
+    }
+
+# Example usage
+workflow_tasks = {
+    'user_service': send_service_task('user_service', 'create_user', **user_data),
+    'email_service': send_service_task('email_service', 'send_welcome', **email_data),
+    'analytics_service': send_service_task('analytics', 'track_signup', **analytics_data)
+}
+
+final_results = monitor_cross_service_workflow(workflow_tasks)
+print(f"Workflow completed: {final_results['overall_completed']}")
+for service, result in final_results['services'].items():
+    print(f"{service}: {result['status']}")
+```
+
+##### Best Practices for Cross-Application Tasks
+
+1. **Use Consistent Naming Conventions**: Establish patterns like `{service}.{module}.{function}`
+
+2. **Document Task Interfaces**: Keep a registry or documentation of available tasks and their parameters
+
+3. **Handle Failures Gracefully**: External services might be down or tasks might fail
+
+4. **Use Appropriate Queues**: Route tasks to specific queues for better resource management
+
+5. **Set Timeouts**: External tasks might take longer than expected
+
+6. **Monitor Dependencies**: Use bulk operations to coordinate multi-service workflows
+
+##### Listening to Dynamic Task Names
+
+When using dynamic task names, you need to **register the task functions** in your worker applications so they can listen to and execute those tasks. Here are several approaches:
+
+###### Method 1: Direct Task Registration (Recommended)
+
+Register tasks with specific names that other applications can call:
+
+```python
+# In your worker application (e.g., user_service/worker.py)
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+# Get the Celery app instance
+celery_app = get_celery_client().app
+
+# Register task with the exact name other services will use
+@celery_app.task(name='user_service.create_user')
+def create_user(email: str, name: str, **kwargs) -> dict:
+    """Create a new user - callable as 'user_service.create_user'."""
+    logger.info(f"Creating user: {name} ({email})")
+    
+    # Your user creation logic here
+    user_id = create_user_in_database(email, name, **kwargs)
+    
+    return {
+        'user_id': user_id,
+        'email': email,
+        'name': name,
+        'status': 'created'
+    }
+
+@celery_app.task(name='user_service.update_profile')
+def update_profile(user_id: str, **updates) -> dict:
+    """Update user profile - callable as 'user_service.update_profile'."""
+    logger.info(f"Updating user {user_id}: {updates}")
+    
+    # Update logic here
+    updated_user = update_user_in_database(user_id, updates)
+    
+    return {
+        'user_id': user_id,
+        'updates': updates,
+        'status': 'updated'
+    }
+
+@celery_app.task(name='user_service.delete_user')
+def delete_user(user_id: str) -> dict:
+    """Delete user - callable as 'user_service.delete_user'."""
+    logger.info(f"Deleting user: {user_id}")
+    
+    # Deletion logic here
+    delete_user_from_database(user_id)
+    
+    return {
+        'user_id': user_id,
+        'status': 'deleted'
+    }
+```
+
+###### Method 2: Dynamic Task Registration
+
+Register tasks dynamically using a registry pattern:
+
+```python
+# In your worker application
+from {{cookiecutter.package_name}}.utils import get_celery_client
+from typing import Callable, Dict, Any
+
+celery_app = get_celery_client().app
+
+# Task registry
+TASK_REGISTRY: Dict[str, Callable] = {}
+
+def register_dynamic_task(task_name: str):
+    """Decorator to register tasks with dynamic names."""
+    def decorator(func: Callable) -> Callable:
+        # Register the function in our registry
+        TASK_REGISTRY[task_name] = func
+        
+        # Create a Celery task that dispatches to the registered function
+        @celery_app.task(name=task_name, bind=True)
+        def task_wrapper(self, *args, **kwargs):
+            if task_name not in TASK_REGISTRY:
+                raise ValueError(f"Task {task_name} not found in registry")
+            
+            try:
+                return TASK_REGISTRY[task_name](*args, **kwargs)
+            except Exception as e:
+                logger.error(f"Task {task_name} failed: {str(e)}")
+                raise self.retry(exc=e, countdown=60, max_retries=3)
+        
+        return func
+    return decorator
+
+# Usage of dynamic registration
+@register_dynamic_task('email_service.send_notification')
+def send_notification(recipient: str, template: str, data: dict = None) -> dict:
+    """Send email notification."""
+    logger.info(f"Sending {template} email to {recipient}")
+    
+    # Email sending logic here
+    send_email(recipient, template, data or {})
+    
+    return {
+        'recipient': recipient,
+        'template': template,
+        'status': 'sent'
+    }
+
+@register_dynamic_task('email_service.send_bulk_email')
+def send_bulk_email(recipients: list[str], template: str, data: dict = None) -> dict:
+    """Send bulk email."""
+    logger.info(f"Sending bulk {template} email to {len(recipients)} recipients")
+    
+    # Bulk email logic here
+    results = bulk_send_email(recipients, template, data or {})
+    
+    return {
+        'recipients_count': len(recipients),
+        'template': template,
+        'results': results,
+        'status': 'sent'
+    }
+```
+
+###### Method 3: Generic Task Handler
+
+Create a generic task handler that can execute any function:
+
+```python
+# In your worker application
+from {{cookiecutter.package_name}}.utils import get_celery_client
+import importlib
+from typing import Any
+
+celery_app = get_celery_client().app
+
+@celery_app.task(name='generic.execute_function', bind=True)
+def execute_function(self, module_path: str, function_name: str, *args, **kwargs) -> Any:
+    """Generic task that can execute any function.
+    
+    Args:
+        module_path: Python module path (e.g., 'myapp.services.user')
+        function_name: Function name to execute
+        *args, **kwargs: Arguments to pass to the function
+    """
+    try:
+        # Import the module
+        module = importlib.import_module(module_path)
+        
+        # Get the function
+        func = getattr(module, function_name)
+        
+        # Execute the function
+        result = func(*args, **kwargs)
+        
+        return {
+            'module': module_path,
+            'function': function_name,
+            'result': result,
+            'status': 'success'
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to execute {module_path}.{function_name}: {str(e)}")
+        raise self.retry(exc=e, countdown=60, max_retries=3)
+
+# Usage from other applications:
+# client.send_task(
+#     'generic.execute_function',
+#     args=['myapp.services.user', 'create_user'],
+#     kwargs={'email': 'user@example.com', 'name': 'John'}
+# )
+```
+
+###### Method 4: Queue-Based Task Routing
+
+Use different queues and workers for different types of tasks:
+
+```python
+# In user_service/worker.py
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+celery_app = get_celery_client().app
+
+# Tasks for user management queue
+@celery_app.task(name='create_user', bind=True)
+def create_user(self, **user_data):
+    """Handle user creation - listens on 'user_management' queue."""
+    return handle_user_creation(user_data)
+
+@celery_app.task(name='update_user', bind=True) 
+def update_user(self, user_id: str, **updates):
+    """Handle user updates - listens on 'user_management' queue."""
+    return handle_user_update(user_id, updates)
+
+# Start worker listening to specific queue:
+# celery -A user_service.worker worker --loglevel=info --queues=user_management
+```
+
+```python
+# In email_service/worker.py
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+celery_app = get_celery_client().app
+
+# Tasks for email queue
+@celery_app.task(name='send_email', bind=True)
+def send_email(self, **email_data):
+    """Handle email sending - listens on 'email_queue'."""
+    return handle_email_sending(email_data)
+
+@celery_app.task(name='send_bulk_email', bind=True)
+def send_bulk_email(self, **bulk_data):
+    """Handle bulk email - listens on 'email_queue'."""
+    return handle_bulk_email_sending(bulk_data)
+
+# Start worker listening to specific queue:
+# celery -A email_service.worker worker --loglevel=info --queues=email_queue
+```
+
+###### Running Workers for Dynamic Tasks
+
+Once you've registered your tasks, start workers to listen for them:
+
+```bash
+# Method 1: Start worker listening to all tasks
+celery -A your_app.worker worker --loglevel=info
+
+# Method 2: Start worker listening to specific queues
+celery -A user_service.worker worker --loglevel=info --queues=user_management
+
+# Method 3: Start multiple workers for different services
+celery -A user_service.worker worker --loglevel=info --queues=user_management --hostname=user_worker@%h
+celery -A email_service.worker worker --loglevel=info --queues=email_queue --hostname=email_worker@%h
+celery -A ml_service.worker worker --loglevel=info --queues=ml_inference --hostname=ml_worker@%h
+
+# Method 4: Start worker with multiple queues
+celery -A your_app.worker worker --loglevel=info --queues=user_management,email_queue,ml_inference
+```
+
+###### Complete Example: Multi-Service Setup
+
+Here's a complete example showing how to set up workers for dynamic task names:
+
+```python
+# File: services/user_service/worker.py
+from {{cookiecutter.package_name}}.utils import get_celery_client
+import logging
+
+logger = logging.getLogger(__name__)
+celery_app = get_celery_client().app
+
+@celery_app.task(name='user_service.create_user')
+def create_user(email: str, name: str, role: str = 'user') -> dict:
+    """Create a new user."""
+    logger.info(f"Creating user: {name} ({email}) with role {role}")
+    
+    # Simulate user creation
+    user_id = f"user_{hash(email) % 10000}"
+    
+    return {
+        'user_id': user_id,
+        'email': email,
+        'name': name,
+        'role': role,
+        'status': 'created'
+    }
+
+@celery_app.task(name='user_service.get_user')
+def get_user(user_id: str) -> dict:
+    """Get user information."""
+    logger.info(f"Getting user: {user_id}")
+    
+    # Simulate user retrieval
+    return {
+        'user_id': user_id,
+        'email': f'user{user_id}@example.com',
+        'name': f'User {user_id}',
+        'status': 'active'
+    }
+
+# File: services/email_service/worker.py  
+from {{cookiecutter.package_name}}.utils import get_celery_client
+import logging
+
+logger = logging.getLogger(__name__)
+celery_app = get_celery_client().app
+
+@celery_app.task(name='email_service.send_welcome')
+def send_welcome(email: str, name: str) -> dict:
+    """Send welcome email."""
+    logger.info(f"Sending welcome email to {name} ({email})")
+    
+    # Simulate email sending
+    return {
+        'recipient': email,
+        'template': 'welcome',
+        'status': 'sent',
+        'message_id': f"msg_{hash(email) % 10000}"
+    }
+
+# File: orchestrator.py - Using the dynamic tasks
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+async def onboard_new_user(email: str, name: str):
+    """Complete user onboarding workflow."""
+    client = get_celery_client()
+    
+    # Step 1: Create user
+    user_task_id = client.send_task(
+        'user_service.create_user',
+        kwargs={'email': email, 'name': name},
+        queue='user_management'
+    )
+    
+    # Step 2: Send welcome email
+    email_task_id = client.send_task(
+        'email_service.send_welcome', 
+        kwargs={'email': email, 'name': name},
+        queue='email_queue'
+    )
+    
+    # Wait for both tasks
+    results = client.wait_for_all_tasks(
+        [user_task_id, email_task_id],
+        timeout=60
+    )
+    
+    if results['completed']:
+        return {
+            'status': 'success',
+            'user_creation': results['results'][user_task_id],
+            'welcome_email': results['results'][email_task_id]
+        }
+    else:
+        return {
+            'status': 'partial_failure',
+            'results': results
+        }
+
+# To run the workers:
+# Terminal 1: celery -A services.user_service.worker worker --queues=user_management
+# Terminal 2: celery -A services.email_service.worker worker --queues=email_queue
+```
+
+**Key Points for Listening to Dynamic Tasks:**
+
+1. **Task Registration is Required**: You must register task functions with the exact names that other services will call
+2. **Worker Must Be Running**: The worker process must be running and listening to the right queues
+3. **Name Matching**: The task name in `@celery_app.task(name='...')` must exactly match what other services send
+4. **Queue Configuration**: Use queues to route tasks to the right workers
+5. **Error Handling**: Implement proper error handling and retries in your task functions
+
+##### Bulk Task Processing
+
+The Celery client supports bulk task submission and waiting for multiple tasks to complete:
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+client = get_celery_client()
+
+# Submit multiple tasks in bulk
+tasks = [
+    {
+        'task_name': 'my_app.tasks.process_data',
+        'args': [1, 2, 3],
+        'kwargs': {'option': 'value1'}
+    },
+    {
+        'task_name': 'my_app.tasks.process_data',
+        'args': [4, 5, 6],
+        'kwargs': {'option': 'value2'},
+        'queue': 'priority_queue'  # Optional per-task queue override
+    },
+    {
+        'task_name': 'my_app.tasks.ai_processing_task',
+        'args': [],
+        'kwargs': {'prompt': 'Analyze this data batch'}
+    }
+]
+
+# Method 1: Submit as individual tasks
+task_ids = client.send_bulk_tasks(tasks, queue='default_queue')
+print(f"Submitted {len(task_ids)} tasks: {task_ids}")
+
+# Wait for all tasks to complete
+results = client.wait_for_all_tasks(
+    task_ids, 
+    timeout=300,  # 5 minutes timeout
+    poll_interval=2.0  # Check every 2 seconds
+)
+
+if results['completed']:
+    print(f"All tasks completed!")
+    print(f"Success: {results['success_count']}, Failed: {results['failure_count']}")
+    
+    # Access individual results
+    for task_id, result in results['results'].items():
+        print(f"Task {task_id}: {result}")
+    
+    # Check for any errors
+    for task_id, error in results['errors'].items():
+        print(f"Task {task_id} failed: {error}")
+else:
+    print(f"Timeout reached. {results['pending_count']} tasks still pending")
+```
+
+```python
+# Method 2: Submit as a Celery group for coordinated execution
+group_id = client.send_bulk_tasks_as_group(tasks, queue='batch_queue')
+print(f"Submitted group with ID: {group_id}")
+
+# Wait for the entire group to complete
+group_results = client.wait_for_group(
+    group_id,
+    timeout=300,
+    poll_interval=1.0
+)
+
+if group_results['completed']:
+    print(f"Group completed!")
+    print(f"Results: {group_results['results']}")
+else:
+    print(f"Group timed out with {group_results['pending_count']} tasks pending")
+```
+
+##### Bulk Task Integration with FastAPI
+
+You can integrate bulk task processing with your FastAPI endpoints:
+
+```python
+# In api/project/bulk_tasks.py
+from fastapi import APIRouter, HTTPException
+from {{cookiecutter.package_name}}.utils import get_celery_client
+from models.request import BulkTaskRequest
+from models.response import BulkTaskResponse
+
+router = APIRouter()
+
+@router.post("/submit-bulk-tasks", response_model=BulkTaskResponse)
+async def submit_bulk_tasks(request: BulkTaskRequest):
+    """Submit multiple tasks for bulk processing."""
+    try:
+        client = get_celery_client()
+        
+        # Prepare tasks from request
+        tasks = []
+        for item in request.items:
+            tasks.append({
+                'task_name': 'my_app.tasks.process_item',
+                'kwargs': {'item_data': item.dict()}
+            })
+        
+        # Submit as group for coordinated execution
+        group_id = client.send_bulk_tasks_as_group(tasks)
+        
+        return BulkTaskResponse(
+            group_id=group_id,
+            task_count=len(tasks),
+            status='SUBMITTED'
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/bulk-status/{group_id}")
+async def bulk_task_status(group_id: str):
+    """Get the status of a bulk task group."""
+    try:
+        client = get_celery_client()
+        
+        # Check group status without waiting
+        results = client.wait_for_group(
+            group_id,
+            timeout=0.1,  # Very short timeout for immediate check
+            poll_interval=0.1
+        )
+        
+        return {
+            "group_id": group_id,
+            "completed": results['completed'],
+            "success_count": results['success_count'],
+            "failure_count": results['failure_count'],
+            "pending_count": results['pending_count'],
+            "results": results.get('results', []) if results['completed'] else None
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/wait-for-bulk/{group_id}")
+async def wait_for_bulk_tasks(group_id: str, timeout: int = 300):
+    """Wait for bulk tasks to complete with specified timeout."""
+    try:
+        client = get_celery_client()
+        
+        results = client.wait_for_group(
+            group_id,
+            timeout=timeout,
+            poll_interval=2.0
+        )
+        
+        return {
+            "group_id": group_id,
+            "completed": results['completed'],
+            "success_count": results['success_count'],
+            "failure_count": results['failure_count'],
+            "pending_count": results['pending_count'],
+            "results": results.get('results', [])
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
 ##### Task Registration
 
 You can also register tasks dynamically:

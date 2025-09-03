@@ -316,22 +316,6 @@
         "documentation": {}
     },
     {
-        "label": "router",
-        "importPath": "project.api",
-        "description": "project.api",
-        "isExtraImport": true,
-        "detail": "project.api",
-        "documentation": {}
-    },
-    {
-        "label": "router",
-        "importPath": "project.demo",
-        "description": "project.demo",
-        "isExtraImport": true,
-        "detail": "project.demo",
-        "documentation": {}
-    },
-    {
         "label": "FastMCP",
         "importPath": "mcp.server.fastmcp",
         "description": "mcp.server.fastmcp",
@@ -464,7 +448,24 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "Celery",
+        "importPath": "celery",
+        "description": "celery",
+        "isExtraImport": true,
+        "detail": "celery",
+        "documentation": {}
+    },
+    {
+        "label": "group",
         "importPath": "celery",
         "description": "celery",
         "isExtraImport": true,
@@ -480,21 +481,20 @@
         "documentation": {}
     },
     {
+        "label": "GroupResult",
+        "importPath": "celery.result",
+        "description": "celery.result",
+        "isExtraImport": true,
+        "detail": "celery.result",
+        "documentation": {}
+    },
+    {
         "label": "httpx",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "httpx",
         "description": "httpx",
         "detail": "httpx",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -843,7 +843,43 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
-        "peekOfCode": "def get_task_status(task_id: str) -> str:\n    \"\"\"Get the status of a task using the singleton Celery client.\n    Args:\n        task_id: ID of the task\n    Returns:\n        Task status (PENDING, STARTED, SUCCESS, FAILURE, RETRY, REVOKED)\n    \"\"\"\n    client = get_celery_client()\n    return client.get_task_status(task_id)",
+        "peekOfCode": "def get_task_status(task_id: str) -> str:\n    \"\"\"Get the status of a task using the singleton Celery client.\n    Args:\n        task_id: ID of the task\n    Returns:\n        Task status (PENDING, STARTED, SUCCESS, FAILURE, RETRY, REVOKED)\n    \"\"\"\n    client = get_celery_client()\n    return client.get_task_status(task_id)\ndef send_bulk_tasks(",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "documentation": {}
+    },
+    {
+        "label": "send_bulk_tasks",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "peekOfCode": "def send_bulk_tasks(\n    tasks: list[dict[str, Any]],\n    queue: str | None = None,\n    **options: Any\n) -> list[str]:\n    \"\"\"Send multiple tasks as a bulk operation using the singleton Celery client.\n    Args:\n        tasks: List of task dictionaries, each containing:\n               - task_name: Name of the task to execute\n               - args: Optional positional arguments for the task",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "documentation": {}
+    },
+    {
+        "label": "send_bulk_tasks_as_group",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "peekOfCode": "def send_bulk_tasks_as_group(\n    tasks: list[dict[str, Any]],\n    queue: str | None = None,\n    **options: Any\n) -> str:\n    \"\"\"Send multiple tasks as a Celery group using the singleton Celery client.\n    Args:\n        tasks: List of task dictionaries, each containing:\n               - task_name: Name of the task to execute\n               - args: Optional positional arguments for the task",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "documentation": {}
+    },
+    {
+        "label": "wait_for_all_tasks",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "peekOfCode": "def wait_for_all_tasks(\n    task_ids: list[str],\n    timeout: float | None = None,\n    poll_interval: float = 1.0\n) -> dict[str, Any]:\n    \"\"\"Wait for all tasks in a list to complete using the singleton Celery client.\n    Args:\n        task_ids: List of task IDs to wait for\n        timeout: Total timeout in seconds to wait for all tasks\n        poll_interval: How often to check task status (in seconds)",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "documentation": {}
+    },
+    {
+        "label": "wait_for_group",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
+        "peekOfCode": "def wait_for_group(\n    group_id: str,\n    timeout: float | None = None,\n    poll_interval: float = 1.0\n) -> dict[str, Any]:\n    \"\"\"Wait for a Celery group to complete using the singleton Celery client.\n    Args:\n        group_id: ID of the group to wait for\n        timeout: Timeout in seconds to wait for the group\n        poll_interval: How often to check group status (in seconds)",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.celery_client",
         "documentation": {}
     },
