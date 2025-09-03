@@ -151,8 +151,12 @@ class RabbitMQConfig(BaseSettings):
     @property
     def broker_url(self) -> str:
         """Get the complete RabbitMQ broker URL for Celery."""
+        from urllib.parse import quote
+        
         protocol = "amqps" if self.ssl else "amqp"
-        return f"{protocol}://{self.username}:{self.password}@{self.host}:{self.port}{self.virtual_host}"
+        # URL encode the virtual host to handle special characters like '/'
+        encoded_vhost = quote(self.virtual_host, safe='')
+        return f"{protocol}://{self.username}:{self.password}@{self.host}:{self.port}/{encoded_vhost}"
 
 
 class RedisConfig(BaseSettings):
