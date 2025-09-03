@@ -18,6 +18,7 @@ alwaysApply: true
 
 ## API Design
 - All endpoints must have ONE pydantic model as request and response
+- All project endpoints in api must be method "post"
 
 ## AI Communication
 - Only in the api application layer
@@ -38,3 +39,7 @@ alwaysApply: true
     - Analyze the code
     - Create a solution approach
     - Implement the solution
+    - Try to keep simple
+    - Don't write tests when it's not explicitly required
+    - Never refactor without a specific reason
+    - Try to avoid bigger changes without a specific reason
