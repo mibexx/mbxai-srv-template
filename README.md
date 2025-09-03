@@ -36,7 +36,7 @@ class WeatherInfo(BaseModel):
     conditions: str
 
 # Get structured AI response
-response = await client.parse(
+response = client.parse(
     messages=[{"role": "user", "content": "What's the weather in Paris?"}],
     response_format=WeatherInfo
 )
@@ -93,12 +93,12 @@ from your_package.utils.client import get_openrouter_client
 client = get_openrouter_client()
 
 # Basic chat
-response = await client.create(
+response = client.create(
     messages=[{"role": "user", "content": "Hello!"}]
 )
 
 # Structured output
-response = await client.parse(
+response = client.parse(
     messages=[{"role": "user", "content": "Extract name and age"}],
     response_format=UserInfo
 )
@@ -115,12 +115,12 @@ from your_package.utils.client import get_tool_client
 client = get_tool_client()
 
 # Basic chat (equivalent to create)
-response = await client.chat(
+response = client.chat(
     messages=[{"role": "user", "content": "Hello!"}]
 )
 
 # Structured output (same interface)
-response = await client.parse(
+response = client.parse(
     messages=[{"role": "user", "content": "Process this data"}],
     response_format=DataModel
 )
@@ -137,12 +137,12 @@ from your_package.utils.client import get_mcp_client
 client = get_mcp_client()
 
 # Automatically uses available MCP tools
-response = await client.chat(
+response = client.chat(
     messages=[{"role": "user", "content": "Get weather data"}]
 )
 
 # Structured output with tool usage
-response = await client.parse(
+response = client.parse(
     messages=[{"role": "user", "content": "Analyze this location"}],
     response_format=LocationAnalysis
 )
@@ -262,7 +262,7 @@ class MyResponse(BaseModel):
 async def my_endpoint(request: MyRequest) -> MyResponse:
     client = get_mcp_client()
     
-    response = await client.parse(
+    response = client.parse(
         messages=[{"role": "user", "content": request.query}],
         response_format=MyResponse
     )
