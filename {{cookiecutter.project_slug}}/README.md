@@ -602,6 +602,346 @@ See `api/project/demo.py` for a complete example that demonstrates:
 
 This architecture ensures clean separation of concerns, maintainable code, and proper handling of AI services while keeping the UI responsive and user-friendly.
 
+## Asynchronous Job Processing with Celery
+
+The template includes a Celery client for handling asynchronous jobs using RabbitMQ as the message broker and Redis as the result backend. This is useful for long-running tasks, background processing, and distributed computing.
+
+### Configuration
+
+The Celery integration requires RabbitMQ and Redis instances. Configure them using environment variables:
+
+#### RabbitMQ Configuration
+
+- `RABBITMQ_HOST`: RabbitMQ host (default: "localhost")
+- `RABBITMQ_PORT`: RabbitMQ port (default: 5672)
+- `RABBITMQ_USERNAME`: RabbitMQ username (default: "guest")
+- `RABBITMQ_PASSWORD`: RabbitMQ password (default: "guest")
+- `RABBITMQ_VHOST`: RabbitMQ virtual host (default: "/")
+- `RABBITMQ_SSL`: Enable SSL connection (default: false)
+
+#### Redis Configuration
+
+- `REDIS_HOST`: Redis host (default: "localhost")
+- `REDIS_PORT`: Redis port (default: 6379)
+- `REDIS_PASSWORD`: Redis password (optional, no default - Redis has no password by default)
+- `REDIS_DB`: Redis database number (default: 0)
+- `REDIS_SSL`: Enable SSL connection (default: false)
+
+#### Celery Configuration
+
+- `CELERY_TASK_SERIALIZER`: Task serializer (default: "json")
+- `CELERY_RESULT_SERIALIZER`: Result serializer (default: "json")
+- `CELERY_ACCEPT_CONTENT`: Accepted content types (default: ["json"])
+- `CELERY_RESULT_EXPIRES`: Result expiration time in seconds (default: 3600)
+- `CELERY_TIMEZONE`: Timezone (default: "UTC")
+- `CELERY_ENABLE_UTC`: Enable UTC (default: true)
+- `CELERY_TASK_TRACK_STARTED`: Track task start (default: true)
+- `CELERY_TASK_TIME_LIMIT`: Task time limit in seconds (default: 300)
+- `CELERY_TASK_SOFT_TIME_LIMIT`: Soft task time limit in seconds (default: 240)
+
+### Example Environment Configuration
+
+For Kubernetes environments, you might configure:
+
+```bash
+# RabbitMQ (running in Kubernetes)
+RABBITMQ_HOST=rabbitmq-service.default.svc.cluster.local
+RABBITMQ_PORT=5672
+RABBITMQ_USERNAME=myuser
+RABBITMQ_PASSWORD=mypassword
+
+# Redis (running in Kubernetes, no password)
+REDIS_HOST=redis-service.default.svc.cluster.local
+REDIS_PORT=6379
+```
+
+### Usage
+
+#### Importing the Client
+
+```python
+from {{cookiecutter.package_name}}.utils import CeleryClient, get_celery_client, send_task, get_task_result, get_task_status
+```
+
+#### Sending Messages (Tasks)
+
+Use the client to send asynchronous tasks to workers:
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+# Get the Celery client
+client = get_celery_client()
+
+# Send a task to be processed asynchronously
+task_id = client.send_task(
+    'my_app.tasks.process_data',  # Task name
+    args=[1, 2, 3],               # Positional arguments
+    kwargs={'option': 'value'},   # Keyword arguments
+    queue='high_priority'         # Optional: specify queue
+)
+
+print(f"Task sent with ID: {task_id}")
+```
+
+#### Using Convenience Functions
+
+For simple operations, use the convenience functions:
+
+```python
+from {{cookiecutter.package_name}}.utils import send_task, get_task_result, get_task_status
+
+# Send a task
+task_id = send_task('my_app.tasks.process_data', args=[1, 2, 3])
+
+# Check task status
+status = get_task_status(task_id)
+print(f"Task status: {status}")  # PENDING, STARTED, SUCCESS, FAILURE, etc.
+
+# Get task result (blocks until complete)
+if status == 'SUCCESS':
+    result = get_task_result(task_id, timeout=30)
+    print(f"Result: {result}")
+```
+
+#### Receiving Messages (Creating Workers)
+
+Create a Celery worker to process tasks. First, create your task functions:
+
+```python
+# In your_tasks.py
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+# Get the Celery app
+celery_app = get_celery_client().app
+
+@celery_app.task
+def process_data(x, y, z, option=None):
+    """Process some data asynchronously."""
+    # Your processing logic here
+    result = x + y + z
+    if option:
+        result = f"{result} with {option}"
+    return result
+
+@celery_app.task
+def long_running_task(duration):
+    """Simulate a long-running task."""
+    import time
+    time.sleep(duration)
+    return f"Task completed after {duration} seconds"
+
+@celery_app.task
+def ai_processing_task(prompt):
+    """Example AI processing task."""
+    from {{cookiecutter.package_name}}.utils import get_mcp_client
+    
+    client = get_mcp_client()
+    response = client.chat_completion(
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response["content"]
+```
+
+#### Running Workers
+
+Start Celery workers to process tasks:
+
+```bash
+# Start a worker
+celery -A your_tasks worker --loglevel=info
+
+# Start a worker with specific queues
+celery -A your_tasks worker --loglevel=info --queues=high_priority,low_priority
+
+# Start multiple workers
+celery -A your_tasks worker --loglevel=info --concurrency=4
+```
+
+#### Advanced Usage Examples
+
+##### Task Management
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+client = get_celery_client()
+
+# Send task with custom options
+task_id = client.send_task(
+    'my_app.tasks.process_data',
+    args=[1, 2, 3],
+    kwargs={'option': 'value'},
+    queue='high_priority',
+    countdown=10,  # Delay execution by 10 seconds
+    expires=300,   # Task expires after 5 minutes
+    retry=True,    # Enable retries
+    retry_policy={
+        'max_retries': 3,
+        'interval_start': 0,
+        'interval_step': 0.2,
+        'interval_max': 0.2,
+    }
+)
+
+# Get detailed task information
+task_info = client.get_task_info(task_id)
+print(f"Status: {task_info['status']}")
+print(f"Result: {task_info['result']}")
+if task_info['failed']:
+    print(f"Error: {task_info['traceback']}")
+
+# Revoke a task
+if task_info['status'] == 'PENDING':
+    client.revoke_task(task_id, terminate=True)
+```
+
+##### Monitoring and Management
+
+```python
+# Get active tasks across all workers
+active_tasks = client.get_active_tasks()
+for worker, tasks in active_tasks.items():
+    print(f"Worker {worker}: {len(tasks)} active tasks")
+
+# Get scheduled tasks
+scheduled_tasks = client.get_scheduled_tasks()
+
+# Check worker status
+workers = client.ping_workers()
+online_workers = [name for name, response in workers.items() if response == 'pong']
+print(f"Online workers: {online_workers}")
+
+# Purge a queue (remove all pending tasks)
+purged_count = client.purge_queue('low_priority')
+print(f"Purged {purged_count} messages from queue")
+```
+
+##### Task Registration
+
+You can also register tasks dynamically:
+
+```python
+from {{cookiecutter.package_name}}.utils import get_celery_client
+
+client = get_celery_client()
+
+# Register a task function
+@client.register_task(name='dynamic.task')
+def my_dynamic_task(data):
+    return f"Processed: {data}"
+
+# Or register with automatic naming
+@client.register_task
+def another_task(x, y):
+    return x * y
+```
+
+### Integration with FastAPI
+
+You can integrate Celery tasks with your FastAPI endpoints:
+
+```python
+# In api/project/tasks.py
+from fastapi import APIRouter, HTTPException
+from {{cookiecutter.package_name}}.utils import send_task, get_task_status, get_task_result
+from models.request import TaskRequest
+from models.response import TaskResponse
+
+router = APIRouter()
+
+@router.post("/submit-task", response_model=TaskResponse)
+async def submit_task(request: TaskRequest):
+    """Submit a task for asynchronous processing."""
+    try:
+        task_id = send_task(
+            'my_app.tasks.process_data',
+            args=[request.data],
+            kwargs={'option': request.option}
+        )
+        return TaskResponse(task_id=task_id, status='PENDING')
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/task-status/{task_id}")
+async def task_status(task_id: str):
+    """Get the status of a task."""
+    try:
+        status = get_task_status(task_id)
+        result = None
+        
+        if status == 'SUCCESS':
+            result = get_task_result(task_id)
+        
+        return {
+            "task_id": task_id,
+            "status": status,
+            "result": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+### Best Practices
+
+1. **Task Design**: Keep tasks idempotent and stateless
+2. **Error Handling**: Implement proper retry logic and error handling
+3. **Resource Management**: Use connection pooling and limit task concurrency
+4. **Monitoring**: Monitor queue lengths, worker health, and task execution times
+5. **Security**: Use proper authentication for RabbitMQ and Redis in production
+6. **Scaling**: Scale workers based on queue length and processing requirements
+
+### Production Deployment
+
+For production deployments:
+
+1. Use dedicated RabbitMQ and Redis instances
+2. Configure SSL/TLS for secure communication
+3. Set up monitoring with tools like Flower or Celery Events
+4. Use process managers like systemd or supervisor for worker processes
+5. Implement proper logging and alerting
+
+### Troubleshooting
+
+Common issues and solutions:
+
+- **Connection errors**: Check RabbitMQ/Redis connectivity and credentials
+- **Task not executing**: Verify worker is running and listening to correct queues
+- **Memory issues**: Monitor worker memory usage and restart workers periodically
+- **Queue buildup**: Scale workers or optimize task processing
+
+### Running Workers
+
+The service includes a Celery worker for processing asynchronous tasks.
+
+#### Local Development
+
+```bash
+# Run the worker locally
+uv run worker
+```
+
+#### Example Tasks
+
+The template includes example tasks in `worker/tasks.py`:
+
+```python
+# Example usage in your application
+from {{cookiecutter.package_name}}.utils import send_task
+
+# Send a simple task
+task_id = send_task(
+    '{{cookiecutter.package_name}}.worker.tasks.example_task',
+    kwargs={'data': {'user_id': 123, 'action': 'process'}}
+)
+
+# Send an AI processing task
+ai_task_id = send_task(
+    '{{cookiecutter.package_name}}.worker.tasks.ai_processing_task',
+    kwargs={'prompt': 'Analyze this data...'}
+)
+```
+
 ## Development
 
 ### Testing

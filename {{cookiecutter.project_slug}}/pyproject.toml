@@ -20,6 +20,8 @@ dependencies = [
     "chromadb>=1.0.15",
     "flask>=3.1.1",
     "flask-wtf>=1.2.2",
+    "celery>=5.4.0",
+    "redis>=5.2.0",
     {% if cookiecutter.use_pytest == 'y' -%}
     "pytest>=8.0.0",
     {% endif -%}
@@ -36,6 +38,7 @@ service = "src.{{cookiecutter.package_name}}.api.run:main"
 mcp = "src.{{cookiecutter.package_name}}.mcp.run:main"
 ui = "src.{{cookiecutter.package_name}}.ui.app:run_server"
 uidev = "src.{{cookiecutter.package_name}}.ui.app:run_dev_server"
+worker = "src.{{cookiecutter.package_name}}.worker.run:main"
 
 [tool.hatch.build.targets.sdist]
 include = ["src"]

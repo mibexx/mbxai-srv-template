@@ -130,6 +130,76 @@ class ChromaDBConfig(BaseSettings):
         extra="ignore",
     )
 
+
+class RabbitMQConfig(BaseSettings):
+    """RabbitMQ configuration for Celery."""
+
+    host: str = Field(default="localhost", alias="RABBITMQ_HOST")
+    port: int = Field(default=5672, alias="RABBITMQ_PORT")
+    username: str = Field(default="guest", alias="RABBITMQ_USERNAME")
+    password: str = Field(default="guest", alias="RABBITMQ_PASSWORD")
+    virtual_host: str = Field(default="/", alias="RABBITMQ_VHOST")
+    ssl: bool = Field(default=False, alias="RABBITMQ_SSL")
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @property
+    def broker_url(self) -> str:
+        """Get the complete RabbitMQ broker URL for Celery."""
+        protocol = "amqps" if self.ssl else "amqp"
+        return f"{protocol}://{self.username}:{self.password}@{self.host}:{self.port}{self.virtual_host}"
+
+
+class RedisConfig(BaseSettings):
+    """Redis configuration for Celery results backend."""
+
+    host: str = Field(default="localhost", alias="REDIS_HOST")
+    port: int = Field(default=6379, alias="REDIS_PORT")
+    password: str | None = Field(default=None, alias="REDIS_PASSWORD")
+    db: int = Field(default=0, alias="REDIS_DB")
+    ssl: bool = Field(default=False, alias="REDIS_SSL")
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @property
+    def result_backend_url(self) -> str:
+        """Get the complete Redis URL for Celery results backend."""
+        protocol = "rediss" if self.ssl else "redis"
+        if self.password:
+            return f"{protocol}://:{self.password}@{self.host}:{self.port}/{self.db}"
+        return f"{protocol}://{self.host}:{self.port}/{self.db}"
+
+
+class CeleryConfig(BaseSettings):
+    """Celery configuration."""
+
+    task_serializer: str = Field(default="json", alias="CELERY_TASK_SERIALIZER")
+    result_serializer: str = Field(default="json", alias="CELERY_RESULT_SERIALIZER")
+    accept_content: list[str] = Field(default=["json"], alias="CELERY_ACCEPT_CONTENT")
+    result_expires: int = Field(default=3600, alias="CELERY_RESULT_EXPIRES")  # 1 hour
+    timezone: str = Field(default="UTC", alias="CELERY_TIMEZONE")
+    enable_utc: bool = Field(default=True, alias="CELERY_ENABLE_UTC")
+    task_track_started: bool = Field(default=True, alias="CELERY_TASK_TRACK_STARTED")
+    task_time_limit: int = Field(default=300, alias="CELERY_TASK_TIME_LIMIT")  # 5 minutes
+    task_soft_time_limit: int = Field(default=240, alias="CELERY_TASK_SOFT_TIME_LIMIT")  # 4 minutes
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
 @lru_cache
 def get_config() -> ApplicationConfig:
     """Get the application configuration singleton."""
@@ -168,3 +238,21 @@ def get_openai_config() -> OpenAIConfig:
 def get_chromadb_config() -> ChromaDBConfig:
     """Get the ChromaDB configuration singleton."""
     return ChromaDBConfig()
+
+
+@lru_cache
+def get_rabbitmq_config() -> RabbitMQConfig:
+    """Get the RabbitMQ configuration singleton."""
+    return RabbitMQConfig()
+
+
+@lru_cache
+def get_redis_config() -> RedisConfig:
+    """Get the Redis configuration singleton."""
+    return RedisConfig()
+
+
+@lru_cache
+def get_celery_config() -> CeleryConfig:
+    """Get the Celery configuration singleton."""
+    return CeleryConfig()
