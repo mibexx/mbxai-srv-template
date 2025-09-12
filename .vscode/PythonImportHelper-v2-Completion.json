@@ -498,7 +498,7 @@
         "documentation": {}
     },
     {
-        "label": "AgentClient",
+        "label": "AsyncAgentClient",
         "importPath": "mbxai.agent",
         "description": "mbxai.agent",
         "isExtraImport": true,
@@ -514,7 +514,7 @@
         "documentation": {}
     },
     {
-        "label": "OpenRouterClient",
+        "label": "AsyncOpenRouterClient",
         "importPath": "mbxai.openrouter",
         "description": "mbxai.openrouter",
         "isExtraImport": true,
@@ -530,7 +530,7 @@
         "documentation": {}
     },
     {
-        "label": "ToolClient",
+        "label": "AsyncToolClient",
         "importPath": "mbxai.tools",
         "description": "mbxai.tools",
         "isExtraImport": true,
@@ -906,7 +906,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:\n    \"\"\"Get the OpenRouter client.\"\"\"\n    return OpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)\ndef get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return ToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()",
+        "peekOfCode": "def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncOpenRouterClient:\n    \"\"\"Get the OpenRouter client.\"\"\"\n    return AsyncOpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)\ndef get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return AsyncToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = AsyncMCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },
@@ -915,7 +915,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return ToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client",
+        "peekOfCode": "def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:\n    \"\"\"Get the Tool client.\"\"\"\n    return AsyncToolClient(get_openrouter_client(model))\ndef get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = AsyncMCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },
@@ -924,7 +924,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = MCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client\ndef get_agent_client(\n    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],\n    max_iterations: int = 2",
+        "peekOfCode": "def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:\n    \"\"\"Get the MCP client.\"\"\"\n    mcp_client = AsyncMCPClient(get_openrouter_client(model))\n    mcp_config = get_mcp_config()\n    if mcp_config.server_url:\n        mcp_client.register_mcp_server(\"mcp-server\", mcp_config.server_url)\n    return mcp_client\ndef get_agent_client(\n    ai_client: Union[AsyncOpenRouterClient, AsyncToolClient, AsyncMCPClient],\n    max_iterations: int = 2",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },
@@ -933,7 +933,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
-        "peekOfCode": "def get_agent_client(\n    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],\n    max_iterations: int = 2\n) -> AgentClient:\n    \"\"\"Get the Agent client.\"\"\"\n    return AgentClient(\n        ai_client=ai_client,\n        max_iterations=max_iterations\n    )",
+        "peekOfCode": "def get_agent_client(\n    ai_client: Union[AsyncOpenRouterClient, AsyncToolClient, AsyncMCPClient],\n    max_iterations: int = 2\n) -> AsyncAgentClient:\n    \"\"\"Get the Agent client.\"\"\"\n    return AsyncAgentClient(\n        ai_client=ai_client,\n        max_iterations=max_iterations\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.utils.client",
         "documentation": {}
     },

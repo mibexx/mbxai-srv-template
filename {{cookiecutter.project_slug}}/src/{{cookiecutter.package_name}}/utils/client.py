@@ -6,10 +6,10 @@ import logging
 import time
 from pydantic import BaseModel
 
-from mbxai.agent import AgentClient
-from mbxai.openrouter import OpenRouterModel, OpenRouterClient
+from mbxai.agent import AsyncAgentClient
+from mbxai.openrouter import OpenRouterModel, AsyncOpenRouterClient
 from mbxai.mcp import MCPClient
-from mbxai.tools import ToolClient
+from mbxai.tools import AsyncToolClient
 
 class ServiceApiClient:
     """Client for making API calls to other services using direct calls or the job system."""
@@ -353,17 +353,17 @@ class ServiceApiClient:
         """Async context manager exit."""
         await self.close()
 
-def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> OpenRouterClient:
+def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncOpenRouterClient:
     """Get the OpenRouter client."""
-    return OpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
+    return AsyncOpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
 
-def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> ToolClient:
+def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:
     """Get the Tool client."""
-    return ToolClient(get_openrouter_client(model))
+    return AsyncToolClient(get_openrouter_client(model))
 
-def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:
+def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:
     """Get the MCP client."""
-    mcp_client = MCPClient(get_openrouter_client(model))
+    mcp_client = AsyncMCPClient(get_openrouter_client(model))
     
     mcp_config = get_mcp_config()
     if mcp_config.server_url:
@@ -372,11 +372,11 @@ def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> MCPClient:
     return mcp_client
 
 def get_agent_client(
-    ai_client: Union[OpenRouterClient, ToolClient, MCPClient],
+    ai_client: Union[AsyncOpenRouterClient, AsyncToolClient, AsyncMCPClient],
     max_iterations: int = 2
-) -> AgentClient:
+) -> AsyncAgentClient:
     """Get the Agent client."""
-    return AgentClient(
+    return AsyncAgentClient(
         ai_client=ai_client,
         max_iterations=max_iterations
     )

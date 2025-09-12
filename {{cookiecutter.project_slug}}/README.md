@@ -449,7 +449,7 @@ async def your_endpoint(request: YourRequest) -> YourResponse:
         ]
         
         # Use parse method with Pydantic model for structured output
-        response = client.parse(
+        response = await client.parse(
             messages=messages,
             response_format=YourResponse,
         )
@@ -482,7 +482,7 @@ For calling external services or other AI services, use the client utilities:
 from ...utils.client import get_mcp_client
 
 client = get_mcp_client()
-response = client.parse(
+response = await client.parse(
     messages=messages,
     response_format=YourPydanticModel,
 )
@@ -506,7 +506,7 @@ result = await service_client.call_service(
 ```python
 # ✅ Correct way
 client = get_mcp_client()
-response = client.parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "Your prompt"}],
     response_format=YourResponseModel,
 )
@@ -531,7 +531,7 @@ class YourResponse(BaseModel):
 
 ```python
 try:
-    response = client.parse(
+    response = await client.parse(
         messages=messages,
         response_format=YourResponse,
     )

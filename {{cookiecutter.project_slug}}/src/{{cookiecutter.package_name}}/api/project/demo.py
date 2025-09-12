@@ -47,7 +47,7 @@ async def get_weather(request: WeatherRequest) -> WeatherResponse:
         ]
 
         # Use the agent to get weather information
-        response = client.parse(
+        response = await client.parse(
             messages=messages,
             response_format=WeatherResponse,
         )

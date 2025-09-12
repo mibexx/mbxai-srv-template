@@ -36,7 +36,7 @@ class WeatherInfo(BaseModel):
     conditions: str
 
 # Get structured AI response
-response = client.parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "What's the weather in Paris?"}],
     response_format=WeatherInfo
 )
@@ -119,7 +119,7 @@ response = client.create(
 )
 
 # Structured output
-response = client.parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "Extract name and age"}],
     response_format=UserInfo
 )
@@ -142,7 +142,7 @@ response = client.chat(
 )
 
 # Structured output (delegates to OpenRouterClient.parse internally)
-response = client.parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "Process this data"}],
     response_format=DataModel
 )
@@ -165,7 +165,7 @@ response = client.chat(
 )
 
 # Structured output with tool usage
-response = client.parse(
+response = await client.parse(
     messages=[{"role": "user", "content": "Analyze this location"}],
     response_format=LocationAnalysis
 )
@@ -332,7 +332,7 @@ class MyResponse(BaseModel):
 async def my_endpoint(request: MyRequest) -> MyResponse:
     client = get_mcp_client()
     
-    response = client.parse(
+    response = await client.parse(
         messages=[{"role": "user", "content": request.query}],
         response_format=MyResponse
     )
