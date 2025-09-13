@@ -353,25 +353,27 @@ class ServiceApiClient:
         """Async context manager exit."""
         await self.close()
 
-def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncOpenRouterClient:
+async def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncOpenRouterClient:
     """Get the OpenRouter client."""
     return AsyncOpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
 
-def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:
+async def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:
     """Get the Tool client."""
-    return AsyncToolClient(get_openrouter_client(model))
+    openrouter_client = await get_openrouter_client(model)
+    return AsyncToolClient(openrouter_client)
 
-def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:
+async def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:
     """Get the MCP client."""
-    mcp_client = AsyncMCPClient(get_openrouter_client(model))
+    openrouter_client = await get_openrouter_client(model)
+    mcp_client = AsyncMCPClient(openrouter_client)
     
     mcp_config = get_mcp_config()
     if mcp_config.server_url:
-        mcp_client.register_mcp_server("mcp-server", mcp_config.server_url)
+        await mcp_client.register_mcp_server("mcp-server", mcp_config.server_url)
     
     return mcp_client
 
-def get_agent_client(
+async def get_agent_client(
     ai_client: Union[AsyncOpenRouterClient, AsyncToolClient, AsyncMCPClient],
     max_iterations: int = 2
 ) -> AsyncAgentClient:
