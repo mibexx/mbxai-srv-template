@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from mbxai.agent import AsyncAgentClient
 from mbxai.openrouter import OpenRouterModel, AsyncOpenRouterClient
-from mbxai.mcp import MCPClient
+from mbxai.mcp import AsyncMCPClient
 from mbxai.tools import AsyncToolClient
 
 class ServiceApiClient:

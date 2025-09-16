@@ -522,7 +522,7 @@
         "documentation": {}
     },
     {
-        "label": "MCPClient",
+        "label": "AsyncMCPClient",
         "importPath": "mbxai.mcp",
         "description": "mbxai.mcp",
         "isExtraImport": true,
