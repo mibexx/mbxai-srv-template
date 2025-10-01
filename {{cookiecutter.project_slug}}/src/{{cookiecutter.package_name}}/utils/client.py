@@ -353,16 +353,36 @@ class ServiceApiClient:
         """Async context manager exit."""
         await self.close()
 
-async def get_openrouter_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncOpenRouterClient:
+async def get_openrouter_client(model: Union[OpenRouterModel, str] = None) -> AsyncOpenRouterClient:
     """Get the OpenRouter client."""
-    return AsyncOpenRouterClient(token=get_openrouter_api_config().api_key, base_url=get_openrouter_api_config().base_url, model=model)
+    config = get_openrouter_api_config()
+    
+    # Register available models from environment variable
+    available_models = config.parse_available_models()
+    for model_name, model_info in available_models.items():
+        AsyncOpenRouterClient.register_model(model_name, model_info["model_id"])
+    
+    # Determine which model to use
+    if model is None:
+        # Use default model from config if available, otherwise fall back to GPT41
+        if config.default_model:
+            model = config.default_model
+        else:
+            model = OpenRouterModel.GPT41
+    
+    # Get the appropriate API token for the selected model
+    # Convert model to string for token lookup if it's an enum
+    model_name = str(model) if isinstance(model, OpenRouterModel) else model
+    api_token = config.get_token_for_model(model_name)
+    
+    return AsyncOpenRouterClient(token=api_token, base_url=config.base_url, model=model)
 
-async def get_tool_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncToolClient:
+async def get_tool_client(model: Union[OpenRouterModel, str] = None) -> AsyncToolClient:
     """Get the Tool client."""
     openrouter_client = await get_openrouter_client(model)
     return AsyncToolClient(openrouter_client)
 
-async def get_mcp_client(model: OpenRouterModel = OpenRouterModel.GPT41) -> AsyncMCPClient:
+async def get_mcp_client(model: Union[OpenRouterModel, str] = None) -> AsyncMCPClient:
     """Get the MCP client."""
     openrouter_client = await get_openrouter_client(model)
     mcp_client = AsyncMCPClient(openrouter_client)

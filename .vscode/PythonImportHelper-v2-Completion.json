@@ -1005,7 +1005,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class OpenRouterAPIConfig(BaseSettings):\n    \"\"\"OpenRouter API configuration.\"\"\"\n    api_key: str = Field(alias=\"OPENROUTER_TOKEN\")\n    base_url: str = Field(default=\"https://openrouter.ai/api/v1\", alias=\"OPENROUTER_BASE_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )",
+        "peekOfCode": "class OpenRouterAPIConfig(BaseSettings):\n    \"\"\"OpenRouter API configuration.\"\"\"\n    api_key: str = Field(alias=\"OPENROUTER_TOKEN\")\n    base_url: str = Field(default=\"https://openrouter.ai/api/v1\", alias=\"OPENROUTER_BASE_URL\")\n    available_models: str = Field(default=\"\", alias=\"AVAILABLE_MODELS\")\n    default_model: str = Field(default=\"\", alias=\"DEFAULT_MODEL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

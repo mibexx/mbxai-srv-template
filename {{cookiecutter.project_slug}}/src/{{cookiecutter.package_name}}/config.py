@@ -56,6 +56,8 @@ class OpenRouterAPIConfig(BaseSettings):
 
     api_key: str = Field(alias="OPENROUTER_TOKEN")
     base_url: str = Field(default="https://openrouter.ai/api/v1", alias="OPENROUTER_BASE_URL")
+    available_models: str = Field(default="", alias="AVAILABLE_MODELS")
+    default_model: str = Field(default="", alias="DEFAULT_MODEL")
 
     model_config = SettingsConfigDict(
         env_prefix="",
@@ -63,6 +65,51 @@ class OpenRouterAPIConfig(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+    
+    def parse_available_models(self) -> dict[str, dict[str, str]]:
+        """Parse the AVAILABLE_MODELS environment variable into a dictionary.
+        
+        Expected format: "MODEL_NAME1=model-id1[optional-token];MODEL_NAME2=model-id2"
+        
+        Returns:
+            Dictionary mapping model names to dictionaries containing 'model_id' and optionally 'token'
+        """
+        if not self.available_models:
+            return {}
+            
+        models = {}
+        for model_pair in self.available_models.split(";"):
+            if "=" in model_pair:
+                name, model_spec = model_pair.split("=", 1)
+                name = name.strip()
+                model_spec = model_spec.strip()
+                
+                # Check if there's a token in brackets
+                if "[" in model_spec and model_spec.endswith("]"):
+                    # Extract model_id and token
+                    bracket_start = model_spec.rfind("[")
+                    model_id = model_spec[:bracket_start].strip()
+                    token = model_spec[bracket_start + 1:-1].strip()
+                    models[name] = {"model_id": model_id, "token": token}
+                else:
+                    # Only model_id, no token
+                    models[name] = {"model_id": model_spec}
+                    
+        return models
+    
+    def get_token_for_model(self, model_name: str) -> str:
+        """Get the appropriate API token for a given model.
+        
+        Args:
+            model_name: The name of the model
+            
+        Returns:
+            Model-specific token if available, otherwise the default API key
+        """
+        models = self.parse_available_models()
+        if model_name in models and "token" in models[model_name]:
+            return models[model_name]["token"]
+        return self.api_key
 
 
 class MCPConfig(BaseSettings):
