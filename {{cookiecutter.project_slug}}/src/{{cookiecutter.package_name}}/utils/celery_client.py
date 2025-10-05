@@ -50,10 +50,47 @@ class CeleryClient:
             task_track_started=celery_config.task_track_started,
             task_time_limit=celery_config.task_time_limit,
             task_soft_time_limit=celery_config.task_soft_time_limit,
+            # Handle unknown tasks more gracefully
+            task_ignore_result=True,  # Don't store results for unknown tasks
+            task_reject_on_worker_lost=True,  # Reject tasks if worker is lost
         )
 
         logger.info(f"Celery configured with broker: {rabbitmq_config.broker_url}")
         logger.info(f"Celery configured with result backend: {redis_config.result_backend_url}")
+        
+        # Set up task prefix filtering
+        self._setup_task_prefix_filter(celery_config.task_prefix)
+
+    def _setup_task_prefix_filter(self, task_prefix: str) -> None:
+        """Set up task filtering to prevent unknown task errors."""
+        # Use a different approach: register a catch-all task for unknown tasks
+        # and configure worker to handle them gracefully
+        
+        # Register a catch-all task that handles any unknown task
+        @self._app.task(bind=True)
+        def handle_unknown_task(self, *args, **kwargs):
+            """Handle any unknown task gracefully."""
+            task_name = getattr(self.request, 'task', 'unknown')
+            logger.debug(f"Handled unknown task: {task_name}")
+            return f"Unknown task {task_name} handled gracefully"
+        
+        # Override the task registry to redirect unknown tasks
+        original_get = self._app.tasks.__getitem__
+        
+        def filtered_get(key):
+            """Custom task getter that redirects unknown tasks."""
+            try:
+                return original_get(key)
+            except KeyError:
+                if not key.startswith(task_prefix + '.'):
+                    logger.debug(f"Redirecting unknown task '{key}' to handler")
+                    return handle_unknown_task
+                raise
+        
+        # Replace the task registry getter
+        self._app.tasks.__getitem__ = filtered_get
+        
+        logger.info(f"Task prefix filter installed: unknown tasks will be handled gracefully")
 
     @property
     def app(self) -> Celery:

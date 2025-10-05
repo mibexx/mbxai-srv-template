@@ -243,6 +243,8 @@ class CeleryConfig(BaseSettings):
     task_track_started: bool = Field(default=True, alias="CELERY_TASK_TRACK_STARTED")
     task_time_limit: int = Field(default=300, alias="CELERY_TASK_TIME_LIMIT")  # 5 minutes
     task_soft_time_limit: int = Field(default=240, alias="CELERY_TASK_SOFT_TIME_LIMIT")  # 4 minutes
+    worker_name: str = Field(default="{{cookiecutter.project_slug}}_celery", alias="CELERY_WORKER_NAME")  # Worker node name
+    task_prefix: str = Field(default="{{cookiecutter.project_slug}}", alias="CELERY_TASK_PREFIX")  # Task prefix filter
 
     model_config = SettingsConfigDict(
         env_prefix="",
