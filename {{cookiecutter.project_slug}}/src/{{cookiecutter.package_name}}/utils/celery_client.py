@@ -9,6 +9,7 @@ import time
 from celery import Celery
 from celery.result import AsyncResult, GroupResult
 from celery import group
+import redis
 
 from ..config import get_rabbitmq_config, get_redis_config, get_celery_config
 
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 class CeleryClient:
     """Client for sending and receiving messages through Celery with RabbitMQ and Redis."""
 
-    def __init__(self, app_name: str = "{{cookiecutter.package_name}}"):
+    def __init__(self, app_name: str = "web_scraper"):
         """Initialize the Celery client.
         
         Args:
@@ -51,15 +52,15 @@ class CeleryClient:
             task_track_started=celery_config.task_track_started,
             task_time_limit=celery_config.task_time_limit,
             task_soft_time_limit=celery_config.task_soft_time_limit,
-            # Handle unknown tasks more gracefully
-            task_ignore_result=True,  # Don't store results for unknown tasks
-            task_reject_on_worker_lost=True,  # Reject tasks if worker is lost
+            # Ensure fresh results from backend on every query - no caching
+            result_backend_always_retry=True,
+            result_cache_max=0,  # Disable result caching
         )
 
         logger.info(f"Celery configured with broker: {rabbitmq_config.broker_url}")
         logger.info(f"Celery configured with result backend: {redis_config.result_backend_url}")
         
-        # Set up custom queue configuration
+        # Set up custom queue configuration for this service's own tasks
         self._setup_custom_queue(celery_config.task_prefix)
 
     def _setup_custom_queue(self, queue_name: str) -> None:
@@ -129,7 +130,7 @@ class CeleryClient:
         if queue:
             send_options['queue'] = queue
         else:
-            # Use the task_prefix as queue name when no queue is specified
+            # Use the default queue (task_prefix) for tasks without explicit queue
             send_options['queue'] = self.default_queue
         if routing_key:
             send_options['routing_key'] = routing_key
@@ -181,16 +182,19 @@ class CeleryClient:
         self, 
         task_id: str, 
         timeout: float | None = 60, 
-        poll_interval: float = 0.5
+        poll_interval: float = 0.5,
+        queue_name: str | None = None
     ) -> Any:
         """Get the result of a task asynchronously without blocking.
         
         This method polls the task status and can be safely used within Celery tasks.
+        Supports polling results from external queues (uses queue name as result key prefix).
         
         Args:
             task_id: ID of the task
             timeout: Timeout in seconds to wait for the result (default: 60)
             poll_interval: How often to check task status in seconds (default: 0.5)
+            queue_name: Queue name where the task was sent (used as result key prefix)
             
         Returns:
             The task result
@@ -200,40 +204,99 @@ class CeleryClient:
             Exception: If the task failed
             
         Example:
+            # For internal tasks:
             result = await client.async_get_task_result(task_id, timeout=30)
+            
+            # For external queue tasks:
+            result = await client.async_get_task_result(task_id, timeout=30, queue_name="web_scraper")
         """
         logger.info(f"Polling for result of task: {task_id}")
         
-        async_result = AsyncResult(task_id, app=self.app)
+        # If queue_name is provided, use a generic result backend lookup
+        # The key insight: Celery stores results in Redis with standard keys regardless of app name
+        # We just need to use the same result backend URL
+        redis_config = get_redis_config()
+        
+        if queue_name:
+            logger.info(f"Looking up result for external queue task: {queue_name}")
+            # Use a minimal Celery app just for result retrieval
+            temp_app = Celery('result_fetcher')
+            temp_app.conf.update(
+                result_backend=redis_config.result_backend_url,
+                result_serializer='json',
+                accept_content=['json'],
+                task_serializer='json'
+            )
+            logger.info(f"Looking for result with backend: {redis_config.result_backend_url}, key: celery-task-meta-{task_id}")
+            result_app = temp_app
+        else:
+            logger.info(f"Using default result backend: {self.app.conf.result_backend}")
+            result_app = self.app
+        
         start_time = time.time()
+        poll_count = 0
+        
+        # Set up Redis connection for direct checking
+        r = redis.Redis(
+            host=redis_config.host,
+            port=redis_config.port,
+            password=redis_config.password,
+            db=redis_config.db,
+            decode_responses=False
+        )
         
         while True:
-            # Check status without blocking
-            status = async_result.status
+            poll_count += 1
             
-            if status == 'SUCCESS':
-                # Task completed successfully, get the result
-                result = async_result.result
-                logger.info(f"Task {task_id} completed with result type: {type(result)}")
-                return result
-            elif status in ['FAILURE', 'REVOKED']:
-                # Task failed or was revoked
-                error_msg = f"Task {task_id} failed with status: {status}"
-                if async_result.traceback:
-                    error_msg += f"\nTraceback: {async_result.traceback}"
-                logger.error(error_msg)
-                raise Exception(error_msg)
+            # Check Redis directly for the result
+            redis_key = f"celery-task-meta-{task_id}"
+            result_data = r.get(redis_key)
+            
+            if result_data:
+                # Result exists in Redis - parse it
+                import json
+                try:
+                    result_dict = json.loads(result_data)
+                    status = result_dict.get('status', 'PENDING')
+                    
+                    if status == 'SUCCESS':
+                        result_value = result_dict.get('result')
+                        logger.info(f"Task {task_id} completed with result type: {type(result_value)}")
+                        r.close()
+                        return result_value
+                    elif status in ['FAILURE', 'REVOKED']:
+                        error_msg = f"Task {task_id} failed with status: {status}"
+                        traceback = result_dict.get('traceback')
+                        if traceback:
+                            error_msg += f"\nTraceback: {traceback}"
+                        logger.error(error_msg)
+                        r.close()
+                        raise Exception(error_msg)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse result from Redis: {e}")
+                    status = 'PENDING'
+            else:
+                status = 'PENDING'
+            
+            # Debug: Check backend state on first poll
+            if poll_count == 1:
+                logger.info(f"Task {task_id} initial state: status={status}, result_in_redis={result_data is not None}")
+            
+            # Log status every few polls
+            if poll_count % 10 == 0:
+                elapsed = time.time() - start_time
+                logger.info(f"Task {task_id} still {status} after {elapsed:.1f}s (poll #{poll_count}), result_exists={result_data is not None}")
             
             # Check timeout
             if timeout is not None:
                 elapsed = time.time() - start_time
                 if elapsed >= timeout:
-                    logger.error(f"Task {task_id} timed out after {elapsed:.1f}s")
-                    raise TimeoutError(f"Task {task_id} timed out after {timeout}s")
+                    logger.error(f"Task {task_id} timed out after {elapsed:.1f}s with status: {status}")
+                    r.close()
+                    raise TimeoutError(f"Task {task_id} timed out after {timeout}s (status: {status})")
             
             # Wait before polling again
             await asyncio.sleep(poll_interval)
-            logger.debug(f"Task {task_id} status: {status}, polling again...")
 
     def get_task_status(self, task_id: str) -> str:
         """Get the status of a task.
