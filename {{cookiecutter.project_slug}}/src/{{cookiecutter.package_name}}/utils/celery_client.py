@@ -58,37 +58,28 @@ class CeleryClient:
         logger.info(f"Celery configured with broker: {rabbitmq_config.broker_url}")
         logger.info(f"Celery configured with result backend: {redis_config.result_backend_url}")
         
-        # Set up task prefix filtering
-        self._setup_task_prefix_filter(celery_config.task_prefix)
+        # Set up custom queue configuration
+        self._setup_custom_queue(celery_config.task_prefix)
 
-    def _setup_task_prefix_filter(self, task_prefix: str) -> None:
-        """Set up task filtering to prevent unknown task errors."""
-        # Use a simple approach: just suppress the error logging and let Celery handle unknown tasks
-        # The key insight is that the worker actually handles unknown tasks correctly by discarding them
-        # We just need to reduce the noise in the logs
+    def _setup_custom_queue(self, queue_name: str) -> None:
+        """Set up custom queue configuration for this service."""
+        # Configure Celery to use a custom queue based on the service name
+        # This prevents cross-service task pollution and message loss
         
-        # Configure logging to suppress the specific error messages
-        import logging
+        # Set the default queue for this app
+        self._app.conf.update(
+            task_default_queue=queue_name,
+            task_routes={
+                # Route all tasks with the queue_name prefix to the custom queue
+                f'{queue_name}.*': {'queue': queue_name}
+            }
+        )
         
-        # Get the celery consumer logger and reduce its verbosity for unknown tasks
-        consumer_logger = logging.getLogger('celery.worker.consumer.consumer')
+        # Store the queue name for use by the worker and client
+        self._default_queue = queue_name
         
-        # Create a custom filter to suppress unknown task errors
-        class UnknownTaskFilter(logging.Filter):
-            def filter(self, record):
-                # Suppress "Received unregistered task" error messages
-                if hasattr(record, 'msg') and 'Received unregistered task' in str(record.msg):
-                    return False
-                return True
-        
-        # Add the filter to suppress unknown task errors
-        consumer_logger.addFilter(UnknownTaskFilter())
-        
-        # Also suppress the KeyError traceback by setting a higher log level for that specific logger
-        strategies_logger = logging.getLogger('celery.worker.consumer')
-        strategies_logger.setLevel(logging.CRITICAL)
-        
-        logger.info(f"Task filtering configured: suppressing unknown task errors for non-'{task_prefix}' tasks")
+        logger.info(f"Custom queue configured: '{queue_name}' - this service will use its own dedicated queue")
+        logger.info(f"Task routing configured: tasks starting with '{queue_name}.*' will use queue '{queue_name}'")
 
     @property
     def app(self) -> Celery:
@@ -96,6 +87,11 @@ class CeleryClient:
         if self._app is None:
             self._setup_celery()
         return self._app
+    
+    @property
+    def default_queue(self) -> str:
+        """Get the default queue name for this service."""
+        return getattr(self, '_default_queue', 'celery')
 
     def send_task(
         self,
@@ -131,6 +127,9 @@ class CeleryClient:
         send_options = {}
         if queue:
             send_options['queue'] = queue
+        else:
+            # Use the default queue for this service if no queue specified
+            send_options['queue'] = self.default_queue
         if routing_key:
             send_options['routing_key'] = routing_key
         send_options.update(options)
