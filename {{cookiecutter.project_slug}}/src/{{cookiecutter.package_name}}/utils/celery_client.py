@@ -1,5 +1,6 @@
 """Celery client for asynchronous job processing with RabbitMQ and Redis."""
 
+import asyncio
 import logging
 from typing import Any
 from functools import lru_cache
@@ -128,7 +129,7 @@ class CeleryClient:
         if queue:
             send_options['queue'] = queue
         else:
-            # Use the default queue for this service if no queue specified
+            # Use the task_prefix as queue name when no queue is specified
             send_options['queue'] = self.default_queue
         if routing_key:
             send_options['routing_key'] = routing_key
@@ -146,6 +147,9 @@ class CeleryClient:
 
     def get_task_result(self, task_id: str, timeout: float | None = None) -> Any:
         """Get the result of a task.
+        
+        WARNING: This method calls result.get() which blocks. Do NOT use this within a Celery task!
+        Use async_get_task_result() instead when calling from within a task.
         
         Args:
             task_id: ID of the task
@@ -172,6 +176,64 @@ class CeleryClient:
             
         logger.info(f"Task {task_id} completed with result type: {type(result)}")
         return result
+    
+    async def async_get_task_result(
+        self, 
+        task_id: str, 
+        timeout: float | None = 60, 
+        poll_interval: float = 0.5
+    ) -> Any:
+        """Get the result of a task asynchronously without blocking.
+        
+        This method polls the task status and can be safely used within Celery tasks.
+        
+        Args:
+            task_id: ID of the task
+            timeout: Timeout in seconds to wait for the result (default: 60)
+            poll_interval: How often to check task status in seconds (default: 0.5)
+            
+        Returns:
+            The task result
+            
+        Raises:
+            TimeoutError: If the task doesn't complete within the timeout
+            Exception: If the task failed
+            
+        Example:
+            result = await client.async_get_task_result(task_id, timeout=30)
+        """
+        logger.info(f"Polling for result of task: {task_id}")
+        
+        async_result = AsyncResult(task_id, app=self.app)
+        start_time = time.time()
+        
+        while True:
+            # Check status without blocking
+            status = async_result.status
+            
+            if status == 'SUCCESS':
+                # Task completed successfully, get the result
+                result = async_result.result
+                logger.info(f"Task {task_id} completed with result type: {type(result)}")
+                return result
+            elif status in ['FAILURE', 'REVOKED']:
+                # Task failed or was revoked
+                error_msg = f"Task {task_id} failed with status: {status}"
+                if async_result.traceback:
+                    error_msg += f"\nTraceback: {async_result.traceback}"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+            
+            # Check timeout
+            if timeout is not None:
+                elapsed = time.time() - start_time
+                if elapsed >= timeout:
+                    logger.error(f"Task {task_id} timed out after {elapsed:.1f}s")
+                    raise TimeoutError(f"Task {task_id} timed out after {timeout}s")
+            
+            # Wait before polling again
+            await asyncio.sleep(poll_interval)
+            logger.debug(f"Task {task_id} status: {status}, polling again...")
 
     def get_task_status(self, task_id: str) -> str:
         """Get the status of a task.
