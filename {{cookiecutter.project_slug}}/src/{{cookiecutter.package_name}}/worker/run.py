@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Celery worker entry point for web_scraper."""
+"""Celery worker entry point."""
 
 import logging
 import sys
@@ -29,7 +29,7 @@ def main() -> None:
     celery_client = get_celery_client()
     default_queue = celery_client.default_queue
     
-    logger.info(f"Starting web_scraper Celery worker with name: {worker_name}")
+    logger.info(f"Starting Celery worker with name: {worker_name}")
     logger.info(f"Configured task prefix: {queue_name}")
     logger.info(f"Worker will listen to dedicated queue: {default_queue}")
     logger.info("This prevents cross-service task pollution and message loss")
