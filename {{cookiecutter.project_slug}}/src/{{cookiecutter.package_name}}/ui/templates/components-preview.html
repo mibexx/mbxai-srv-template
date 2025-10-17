@@ -239,33 +239,27 @@
 
       <!-- Select Dropdown Section -->
       <div class="form-section">
-        <h3 class="form-section-title">Select Dropdown</h3>
+        <h3 class="form-section-title">Select Dropdown (Custom Styled)</h3>
         
         <div class="form-grid-2">
           <div class="form-group">
-            <label for="country" class="form-label">Country <span class="text-red-500">*</span></label>
-            <select v-model="formData.country" id="country" required>
-              <option value="">Select a country...</option>
-              <option value="us">United States</option>
-              <option value="uk">United Kingdom</option>
-              <option value="ca">Canada</option>
-              <option value="au">Australia</option>
-              <option value="de">Germany</option>
-              <option value="fr">France</option>
-            </select>
+            <label class="form-label">Country <span class="text-red-500">*</span></label>
+            <custom-select
+              v-model="formData.country"
+              :options="countryOptions"
+              placeholder="Select a country..."
+              :required="true"
+            ></custom-select>
             <p class="form-help">Select your country of residence</p>
           </div>
 
           <div class="form-group">
-            <label for="role" class="form-label">Role</label>
-            <select v-model="formData.role" id="role">
-              <option value="">Select your role...</option>
-              <option value="developer">Developer</option>
-              <option value="designer">Designer</option>
-              <option value="manager">Manager</option>
-              <option value="analyst">Analyst</option>
-              <option value="other">Other</option>
-            </select>
+            <label class="form-label">Role</label>
+            <custom-select
+              v-model="formData.role"
+              :options="roleOptions"
+              placeholder="Select your role..."
+            ></custom-select>
             <p class="form-help">Your professional role</p>
           </div>
         </div>
@@ -421,5 +415,6 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/helpers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/custom-select.js') }}"></script>
 <script src="{{ url_for('static', filename='js/components-preview.js') }}"></script>
 {% endblock %}{% endraw %}

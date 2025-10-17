@@ -1,7 +1,10 @@
 const { createApp } = Vue;
 
-createApp({
+const app = createApp({
   delimiters: ['[[', ']]'],
+  components: {
+    'custom-select': CustomSelect
+  },
   data() {
     return {
       // Progress tracking
@@ -24,6 +27,29 @@ createApp({
         marketing: false,
         terms: false
       },
+      
+      // Select options
+      countryOptions: [
+        { value: 'us', label: 'United States' },
+        { value: 'uk', label: 'United Kingdom' },
+        { value: 'ca', label: 'Canada' },
+        { value: 'au', label: 'Australia' },
+        { value: 'de', label: 'Germany' },
+        { value: 'fr', label: 'France' },
+        { value: 'jp', label: 'Japan' },
+        { value: 'cn', label: 'China' },
+        { value: 'in', label: 'India' },
+        { value: 'br', label: 'Brazil' }
+      ],
+      
+      roleOptions: [
+        { value: 'developer', label: 'Developer' },
+        { value: 'designer', label: 'Designer' },
+        { value: 'manager', label: 'Manager' },
+        { value: 'analyst', label: 'Analyst' },
+        { value: 'architect', label: 'Architect' },
+        { value: 'other', label: 'Other' }
+      ],
       
       formSubmitting: false,
       autoSaveKey: 'components-preview-form-data'
@@ -226,5 +252,7 @@ createApp({
       ToastManager.success('Form data saved to localStorage');
     }
   }
-}).mount('#components-app');
+});
+
+app.mount('#components-app');
 

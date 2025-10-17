@@ -38,15 +38,12 @@
 
       <!-- Greeting Style Select -->
       <div class="form-group">
-        <label for="greetingStyle" class="form-label">Greeting Style</label>
-        <select 
-          v-model="helloForm.greetingStyle" 
-          id="greetingStyle">
-          <option value="casual">Casual</option>
-          <option value="formal">Formal</option>
-          <option value="friendly">Friendly</option>
-          <option value="professional">Professional</option>
-        </select>
+        <label class="form-label">Greeting Style</label>
+        <custom-select
+          v-model="helloForm.greetingStyle"
+          :options="greetingStyleOptions"
+          placeholder="Select greeting style..."
+        ></custom-select>
         <p class="form-help">Choose the tone for your greeting</p>
       </div>
     </div>

@@ -1,7 +1,10 @@
 const { createApp } = Vue;
 
-createApp({
+const app = createApp({
   delimiters: ['[[', ']]'],
+  components: {
+    'custom-select': CustomSelect
+  },
   data() {
     return {
       isLoading: false,
@@ -15,6 +18,12 @@ createApp({
         savePreferences: false,
         emailNotification: false
       },
+      greetingStyleOptions: [
+        { value: 'casual', label: 'Casual' },
+        { value: 'formal', label: 'Formal' },
+        { value: 'friendly', label: 'Friendly' },
+        { value: 'professional', label: 'Professional' }
+      ],
       autoSaveKey: 'hello-form-data'
     }
   },
@@ -138,4 +147,6 @@ createApp({
       ToastManager.info('Saved preferences cleared');
     }
   }
-}).mount('#estimation-app');
+});
+
+app.mount('#estimation-app');
