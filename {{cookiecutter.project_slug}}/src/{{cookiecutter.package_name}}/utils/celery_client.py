@@ -16,7 +16,7 @@ from ..config import get_rabbitmq_config, get_redis_config, get_celery_config
 
 logger = logging.getLogger(__name__)
 
-
+0
 class CeleryClient:
     """Client for sending and receiving messages through Celery with RabbitMQ and Redis."""
 

@@ -20,18 +20,28 @@ alwaysApply: true
 - All endpoints must have ONE pydantic model as request and response
 - All project endpoints in api must be method "post"
 
-## AI Communication
-- Only in the api application layer
-- For AI communication use the mbxai package with McpClient (check utils/client -> get_mcp_client)
-- Always use the "parse" method of McpClient
-- Pydantic models for parse must always have only required fields
+## Business Logic
+- Logic should be in dedicated classes in the utils/*/ folder
+- Models should be seperated in it's own files in the models/ folder
+- Adapter to use business logic should always be in the worker/ folder as celery tasks
+- When an API endpoint is requested, it should use the celery_client to trigger the task, don't use the logic directly
+
+## SOLID
+- Always try to keep SOLID - Each logic into it's own class
+- Don't write logic in API endpoints or tasks, extract them into own service classes
 
 ## UI Logic
-- Implement endpoints always first in the ui app
-- When AI logic is required, use the api endpoints in the ui app as proxy to the api layer
+- Implement (proxy) endpoints always first in the ui app
+- In app, use celery_client to trigger the requested task
+
+## AI
+- To send requests to AI, check the client.py and use (if nothing else is requested) the get_mcp_client function
+- Use always the "parse" method of the client
+- Use the AsyncMcpClient (get_mcp_client) and implement it well
 
 ## Development Practices
 - Never write tests when it's not explicitly required
+- Never write documentation when it's not explicitly required (no markdown files)
 
 ## Process
 - Always use the following process:
