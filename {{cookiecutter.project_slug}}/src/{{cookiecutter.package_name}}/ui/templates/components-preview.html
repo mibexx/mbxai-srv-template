@@ -1,8 +1,8 @@
-{% raw %}{% extends "base.html" %}
+{{ "{%" }} extends "base.html" {{ "%}" }}
 
-{% block title %}UI Components Preview - {{ super() }}{% endblock %}
+{{ "{%" }} block title {{ "%}" }}UI Components Preview - {{ "{{" }} super() {{ "}}" }}{{ "{%" }} endblock {{ "%}" }}
 
-{% block content %}{% endraw %}
+{{ "{%" }} block content {{ "%}" }}
 <div class="px-4 sm:px-0" id="components-app">
   <!-- Page Header -->
   <div class="content-section mb-8">
@@ -219,216 +219,6 @@
               placeholder="+1 (555) 123-4567">
             <p class="form-help">Optional contact number</p>
           </div>
-
-          <div class="form-group">
-            <label for="website" class="form-label">Website</label>
-            <input 
-              v-model="formData.website" 
-              type="url" 
-              id="website" 
-              placeholder="https://example.com">
-            <p class="form-help">Your personal or company website</p>
-          </div>
-
-          <div class="form-group">
-            <label for="age" class="form-label">Age</label>
-            <input 
-              v-model="formData.age" 
-              type="number" 
-              id="age" 
-              min="18" 
-              max="120"
-              placeholder="25">
-            <p class="form-help">Must be 18 or older</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Textarea Section -->
-      <div class="form-section">
-        <h3 class="form-section-title">Text Areas</h3>
-        
-        <div class="form-group">
-          <label for="description" class="form-label">Description</label>
-          <textarea 
-            v-model="formData.description" 
-            id="description" 
-            rows="4"
-            placeholder="Enter a detailed description..."></textarea>
-          <p class="form-help">Provide additional details or comments</p>
-        </div>
-      </div>
-
-      <!-- Select Dropdowns Section -->
-      <div class="form-section">
-        <h3 class="form-section-title">Select Dropdowns</h3>
-        
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label for="country" class="form-label">Country <span class="text-red-500">*</span></label>
-            <select v-model="formData.country" id="country" required>
-              <option value="">Select a country...</option>
-              <option value="us">United States</option>
-              <option value="uk">United Kingdom</option>
-              <option value="ca">Canada</option>
-              <option value="au">Australia</option>
-              <option value="de">Germany</option>
-              <option value="fr">France</option>
-            </select>
-            <p class="form-help">Select your country of residence</p>
-          </div>
-
-          <div class="form-group">
-            <label for="role" class="form-label">Role</label>
-            <select v-model="formData.role" id="role">
-              <option value="">Select your role...</option>
-              <option value="developer">Developer</option>
-              <option value="designer">Designer</option>
-              <option value="manager">Manager</option>
-              <option value="analyst">Analyst</option>
-              <option value="other">Other</option>
-            </select>
-            <p class="form-help">Your professional role</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- File Upload Section -->
-      <div class="form-section">
-        <h3 class="form-section-title">File Uploads</h3>
-        
-        <div class="form-group">
-          <label for="document" class="form-label">Upload Document</label>
-          <input 
-            type="file" 
-            id="document" 
-            @change="handleFileUpload"
-            accept=".pdf,.doc,.docx,.txt">
-          <p class="form-help">Accepted formats: PDF, DOC, DOCX, TXT (Max 10MB)</p>
-        </div>
-
-        <div class="form-group">
-          <label for="image" class="form-label">Upload Image</label>
-          <input 
-            type="file" 
-            id="image" 
-            accept="image/*"
-            multiple>
-          <p class="form-help">Accepted formats: JPG, PNG, GIF (Max 5MB each)</p>
-        </div>
-      </div>
-
-      <!-- Checkboxes Section -->
-      <div class="form-section">
-        <h3 class="form-section-title">Checkboxes</h3>
-        
-        <div class="space-y-3">
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.newsletter" 
-                type="checkbox" 
-                id="newsletter"
-                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="newsletter" class="text-sm font-medium text-gray-900 cursor-pointer">
-                Subscribe to newsletter
-              </label>
-              <p class="text-sm text-gray-600">Get weekly updates and news</p>
-            </div>
-          </div>
-
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.marketing" 
-                type="checkbox" 
-                id="marketing"
-                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="marketing" class="text-sm font-medium text-gray-900 cursor-pointer">
-                Receive marketing emails
-              </label>
-              <p class="text-sm text-gray-600">Occasional promotional content</p>
-            </div>
-          </div>
-
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.terms" 
-                type="checkbox" 
-                id="terms"
-                required
-                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="terms" class="text-sm font-medium text-gray-900 cursor-pointer">
-                I agree to the terms and conditions <span class="text-red-500">*</span>
-              </label>
-              <p class="text-sm text-gray-600">Required to submit the form</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Radio Buttons Section -->
-      <div class="form-section">
-        <h3 class="form-section-title">Radio Buttons</h3>
-        
-        <div class="space-y-3">
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.contactMethod" 
-                type="radio" 
-                id="contactEmail"
-                value="email"
-                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="contactEmail" class="text-sm font-medium text-gray-900 cursor-pointer">
-                Contact via Email
-              </label>
-              <p class="text-sm text-gray-600">Preferred for detailed communication</p>
-            </div>
-          </div>
-
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.contactMethod" 
-                type="radio" 
-                id="contactPhone"
-                value="phone"
-                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="contactPhone" class="text-sm font-medium text-gray-900 cursor-pointer">
-                Contact via Phone
-              </label>
-              <p class="text-sm text-gray-600">Quick and direct communication</p>
-            </div>
-          </div>
-
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input 
-                v-model="formData.contactMethod" 
-                type="radio" 
-                id="contactBoth"
-                value="both"
-                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            </div>
-            <div class="ml-3">
-              <label for="contactBoth" class="text-sm font-medium text-gray-900 cursor-pointer">
-                Both Email and Phone
-              </label>
-              <p class="text-sm text-gray-600">Maximum flexibility</p>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -441,57 +231,18 @@
           Reset Form
         </button>
         
-        <div class="flex gap-3">
-          <button type="button" @click="saveFormData" class="btn-secondary">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-            Save Draft
-          </button>
-          
-          <button type="submit" :disabled="formSubmitting" class="btn-primary">
-            <svg v-if="formSubmitting" class="animate-spin -ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-            [[ formSubmitting ? 'Submitting...' : 'Submit Form' ]]
-          </button>
-        </div>
+        <button type="submit" :disabled="formSubmitting" class="btn-primary">
+          <svg v-if="formSubmitting" class="animate-spin -ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          [[ formSubmitting ? 'Submitting...' : 'Submit Form' ]]
+        </button>
       </div>
     </form>
-  </div>
-
-  <!-- Container Sections Example -->
-  <div class="content-section">
-    <div class="content-section-header">
-      <h2 class="content-section-title">
-        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-        </svg>
-        Container Section Example
-      </h2>
-      <p class="content-section-subtitle">Reusable content container with header, body, and footer</p>
-    </div>
-    <div class="content-section-body">
-      <p class="text-gray-700 leading-relaxed">
-        This is an example of a content section container. It includes a styled header with an icon and title,
-        a body section for your main content, and an optional footer for actions or additional information.
-        The container automatically handles spacing, borders, and shadows for a consistent look across your application.
-      </p>
-      <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p class="text-sm text-blue-800">
-          <strong>Tip:</strong> You can nest multiple sections and customize them with different content types,
-          including text, images, forms, tables, and more.
-        </p>
-      </div>
-    </div>
-    <div class="content-section-footer">
-      <button class="btn-secondary">Learn More</button>
-      <button class="btn-primary">Get Started</button>
-    </div>
   </div>
 
   <!-- LocalStorage Demo -->
@@ -529,10 +280,9 @@
     </div>
   </div>
 </div>
-{% raw %}{% endblock %}
+{{ "{%" }} endblock {{ "%}" }}
 
-{% block scripts %}
+{{ "{%" }} block scripts {{ "%}" }}
 <script src="{{ "{{" }} url_for('static', filename='js/helpers.js') {{ "}}" }}"></script>
 <script src="{{ "{{" }} url_for('static', filename='js/components-preview.js') {{ "}}" }}"></script>
-{% endblock %}{% endraw %}
-
+{{ "{%" }} endblock {{ "%}" }}

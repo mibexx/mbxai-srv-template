@@ -1,8 +1,8 @@
-{% raw %}{% extends "base.html" %}
+{{ "{%" }} extends "base.html" {{ "%}" }}
 
-{% block title %}{% endraw %}{{cookiecutter.project_name}}{% raw %} - {{ super() }}{% endblock %}
+{{ "{%" }} block title {{ "%}" }}{{cookiecutter.project_name}} - {{ "{{" }} super() {{ "}}" }}{{ "{%" }} endblock {{ "%}" }}
 
-{% block content %}{% endraw %}
+{{ "{%" }} block content {{ "%}" }}
 <div class="px-4 sm:px-0" id="estimation-app">
   <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
     <div class="px-4 py-5 sm:p-6">
@@ -28,12 +28,12 @@
   <!-- Estimation Process Accordion -->
   <div class="space-y-4">
     <!-- Include Task Templates -->
-    {% raw %}{% include 'tasks/hello.html' %}{% endraw %}
+    {{ "{%" }} include 'tasks/hello.html' {{ "%}" }}
   </div>
 </div>
-{% raw %}{% endblock %}
+{{ "{%" }} endblock {{ "%}" }}
 
-{% block scripts %}
+{{ "{%" }} block scripts {{ "%}" }}
 <script src="{{ "{{" }} url_for('static', filename='js/helpers.js') {{ "}}" }}"></script>
 <script src="{{ "{{" }} url_for('static', filename='js/estimation.js') {{ "}}" }}"></script>
-{% endblock %}{% endraw %} 
+{{ "{%" }} endblock {{ "%}" }}
