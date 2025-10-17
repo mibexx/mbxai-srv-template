@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class CeleryClient:
     """Client for sending and receiving messages through Celery with RabbitMQ and Redis."""
 
-    def __init__(self, app_name: str = "web_scraper"):
+    def __init__(self, app_name: str = "{{cookiecutter.package_name}}"):
         """Initialize the Celery client.
         
         Args:

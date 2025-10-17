@@ -1,0 +1,538 @@
+{% raw %}{% extends "base.html" %}
+
+{% block title %}UI Components Preview - {{ super() }}{% endblock %}
+
+{% block content %}{% endraw %}
+<div class="px-4 sm:px-0" id="components-app">
+  <!-- Page Header -->
+  <div class="content-section mb-8">
+    <div class="content-section-header">
+      <h1 class="content-section-title">
+        <svg class="w-7 h-7 mr-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+        </svg>
+        UI Components Preview
+      </h1>
+      <p class="content-section-subtitle">
+        A comprehensive showcase of all available UI components, forms, and styles
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Examples Section -->
+  <div class="content-section">
+    <div class="content-section-header">
+      <h2 class="content-section-title">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+        </svg>
+        Toast Notifications
+      </h2>
+      <p class="content-section-subtitle">Click buttons to see different toast notification styles</p>
+    </div>
+    <div class="content-section-body">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <button @click="showToast('success')" class="btn-success">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Show Success
+        </button>
+        <button @click="showToast('error')" class="btn-danger">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Show Error
+        </button>
+        <button @click="showToast('warning')" class="btn-warning">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          Show Warning
+        </button>
+        <button @click="showToast('info')" class="btn-info">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Show Info
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar Examples -->
+  <div class="content-section">
+    <div class="content-section-header">
+      <h2 class="content-section-title">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Progress Bars
+      </h2>
+      <p class="content-section-subtitle">Visual progress indicators for async tasks</p>
+    </div>
+    <div class="content-section-body space-y-6">
+      <div>
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700">Success Progress</span>
+          <span class="text-sm font-medium text-gray-700">[[ progress.success ]]%</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar progress-bar-success" :style="{width: progress.success + '%'}"></div>
+        </div>
+      </div>
+      
+      <div>
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700">Info Progress (Animated)</span>
+          <span class="text-sm font-medium text-gray-700">[[ progress.info ]]%</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar progress-bar-info progress-bar-animated" :style="{width: progress.info + '%'}"></div>
+        </div>
+      </div>
+      
+      <div>
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700">Warning Progress</span>
+          <span class="text-sm font-medium text-gray-700">[[ progress.warning ]]%</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar progress-bar-warning" :style="{width: progress.warning + '%'}"></div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button @click="updateProgress" class="btn-primary">Update Progress</button>
+        <button @click="resetProgress" class="btn-secondary">Reset Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Badges -->
+  <div class="content-section">
+    <div class="content-section-header">
+      <h2 class="content-section-title">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        Status Badges
+      </h2>
+      <p class="content-section-subtitle">Status indicators for various states</p>
+    </div>
+    <div class="content-section-body">
+      <div class="flex flex-wrap gap-3">
+        <span class="status-badge status-badge-pending">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <circle cx="10" cy="10" r="3"/>
+          </svg>
+          Pending
+        </span>
+        <span class="status-badge status-badge-processing">
+          <svg class="w-3 h-3 mr-1 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Processing
+        </span>
+        <span class="status-badge status-badge-success">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          Success
+        </span>
+        <span class="status-badge status-badge-error">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+          Error
+        </span>
+        <span class="status-badge status-badge-warning">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          Warning
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comprehensive Form Example -->
+  <div class="form-container">
+    <div class="form-header">
+      <h2 class="text-xl font-semibold text-gray-900 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Comprehensive Form Example
+      </h2>
+      <p class="mt-1 text-sm text-gray-600">
+        All available form field types with validation and styling
+      </p>
+    </div>
+
+    <form @submit.prevent="submitForm" class="form-body">
+      <!-- Text Inputs Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">Text Input Fields</h3>
+        
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="firstName" class="form-label">First Name <span class="text-red-500">*</span></label>
+            <input 
+              v-model="formData.firstName" 
+              type="text" 
+              id="firstName" 
+              placeholder="Enter your first name"
+              required>
+            <p class="form-help">Your given name</p>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName" class="form-label">Last Name <span class="text-red-500">*</span></label>
+            <input 
+              v-model="formData.lastName" 
+              type="text" 
+              id="lastName" 
+              placeholder="Enter your last name"
+              required>
+            <p class="form-help">Your family name</p>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address <span class="text-red-500">*</span></label>
+            <input 
+              v-model="formData.email" 
+              type="email" 
+              id="email" 
+              placeholder="your.email@example.com"
+              required>
+            <p class="form-help">We'll never share your email</p>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input 
+              v-model="formData.phone" 
+              type="tel" 
+              id="phone" 
+              placeholder="+1 (555) 123-4567">
+            <p class="form-help">Optional contact number</p>
+          </div>
+
+          <div class="form-group">
+            <label for="website" class="form-label">Website</label>
+            <input 
+              v-model="formData.website" 
+              type="url" 
+              id="website" 
+              placeholder="https://example.com">
+            <p class="form-help">Your personal or company website</p>
+          </div>
+
+          <div class="form-group">
+            <label for="age" class="form-label">Age</label>
+            <input 
+              v-model="formData.age" 
+              type="number" 
+              id="age" 
+              min="18" 
+              max="120"
+              placeholder="25">
+            <p class="form-help">Must be 18 or older</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Textarea Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">Text Areas</h3>
+        
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            v-model="formData.description" 
+            id="description" 
+            rows="4"
+            placeholder="Enter a detailed description..."></textarea>
+          <p class="form-help">Provide additional details or comments</p>
+        </div>
+      </div>
+
+      <!-- Select Dropdowns Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">Select Dropdowns</h3>
+        
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="country" class="form-label">Country <span class="text-red-500">*</span></label>
+            <select v-model="formData.country" id="country" required>
+              <option value="">Select a country...</option>
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="ca">Canada</option>
+              <option value="au">Australia</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+            </select>
+            <p class="form-help">Select your country of residence</p>
+          </div>
+
+          <div class="form-group">
+            <label for="role" class="form-label">Role</label>
+            <select v-model="formData.role" id="role">
+              <option value="">Select your role...</option>
+              <option value="developer">Developer</option>
+              <option value="designer">Designer</option>
+              <option value="manager">Manager</option>
+              <option value="analyst">Analyst</option>
+              <option value="other">Other</option>
+            </select>
+            <p class="form-help">Your professional role</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- File Upload Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">File Uploads</h3>
+        
+        <div class="form-group">
+          <label for="document" class="form-label">Upload Document</label>
+          <input 
+            type="file" 
+            id="document" 
+            @change="handleFileUpload"
+            accept=".pdf,.doc,.docx,.txt">
+          <p class="form-help">Accepted formats: PDF, DOC, DOCX, TXT (Max 10MB)</p>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="form-label">Upload Image</label>
+          <input 
+            type="file" 
+            id="image" 
+            accept="image/*"
+            multiple>
+          <p class="form-help">Accepted formats: JPG, PNG, GIF (Max 5MB each)</p>
+        </div>
+      </div>
+
+      <!-- Checkboxes Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">Checkboxes</h3>
+        
+        <div class="space-y-3">
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.newsletter" 
+                type="checkbox" 
+                id="newsletter"
+                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="newsletter" class="text-sm font-medium text-gray-900 cursor-pointer">
+                Subscribe to newsletter
+              </label>
+              <p class="text-sm text-gray-600">Get weekly updates and news</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.marketing" 
+                type="checkbox" 
+                id="marketing"
+                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="marketing" class="text-sm font-medium text-gray-900 cursor-pointer">
+                Receive marketing emails
+              </label>
+              <p class="text-sm text-gray-600">Occasional promotional content</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.terms" 
+                type="checkbox" 
+                id="terms"
+                required
+                class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="terms" class="text-sm font-medium text-gray-900 cursor-pointer">
+                I agree to the terms and conditions <span class="text-red-500">*</span>
+              </label>
+              <p class="text-sm text-gray-600">Required to submit the form</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radio Buttons Section -->
+      <div class="form-section">
+        <h3 class="form-section-title">Radio Buttons</h3>
+        
+        <div class="space-y-3">
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.contactMethod" 
+                type="radio" 
+                id="contactEmail"
+                value="email"
+                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="contactEmail" class="text-sm font-medium text-gray-900 cursor-pointer">
+                Contact via Email
+              </label>
+              <p class="text-sm text-gray-600">Preferred for detailed communication</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.contactMethod" 
+                type="radio" 
+                id="contactPhone"
+                value="phone"
+                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="contactPhone" class="text-sm font-medium text-gray-900 cursor-pointer">
+                Contact via Phone
+              </label>
+              <p class="text-sm text-gray-600">Quick and direct communication</p>
+            </div>
+          </div>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input 
+                v-model="formData.contactMethod" 
+                type="radio" 
+                id="contactBoth"
+                value="both"
+                class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            </div>
+            <div class="ml-3">
+              <label for="contactBoth" class="text-sm font-medium text-gray-900 cursor-pointer">
+                Both Email and Phone
+              </label>
+              <p class="text-sm text-gray-600">Maximum flexibility</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+        <button type="button" @click="resetForm" class="btn-secondary">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Reset Form
+        </button>
+        
+        <div class="flex gap-3">
+          <button type="button" @click="saveFormData" class="btn-secondary">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
+            Save Draft
+          </button>
+          
+          <button type="submit" :disabled="formSubmitting" class="btn-primary">
+            <svg v-if="formSubmitting" class="animate-spin -ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            [[ formSubmitting ? 'Submitting...' : 'Submit Form' ]]
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Container Sections Example -->
+  <div class="content-section">
+    <div class="content-section-header">
+      <h2 class="content-section-title">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+        </svg>
+        Container Section Example
+      </h2>
+      <p class="content-section-subtitle">Reusable content container with header, body, and footer</p>
+    </div>
+    <div class="content-section-body">
+      <p class="text-gray-700 leading-relaxed">
+        This is an example of a content section container. It includes a styled header with an icon and title,
+        a body section for your main content, and an optional footer for actions or additional information.
+        The container automatically handles spacing, borders, and shadows for a consistent look across your application.
+      </p>
+      <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-sm text-blue-800">
+          <strong>Tip:</strong> You can nest multiple sections and customize them with different content types,
+          including text, images, forms, tables, and more.
+        </p>
+      </div>
+    </div>
+    <div class="content-section-footer">
+      <button class="btn-secondary">Learn More</button>
+      <button class="btn-primary">Get Started</button>
+    </div>
+  </div>
+
+  <!-- LocalStorage Demo -->
+  <div class="content-section">
+    <div class="content-section-header">
+      <h2 class="content-section-title">
+        <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+        </svg>
+        LocalStorage Demo
+      </h2>
+      <p class="content-section-subtitle">Form data is automatically saved and restored</p>
+    </div>
+    <div class="content-section-body">
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <p class="text-sm text-gray-700 mb-3">
+          All form data on this page is automatically saved to localStorage as you type.
+          Try filling out the form, refreshing the page, and see your data restored!
+        </p>
+        <div class="flex gap-3">
+          <button @click="loadFormData" class="btn-secondary text-sm px-4 py-2">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Load Saved Data
+          </button>
+          <button @click="clearFormData" class="btn-secondary text-sm px-4 py-2">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Clear Saved Data
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% raw %}{% endblock %}
+
+{% block scripts %}
+<script src="{{ "{{" }} url_for('static', filename='js/helpers.js') {{ "}}" }}"></script>
+<script src="{{ "{{" }} url_for('static', filename='js/components-preview.js') {{ "}}" }}"></script>
+{% endblock %}{% endraw %}
+

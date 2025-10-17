@@ -44,6 +44,11 @@ def create_app() -> Flask:
         """Home page with CSV converter form."""
         return render_template('index.html', active_page='overview')
     
+    @app.route('/preview')
+    def components_preview():
+        """UI Components preview page."""
+        return render_template('components-preview.html', active_page='preview')
+    
     
     @app.route('/api/hello', methods=['POST'])
     @csrf.exempt

@@ -34,5 +34,6 @@
 {% raw %}{% endblock %}
 
 {% block scripts %}
+<script src="{{ "{{" }} url_for('static', filename='js/helpers.js') {{ "}}" }}"></script>
 <script src="{{ "{{" }} url_for('static', filename='js/estimation.js') {{ "}}" }}"></script>
 {% endblock %}{% endraw %} 
