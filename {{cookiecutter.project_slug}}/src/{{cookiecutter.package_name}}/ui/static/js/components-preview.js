@@ -17,15 +17,12 @@ createApp({
         lastName: '',
         email: '',
         phone: '',
-        website: '',
-        age: '',
         description: '',
         country: '',
         role: '',
         newsletter: false,
         marketing: false,
-        terms: false,
-        contactMethod: 'email'
+        terms: false
       },
       
       formSubmitting: false,
@@ -97,6 +94,17 @@ createApp({
     },
     
     /**
+     * Handle multiple file uploads
+     */
+    handleMultipleFileUpload(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        const fileList = Array.from(files).map(f => f.name).join(', ');
+        ToastManager.success(`${files.length} file(s) selected: ${fileList}`);
+      }
+    },
+    
+    /**
      * Submit form
      */
     async submitForm() {
@@ -148,21 +156,6 @@ createApp({
         return false;
       }
       
-      // Validate website if provided
-      if (this.formData.website && !FormValidator.isValidUrl(this.formData.website)) {
-        ToastManager.error('Please enter a valid website URL');
-        return false;
-      }
-      
-      // Validate age if provided
-      if (this.formData.age) {
-        const age = parseInt(this.formData.age);
-        if (age < 18 || age > 120) {
-          ToastManager.error('Age must be between 18 and 120');
-          return false;
-        }
-      }
-      
       return true;
     },
     
@@ -175,16 +168,17 @@ createApp({
         lastName: '',
         email: '',
         phone: '',
-        website: '',
-        age: '',
         description: '',
         country: '',
         role: '',
         newsletter: false,
         marketing: false,
-        terms: false,
-        contactMethod: 'email'
+        terms: false
       };
+      
+      // Clear file inputs
+      const fileInputs = document.querySelectorAll('input[type="file"]');
+      fileInputs.forEach(input => input.value = '');
       
       ToastManager.info('Form reset to default values');
     },
@@ -222,6 +216,14 @@ createApp({
       StorageHelper.remove(this.autoSaveKey);
       this.resetForm();
       ToastManager.warning('Saved form data cleared');
+    },
+    
+    /**
+     * Manual save button
+     */
+    saveFormData() {
+      StorageHelper.save(this.autoSaveKey, this.formData);
+      ToastManager.success('Form data saved to localStorage');
     }
   }
 }).mount('#components-app');
