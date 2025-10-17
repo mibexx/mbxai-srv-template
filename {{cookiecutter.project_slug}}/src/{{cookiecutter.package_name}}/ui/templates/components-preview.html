@@ -1,8 +1,8 @@
-{{ "{%" }} extends "base.html" {{ "%}" }}
+{% raw %}{% extends "base.html" %}
 
-{{ "{%" }} block title {{ "%}" }}UI Components Preview - {{ "{{" }} super() {{ "}}" }}{{ "{%" }} endblock {{ "%}" }}
+{% block title %}UI Components Preview - {{ super() }}{% endblock %}
 
-{{ "{%" }} block content {{ "%}" }}
+{% block content %}{% endraw %}
 <div class="px-4 sm:px-0" id="components-app">
   <!-- Page Header -->
   <div class="content-section mb-8">
@@ -280,9 +280,9 @@
     </div>
   </div>
 </div>
-{{ "{%" }} endblock {{ "%}" }}
+{% raw %}{% endblock %}
 
-{{ "{%" }} block scripts {{ "%}" }}
-<script src="{{ "{{" }} url_for('static', filename='js/helpers.js') {{ "}}" }}"></script>
-<script src="{{ "{{" }} url_for('static', filename='js/components-preview.js') {{ "}}" }}"></script>
-{{ "{%" }} endblock {{ "%}" }}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/helpers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/components-preview.js') }}"></script>
+{% endblock %}{% endraw %}

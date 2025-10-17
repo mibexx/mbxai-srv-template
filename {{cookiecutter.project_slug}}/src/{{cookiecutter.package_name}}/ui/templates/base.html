@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/mermaid@11.7.0/dist/mermaid.min.js"></script>
     
     <!-- External Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link rel="stylesheet" href="{% raw %}{{ url_for('static', filename='css/styles.css') }}{% endraw %}" />
   </head>
   <body class="bg-gray-50 min-h-screen flex flex-col">
     <header class="bg-white shadow">
