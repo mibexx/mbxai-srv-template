@@ -14,6 +14,7 @@ alwaysApply: true
     - mcp: MCP server for the application in src/{{cookiecutter.package_name}}/mcp
     - ui: UI for the application in src/{{cookiecutter.package_name}}/ui
 - Logic in UI should use an endpoint in api with proxy in frontend app
+- Be aware, that API, MCP, UI and WORKER will be executed in different pod with different file system. There is no shared storage.
 
 ## API Design
 - All endpoints must have ONE pydantic model as request and response
