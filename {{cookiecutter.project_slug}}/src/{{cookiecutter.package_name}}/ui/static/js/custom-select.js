@@ -75,7 +75,7 @@ const CustomSelect = {
           'custom-select-has-value': modelValue
         }"
       >
-        <span :class="{ 'text-gray-500': !modelValue }">{{ displayText }}</span>
+        <span :class="{ 'text-gray-500': !modelValue }">{{ "{{" }} displayText {{ "}}" }}</span>
         <svg 
           class="custom-select-arrow" 
           :class="{ 'custom-select-arrow-open': isOpen }"
@@ -96,7 +96,7 @@ const CustomSelect = {
             class="custom-select-option"
             :class="{ 'custom-select-option-selected': option.value === modelValue }"
           >
-            {{ option.label }}
+            {{ "{{" }} option.label {{ "}}" }}
           </div>
         </div>
       </transition>
@@ -108,4 +108,3 @@ const CustomSelect = {
 if (typeof window !== 'undefined') {
   window.CustomSelect = CustomSelect;
 }
-
