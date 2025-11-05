@@ -41,6 +41,8 @@ alwaysApply: true
 - To send requests to AI, check the client.py and use (if nothing else is requested) the get_mcp_client function
 - Use always the "parse" method of the client
 - Use the AsyncMcpClient (get_mcp_client) and implement it well
+- Pydantic models, used for AI parse, may NOT have any default values.
+- Pydantic models, used for AI parse, may not have dict as type. Use always own types with own models
 
 ## Development Practices
 - Never write tests when it's not explicitly required
