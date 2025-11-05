@@ -4,6 +4,9 @@ globs:
 alwaysApply: true
 ---
 
+## Context
+- Check always if there's a context-folder. If yes, read the markdown files in it before you start to work.
+
 ## Python Version
 - Always use Python 3.12 or higher
 - Use always dict and list instead of Dict and List
