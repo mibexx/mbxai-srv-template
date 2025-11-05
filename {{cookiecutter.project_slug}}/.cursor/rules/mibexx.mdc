@@ -53,3 +53,12 @@ alwaysApply: true
     - Don't write tests when it's not explicitly required
     - Never refactor without a specific reason
     - Try to avoid bigger changes without a specific reason
+
+## Structure
+- All logic should be inside the utils/business folder.
+- Write clean classes for each capsuled logic.
+- Use always pydantic models for parameters and results.
+- Write models always in own files grouped for one piece of logic. Request and Response in one file. Use the same naming as the logic. Place them in utils/models/ with a clean and readable naming.
+- Ensure to use the pydantic models in the business models. 
+- Prefix private functions always with underscore.
+- First public functions, then private functions.
