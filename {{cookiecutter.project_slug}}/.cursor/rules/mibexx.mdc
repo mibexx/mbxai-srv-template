@@ -36,6 +36,7 @@ alwaysApply: true
 ## UI Logic
 - Implement (proxy) endpoints always first in the ui app
 - In app, use celery_client to trigger the requested task
+- Never use JavaScript alerts or confirms. Use toasts and modals instead.
 
 ## AI
 - To send requests to AI, check the client.py and use (if nothing else is requested) the get_mcp_client function
