@@ -124,6 +124,43 @@ class MCPConfig(BaseSettings):
         extra="ignore",
     )
 
+
+class McpOAuth2Config(BaseSettings):
+    """OAuth2 configuration for the MCP server."""
+
+    issuer: str | None = Field(default=None, alias="MCP_OAUTH2_ISSUER")
+    authorization_endpoint: str | None = Field(
+        default=None,
+        alias="MCP_OAUTH2_AUTHORIZATION_ENDPOINT",
+    )
+    token_endpoint: str | None = Field(
+        default=None,
+        alias="MCP_OAUTH2_TOKEN_ENDPOINT",
+    )
+    jwks_uri: str | None = Field(default=None, alias="MCP_OAUTH2_JWKS_URI")
+    scopes_supported_raw: str = Field(
+        default="",
+        alias="MCP_OAUTH2_SCOPES_SUPPORTED",
+    )
+
+    model_config = SettingsConfigDict(
+        env_prefix="",
+        env_file=ROOT_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @property
+    def scopes_supported(self) -> list[str]:
+        """Return the configured scopes as a list."""
+        if not self.scopes_supported_raw:
+            return []
+        return [
+            scope.strip()
+            for scope in self.scopes_supported_raw.split(",")
+            if scope.strip()
+        ]
+
 class ServiceAPIConfig(BaseSettings):
     """Service API configuration."""
 
@@ -274,6 +311,12 @@ def get_openrouter_api_config() -> OpenRouterAPIConfig:
 def get_mcp_config() -> MCPConfig:
     """Get the MCP configuration singleton."""
     return MCPConfig()
+
+
+@lru_cache
+def get_mcp_oauth2_config() -> McpOAuth2Config:
+    """Get the MCP OAuth2 configuration singleton."""
+    return McpOAuth2Config()
 
 @lru_cache
 def get_service_api_config() -> ServiceAPIConfig:

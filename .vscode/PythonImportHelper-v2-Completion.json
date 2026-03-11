@@ -56,6 +56,30 @@
         "documentation": {}
     },
     {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "BaseModel",
         "importPath": "pydantic",
         "description": "pydantic",
@@ -120,6 +144,38 @@
         "documentation": {}
     },
     {
+        "label": "APIRouter",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "Form",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "status",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
@@ -162,6 +218,30 @@
     },
     {
         "label": "Type",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
         "importPath": "typing",
         "description": "typing",
         "isExtraImport": true,
@@ -324,7 +404,23 @@
         "documentation": {}
     },
     {
+        "label": "Mapping",
+        "importPath": "collections.abc",
+        "description": "collections.abc",
+        "isExtraImport": true,
+        "detail": "collections.abc",
+        "documentation": {}
+    },
+    {
         "label": "MCPServer",
+        "importPath": "mbxai.mcp.server",
+        "description": "mbxai.mcp.server",
+        "isExtraImport": true,
+        "detail": "mbxai.mcp.server",
+        "documentation": {}
+    },
+    {
+        "label": "OAuth2Configuration",
         "importPath": "mbxai.mcp.server",
         "description": "mbxai.mcp.server",
         "isExtraImport": true,
@@ -337,6 +433,14 @@
         "description": "project.weather",
         "isExtraImport": true,
         "detail": "project.weather",
+        "documentation": {}
+    },
+    {
+        "label": "RedirectResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
         "documentation": {}
     },
     {
@@ -735,7 +839,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
-        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"",
+        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n    __auth__: dict[str, Any] | None = Field(\n        default=None,\n        description=\"Authentication context injected by the MCP server\",\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
         "documentation": {}
     },
@@ -753,7 +857,25 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "config = get_config()\n# Import the tools\nfrom project.weather import get_weather\n# Initialize mbxai server\nserver = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app",
+        "peekOfCode": "config = get_config()\noauth2_config_settings = get_mcp_oauth2_config()\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n        or not oauth2_config_settings.jwks_uri\n    ):",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "oauth2_config_settings",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "oauth2_config_settings = get_mcp_oauth2_config()\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n        or not oauth2_config_settings.jwks_uri\n    ):\n        return None",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "oauth2_configuration",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "oauth2_configuration = _build_oauth2_configuration()\n# Import the tools\nfrom project.weather import get_weather\ndef _build_server() -> MCPServer:\n    \"\"\"Create the MCPServer with optional OAuth2 support.\"\"\"\n    server_kwargs: dict[str, object] = {\n        \"name\": config.name,\n        \"description\": config.description,\n    }\n    if oauth2_configuration is not None:",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
@@ -762,7 +884,7 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "server = MCPServer(\n    name=config.name,\n    description=config.description\n)\n# Get the FastAPI app from the mbxai server\napp = server.app\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    await server.add_tool(get_weather)",
+        "peekOfCode": "server = _build_server()\n# Get the FastAPI app from the mbxai server\napp = server.app\n# Mount the simple OAuth2 endpoints (can be replaced or extended in projects)\napp.include_router(get_oauth2_router())\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    security_schemes: list[Mapping[str, Any]] | None = None\n    if oauth2_configuration is not None and oauth2_configuration.scopes_supported:",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
@@ -771,8 +893,26 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "app = server.app\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    await server.add_tool(get_weather)",
+        "peekOfCode": "app = server.app\n# Mount the simple OAuth2 endpoints (can be replaced or extended in projects)\napp.include_router(get_oauth2_router())\n# Function to register tools\nasync def register_tools():\n    \"\"\"Register all tools with the server.\"\"\"\n    security_schemes: list[Mapping[str, Any]] | None = None\n    if oauth2_configuration is not None and oauth2_configuration.scopes_supported:\n        security_schemes = [\n            {",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "TokenResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "peekOfCode": "class TokenResponse(BaseModel):\n    access_token: str = Field(description=\"Issued access token\")\n    token_type: str = Field(default=\"Bearer\", description=\"Token type\")\n    expires_in: int = Field(default=3600, description=\"Token lifetime in seconds\")\n    scope: str = Field(default=\"\", description=\"Granted scopes as space-separated string\")\ndef get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "documentation": {}
+    },
+    {
+        "label": "get_oauth2_router",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "peekOfCode": "def get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize\n    - POST /oauth/token\n    \"\"\"\n    router = APIRouter()\n    @router.get(\"/oauth/authorize\")\n    async def authorize(",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "documentation": {}
     },
     {
@@ -1023,7 +1163,16 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = Field(default=None, alias=\"MCP_SERVER_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\nclass ServiceAPIConfig(BaseSettings):",
+        "peekOfCode": "class MCPConfig(BaseSettings):\n    \"\"\"MCP server configuration.\"\"\"\n    server_url: str | None = Field(default=None, alias=\"MCP_SERVER_URL\")\n    model_config = SettingsConfigDict(\n        env_prefix=\"\",\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",\n    )\nclass McpOAuth2Config(BaseSettings):",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "McpOAuth2Config",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "class McpOAuth2Config(BaseSettings):\n    \"\"\"OAuth2 configuration for the MCP server.\"\"\"\n    issuer: str | None = Field(default=None, alias=\"MCP_OAUTH2_ISSUER\")\n    authorization_endpoint: str | None = Field(\n        default=None,\n        alias=\"MCP_OAUTH2_AUTHORIZATION_ENDPOINT\",\n    )\n    token_endpoint: str | None = Field(\n        default=None,\n        alias=\"MCP_OAUTH2_TOKEN_ENDPOINT\",",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -1104,7 +1253,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"",
+        "peekOfCode": "def get_openrouter_api_config() -> OpenRouterAPIConfig:\n    \"\"\"Get the OpenRouter API configuration singleton.\"\"\"\n    return OpenRouterAPIConfig()\n@lru_cache\ndef get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_mcp_oauth2_config() -> McpOAuth2Config:\n    \"\"\"Get the MCP OAuth2 configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },
@@ -1113,7 +1262,16 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()\n@lru_cache\ndef get_openai_config() -> OpenAIConfig:\n    \"\"\"Get the OpenAI configuration singleton.\"\"\"",
+        "peekOfCode": "def get_mcp_config() -> MCPConfig:\n    \"\"\"Get the MCP configuration singleton.\"\"\"\n    return MCPConfig()\n@lru_cache\ndef get_mcp_oauth2_config() -> McpOAuth2Config:\n    \"\"\"Get the MCP OAuth2 configuration singleton.\"\"\"\n    return McpOAuth2Config()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "documentation": {}
+    },
+    {
+        "label": "get_mcp_oauth2_config",
+        "kind": 2,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
+        "peekOfCode": "def get_mcp_oauth2_config() -> McpOAuth2Config:\n    \"\"\"Get the MCP OAuth2 configuration singleton.\"\"\"\n    return McpOAuth2Config()\n@lru_cache\ndef get_service_api_config() -> ServiceAPIConfig:\n    \"\"\"Get the service api configuration singleton.\"\"\"\n    return ServiceAPIConfig()\n@lru_cache\ndef get_openai_config() -> OpenAIConfig:\n    \"\"\"Get the OpenAI configuration singleton.\"\"\"",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

@@ -31,6 +31,11 @@ These variables are prefixed with `{{cookiecutter.project_slug.upper()}}_`:
 - `OPENROUTER_TOKEN`: Your OpenRouter API token for AI model interactions
 - `OPENROUTER_BASE_URL`: Base URL for OpenRouter API (default: "https://openrouter.ai/api/v1")
 - `MCP_SERVER_URL`: URL of the Model Context Protocol server (optional)
+- `MCP_OAUTH2_ISSUER`: OAuth2/OpenID Connect issuer URL for the MCP server (optional)
+- `MCP_OAUTH2_AUTHORIZATION_ENDPOINT`: OAuth2 authorization endpoint used by clients (optional)
+- `MCP_OAUTH2_TOKEN_ENDPOINT`: OAuth2 token endpoint for token exchange (optional)
+- `MCP_OAUTH2_JWKS_URI`: JWKS URI for validating incoming access tokens (optional)
+- `MCP_OAUTH2_SCOPES_SUPPORTED`: Comma-separated list of scopes the MCP server supports (optional)
 
 These can be set in your environment or in a `.env` file in the project root.
 
@@ -244,6 +249,35 @@ The MCP client supports:
 - Executing tools through the MCP protocol
 - Agent mode with MCP tools
 - Streaming agent responses
+
+#### MCP Server and OAuth2-Protected Tools
+
+The template also includes an HTTP-based MCP server (under `src/{{cookiecutter.package_name}}/mcp`) built on `mbxai`'s `MCPServer`.  
+If the OAuth2-related environment variables are set (`MCP_OAUTH2_ISSUER`, authorization/token endpoints, `MCP_OAUTH2_JWKS_URI` and `MCP_OAUTH2_SCOPES_SUPPORTED`), the server:
+
+- Exposes standard discovery documents under:
+  - `/.well-known/openid-configuration`
+  - `/.well-known/oauth-authorization-server`
+- Validates `Authorization: Bearer <token>` for tools that define `securitySchemes` with `type: "oauth2"` and required scopes.
+- Injects an authentication context into tool input models via an internal `__auth__` field so tools can access information like `access_token`, `scopes`, or user identifiers.
+
+By default, the example `weather` tool is registered without security. When OAuth2 is configured, the template registers it with an OAuth2 `securitySchemes` entry so the `/tools` endpoint advertises the required scopes to MCP clients.
+
+#### Built-in OAuth2 Endpoints (Overridable)
+
+For convenience, the MCP service in this template also ships with minimal OAuth2 endpoints implemented in `mcp/auth.py` and mounted into the FastAPI app:
+
+- `GET /oauth/authorize`
+  - Accepts typical authorization request parameters (`response_type`, `client_id`, `redirect_uri`, `scope`, `state`).
+  - In the template it immediately redirects back to `redirect_uri` with a static `code` and echoes `state`/`scope`.
+- `POST /oauth/token`
+  - Accepts standard form fields (`grant_type`, `code`, `redirect_uri`, `client_id`, `client_secret`, `scope`).
+  - Returns a simple JSON token response with a dummy `access_token`, `token_type="Bearer"`, and `expires_in=3600`.
+
+These implementations are intentionally simple and are meant as **safe defaults**:
+
+- They allow you to point `OAuth2Configuration.authorization_endpoint` and `token_endpoint` at the service itself for quick experiments.
+- In real projects, you can **override or extend** the behavior by editing `src/{{cookiecutter.package_name}}/mcp/auth.py` (for example to delegate to an external IdP, perform real login/consent, or issue signed JWTs), while the rest of the template (MCP server wiring and tool security metadata) stays unchanged.
 
 #### Basic Usage
 
