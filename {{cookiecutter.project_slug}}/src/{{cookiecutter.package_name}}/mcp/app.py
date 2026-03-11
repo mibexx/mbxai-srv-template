@@ -54,6 +54,7 @@ def _build_server() -> MCPServer:
     """Create the MCPServer with optional OAuth2 support."""
     server_kwargs: dict[str, object] = {
         "name": config.name,
+        "description": config.description,
     }
 
     if oauth2_configuration is not None:

@@ -867,7 +867,7 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "oauth2_configuration = _build_oauth2_configuration()\n# Import the tools\nfrom .project.weather import get_weather\ndef _build_server() -> MCPServer:\n    \"\"\"Create the MCPServer with optional OAuth2 support.\"\"\"\n    server_kwargs: dict[str, object] = {\n        \"name\": config.name,\n    }\n    if oauth2_configuration is not None:\n        server_kwargs[\"oauth2_configuration\"] = oauth2_configuration",
+        "peekOfCode": "oauth2_configuration = _build_oauth2_configuration()\n# Import the tools\nfrom .project.weather import get_weather\ndef _build_server() -> MCPServer:\n    \"\"\"Create the MCPServer with optional OAuth2 support.\"\"\"\n    server_kwargs: dict[str, object] = {\n        \"name\": config.name,\n        \"description\": config.description,\n    }\n    if oauth2_configuration is not None:",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
@@ -1128,7 +1128,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
-        "peekOfCode": "class ApplicationConfig(BaseSettings):\n    \"\"\"Application configuration.\"\"\"\n    name: str = \"{{cookiecutter.project_name}}\"\n    version: str = Field(default_factory=_get_version)\n    log_level: int = logging.INFO\n    model_config = SettingsConfigDict(\n        env_prefix=SERVICE_NAME,\n        env_file=ROOT_DIR / \".env\",\n        env_file_encoding=\"utf-8\",\n        extra=\"ignore\",",
+        "peekOfCode": "class ApplicationConfig(BaseSettings):\n    \"\"\"Application configuration.\"\"\"\n    name: str = \"{{cookiecutter.project_name}}\"\n    description: str = Field(\n        default=\"{{cookiecutter.project_name}} MCP server\",\n        description=\"Human-readable description of the service\",\n    )\n    version: str = Field(default_factory=_get_version)\n    log_level: int = logging.INFO\n    model_config = SettingsConfigDict(",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.config",
         "documentation": {}
     },

@@ -22,6 +22,10 @@ class ApplicationConfig(BaseSettings):
     """Application configuration."""
 
     name: str = "{{cookiecutter.project_name}}"
+    description: str = Field(
+        default="{{cookiecutter.project_name}} MCP server",
+        description="Human-readable description of the service",
+    )
     version: str = Field(default_factory=_get_version)
     log_level: int = logging.INFO
 
