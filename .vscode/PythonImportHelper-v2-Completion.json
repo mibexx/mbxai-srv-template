@@ -831,7 +831,7 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
-        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n    __auth__: dict[str, Any] | None = Field(\n        default=None,\n        description=\"Authentication context injected by the MCP server\",\n    )",
+        "peekOfCode": "class WeatherInput(BaseModel):\n    location: str\n    units: str = \"celsius\"  # Default to celsius, can be \"fahrenheit\" or \"celsius\"\n    auth: dict[str, Any] | None = Field(\n        default=None,\n        description=\"Authentication context injected by the MCP server\",\n        alias=\"__auth__\",\n        serialization_alias=\"__auth__\",\n    )",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.project.models.request",
         "documentation": {}
     },
