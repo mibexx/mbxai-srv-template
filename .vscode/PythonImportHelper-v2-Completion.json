@@ -867,7 +867,7 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "oauth2_configuration = _build_oauth2_configuration()\n# Import the tools\nfrom .project.weather import get_weather\ndef _build_server() -> MCPServer:\n    \"\"\"Create the MCPServer with optional OAuth2 support.\"\"\"\n    server_kwargs: dict[str, object] = {\n        \"name\": config.name,\n        \"description\": config.description,\n    }\n    if oauth2_configuration is not None:",
+        "peekOfCode": "oauth2_configuration = _build_oauth2_configuration()\n# Import the tools\nfrom .project.weather import get_weather\ndef _build_server() -> MCPServer:\n    \"\"\"Create the MCPServer with optional OAuth2 support.\"\"\"\n    server_kwargs: dict[str, object] = {\n        \"name\": config.name,\n    }\n    if oauth2_configuration is not None:\n        server_kwargs[\"oauth2_configuration\"] = oauth2_configuration",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
