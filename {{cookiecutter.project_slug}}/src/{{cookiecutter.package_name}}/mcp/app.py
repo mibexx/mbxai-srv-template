@@ -47,7 +47,7 @@ async def validate_oauth2_token(
 oauth2_configuration = _build_oauth2_configuration()
 
 # Import the tools
-from project.weather import get_weather
+from .project.weather import get_weather
 
 
 def _build_server() -> MCPServer:
