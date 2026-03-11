@@ -1,5 +1,6 @@
 from collections.abc import Mapping
 from typing import Any
+import logging
 
 from mbxai.mcp.server import MCPServer, OAuth2Configuration
 
@@ -9,6 +10,8 @@ from .auth import get_oauth2_router
 config = get_config()
 oauth2_config_settings = get_mcp_oauth2_config()
 
+logger = logging.getLogger(__name__)
+
 
 def _build_oauth2_configuration() -> OAuth2Configuration | None:
     """Create an OAuth2Configuration if all required values are present."""
@@ -16,7 +19,6 @@ def _build_oauth2_configuration() -> OAuth2Configuration | None:
         not oauth2_config_settings.issuer
         or not oauth2_config_settings.authorization_endpoint
         or not oauth2_config_settings.token_endpoint
-        or not oauth2_config_settings.jwks_uri
     ):
         return None
 
@@ -60,6 +62,8 @@ def _build_server() -> MCPServer:
     if oauth2_configuration is not None:
         server_kwargs["oauth2_configuration"] = oauth2_configuration
         server_kwargs["oauth2_handler"] = validate_oauth2_token
+
+    logger.info(f"Server kwargs: {server_kwargs}")
 
     return MCPServer(**server_kwargs)
 

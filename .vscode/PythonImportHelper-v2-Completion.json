@@ -849,7 +849,7 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "config = get_config()\noauth2_config_settings = get_mcp_oauth2_config()\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n        or not oauth2_config_settings.jwks_uri\n    ):",
+        "peekOfCode": "config = get_config()\noauth2_config_settings = get_mcp_oauth2_config()\nlogger = logging.getLogger(__name__)\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n    ):",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
@@ -858,7 +858,16 @@
         "kind": 5,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
-        "peekOfCode": "oauth2_config_settings = get_mcp_oauth2_config()\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n        or not oauth2_config_settings.jwks_uri\n    ):\n        return None",
+        "peekOfCode": "oauth2_config_settings = get_mcp_oauth2_config()\nlogger = logging.getLogger(__name__)\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n    ):\n        return None",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef _build_oauth2_configuration() -> OAuth2Configuration | None:\n    \"\"\"Create an OAuth2Configuration if all required values are present.\"\"\"\n    if (\n        not oauth2_config_settings.issuer\n        or not oauth2_config_settings.authorization_endpoint\n        or not oauth2_config_settings.token_endpoint\n    ):\n        return None\n    return OAuth2Configuration(",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.app",
         "documentation": {}
     },
