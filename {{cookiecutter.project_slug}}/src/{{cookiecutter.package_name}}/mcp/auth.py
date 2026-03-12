@@ -1,6 +1,8 @@
 from typing import Any
+import secrets
+import time
 
-from fastapi import APIRouter, Form, HTTPException, status
+from fastapi import APIRouter, Form, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
@@ -12,6 +14,64 @@ class TokenResponse(BaseModel):
     scope: str = Field(default="", description="Granted scopes as space-separated string")
 
 
+class ClientRegistrationRequest(BaseModel):
+    redirect_uris: list[str] | None = Field(
+        default=None,
+        description="Redirection URIs that the client may use in requests to the authorization server",
+    )
+    client_name: str | None = Field(
+        default=None,
+        description="Human-readable name of the client to be presented to the end-user",
+    )
+    token_endpoint_auth_method: str | None = Field(
+        default=None,
+        description="Requested authentication method for the token endpoint",
+    )
+    grant_types: list[str] | None = Field(
+        default=None,
+        description="OAuth 2.0 grant types that the client will use",
+    )
+    response_types: list[str] | None = Field(
+        default=None,
+        description="OAuth 2.0 response types that the client will use",
+    )
+    scope: str | None = Field(
+        default=None,
+        description="Space-separated list of scope values that the client can use",
+    )
+    jwks_uri: str | None = Field(
+        default=None,
+        description="URL for the client's JSON Web Key Set (JWKS) document",
+    )
+
+
+class ClientRegistrationResponse(BaseModel):
+    client_id: str = Field(description="Unique identifier for the registered client")
+    client_secret: str | None = Field(
+        default=None,
+        description="Client secret issued to the client, if applicable",
+    )
+    client_id_issued_at: int = Field(
+        description="Time at which the client identifier was issued, in seconds since the Unix epoch",
+    )
+    client_secret_expires_at: int = Field(
+        description="Time at which the client secret will expire, or 0 if it will not expire",
+    )
+    registration_access_token: str = Field(
+        description="Access token that can be used to manage the client registration",
+    )
+    registration_client_uri: str = Field(
+        description="Location of the client configuration endpoint",
+    )
+    redirect_uris: list[str] | None = None
+    client_name: str | None = None
+    token_endpoint_auth_method: str | None = None
+    grant_types: list[str] | None = None
+    response_types: list[str] | None = None
+    scope: str | None = None
+    jwks_uri: str | None = None
+
+
 def get_oauth2_router() -> APIRouter:
     """Create a simple, overridable OAuth2 router.
 
@@ -20,6 +80,7 @@ def get_oauth2_router() -> APIRouter:
 
     - GET /oauth/authorize
     - POST /oauth/token
+    - POST /oauth/register (RFC 7591 dynamic client registration)
     """
     router = APIRouter()
 
@@ -94,6 +155,46 @@ def get_oauth2_router() -> APIRouter:
         return TokenResponse(
             access_token=token_value,
             scope=granted_scope,
+        )
+
+    @router.post(
+        "/oauth/register",
+        response_model=ClientRegistrationResponse,
+        name="oauth_dynamic_client_registration",
+        status_code=status.HTTP_201_CREATED,
+    )
+    async def register_client(
+        request: Request,
+        registration: ClientRegistrationRequest,
+    ) -> ClientRegistrationResponse:
+        """Dynamic client registration endpoint following RFC 7591.
+
+        The default implementation issues opaque identifiers and does not persist
+        registrations. Projects should replace this with real storage and policy.
+        """
+        issued_at = int(time.time())
+        client_id = secrets.token_urlsafe(24)
+        client_secret = secrets.token_urlsafe(32)
+        registration_access_token = secrets.token_urlsafe(32)
+
+        registration_client_uri = str(
+            request.url_for("oauth_dynamic_client_registration")
+        )
+
+        return ClientRegistrationResponse(
+            client_id=client_id,
+            client_secret=client_secret,
+            client_id_issued_at=issued_at,
+            client_secret_expires_at=0,
+            registration_access_token=registration_access_token,
+            registration_client_uri=registration_client_uri,
+            redirect_uris=registration.redirect_uris,
+            client_name=registration.client_name,
+            token_endpoint_auth_method=registration.token_endpoint_auth_method,
+            grant_types=registration.grant_types,
+            response_types=registration.response_types,
+            scope=registration.scope,
+            jwks_uri=registration.jwks_uri,
         )
 
     return router

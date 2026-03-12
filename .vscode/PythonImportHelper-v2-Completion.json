@@ -168,6 +168,14 @@
         "documentation": {}
     },
     {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "status",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -428,6 +436,24 @@
         "documentation": {}
     },
     {
+        "label": "secrets",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "secrets",
+        "description": "secrets",
+        "detail": "secrets",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "RedirectResponse",
         "importPath": "fastapi.responses",
         "description": "fastapi.responses",
@@ -541,15 +567,6 @@
         "description": "functools",
         "isExtraImport": true,
         "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -903,7 +920,25 @@
         "kind": 6,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
-        "peekOfCode": "class TokenResponse(BaseModel):\n    access_token: str = Field(description=\"Issued access token\")\n    token_type: str = Field(default=\"Bearer\", description=\"Token type\")\n    expires_in: int = Field(default=3600, description=\"Token lifetime in seconds\")\n    scope: str = Field(default=\"\", description=\"Granted scopes as space-separated string\")\ndef get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize",
+        "peekOfCode": "class TokenResponse(BaseModel):\n    access_token: str = Field(description=\"Issued access token\")\n    token_type: str = Field(default=\"Bearer\", description=\"Token type\")\n    expires_in: int = Field(default=3600, description=\"Token lifetime in seconds\")\n    scope: str = Field(default=\"\", description=\"Granted scopes as space-separated string\")\nclass ClientRegistrationRequest(BaseModel):\n    redirect_uris: list[str] | None = Field(\n        default=None,\n        description=\"Redirection URIs that the client may use in requests to the authorization server\",\n    )",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRegistrationRequest",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "peekOfCode": "class ClientRegistrationRequest(BaseModel):\n    redirect_uris: list[str] | None = Field(\n        default=None,\n        description=\"Redirection URIs that the client may use in requests to the authorization server\",\n    )\n    client_name: str | None = Field(\n        default=None,\n        description=\"Human-readable name of the client to be presented to the end-user\",\n    )\n    token_endpoint_auth_method: str | None = Field(",
+        "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "documentation": {}
+    },
+    {
+        "label": "ClientRegistrationResponse",
+        "kind": 6,
+        "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
+        "peekOfCode": "class ClientRegistrationResponse(BaseModel):\n    client_id: str = Field(description=\"Unique identifier for the registered client\")\n    client_secret: str | None = Field(\n        default=None,\n        description=\"Client secret issued to the client, if applicable\",\n    )\n    client_id_issued_at: int = Field(\n        description=\"Time at which the client identifier was issued, in seconds since the Unix epoch\",\n    )\n    client_secret_expires_at: int = Field(",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "documentation": {}
     },
@@ -912,7 +947,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
-        "peekOfCode": "def get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize\n    - POST /oauth/token\n    \"\"\"\n    router = APIRouter()\n    @router.get(\"/oauth/authorize\")\n    async def authorize(",
+        "peekOfCode": "def get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize\n    - POST /oauth/token\n    - POST /oauth/register (RFC 7591 dynamic client registration)\n    \"\"\"\n    router = APIRouter()\n    @router.get(\"/oauth/authorize\")",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "documentation": {}
     },

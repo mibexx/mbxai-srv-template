@@ -141,6 +141,10 @@ class McpOAuth2Config(BaseSettings):
         default=None,
         alias="MCP_OAUTH2_TOKEN_ENDPOINT",
     )
+    registration_endpoint: str | None = Field(
+        default=None,
+        alias="MCP_OAUTH2_REGISTRATION_ENDPOINT",
+    )
     jwks_uri: str | None = Field(default=None, alias="MCP_OAUTH2_JWKS_URI")
     scopes_supported_raw: str = Field(
         default="",

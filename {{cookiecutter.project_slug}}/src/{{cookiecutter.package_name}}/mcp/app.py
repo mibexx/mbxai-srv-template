@@ -26,6 +26,7 @@ def _build_oauth2_configuration() -> OAuth2Configuration | None:
         issuer=oauth2_config_settings.issuer,
         authorization_endpoint=oauth2_config_settings.authorization_endpoint,
         token_endpoint=oauth2_config_settings.token_endpoint,
+        registration_endpoint=oauth2_config_settings.registration_endpoint,
         jwks_uri=oauth2_config_settings.jwks_uri,
         scopes_supported=oauth2_config_settings.scopes_supported,
     )
