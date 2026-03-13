@@ -267,13 +267,13 @@ By default, the example `weather` tool is registered without security. When OAut
 
 For convenience, the MCP service in this template also ships with minimal OAuth2 endpoints implemented in `mcp/auth.py` and mounted into the FastAPI app:
 
-- `GET /oauth/authorize`
+- `GET /auth/authorize`
   - Accepts typical authorization request parameters (`response_type`, `client_id`, `redirect_uri`, `scope`, `state`).
   - In the template it immediately redirects back to `redirect_uri` with a static `code` and echoes `state`/`scope`.
-- `POST /oauth/token`
+- `POST /auth/token`
   - Accepts standard form fields (`grant_type`, `code`, `redirect_uri`, `client_id`, `client_secret`, `scope`).
   - Returns a simple JSON token response with a dummy `access_token`, `token_type="Bearer"`, and `expires_in=3600`.
-- `POST /oauth/register` (dynamic client registration, RFC 7591-style)
+- `POST /auth/register` (dynamic client registration, RFC 7591-style)
   - Accepts a JSON body describing the client (for example `redirect_uris`, `client_name`, `grant_types`, `response_types`, `scope`, `jwks_uri`, `token_endpoint_auth_method`).
   - Returns a registration document containing an opaque `client_id`, optional `client_secret`, timestamps (`client_id_issued_at`, `client_secret_expires_at`), a `registration_access_token`, a `registration_client_uri`, and the echoed client metadata.
 
@@ -287,23 +287,23 @@ These implementations are intentionally simple and are meant as **safe defaults*
 To adapt the OAuth2/OIDC flow to your own requirements:
 
 1. **Decide where authorization happens**
-   - If you already have an IdP (Auth0, Keycloak, Azure AD, etc.), configure `MCP_OAUTH2_ISSUER`, `MCP_OAUTH2_AUTHORIZATION_ENDPOINT`, `MCP_OAUTH2_TOKEN_ENDPOINT`, and `MCP_OAUTH2_JWKS_URI` to point to that provider and *remove or bypass* the template `/oauth/authorize` and `/oauth/token` handlers.
+   - If you already have an IdP (Auth0, Keycloak, Azure AD, etc.), configure `MCP_OAUTH2_ISSUER`, `MCP_OAUTH2_AUTHORIZATION_ENDPOINT`, `MCP_OAUTH2_TOKEN_ENDPOINT`, and `MCP_OAUTH2_JWKS_URI` to point to that provider and *remove or bypass* the template `/auth/authorize` and `/auth/token` handlers.
    - If the MCP service itself should act as the authorization server, keep those routes and extend them instead of delegating to an external IdP.
 
-2. **Implement real login and consent in `/oauth/authorize`**
+2. **Implement real login and consent in `/auth/authorize`**
    - Replace the simple redirect logic in `get_oauth2_router().authorize` with:
      - A user authentication step (session/cookie or your preferred mechanism).
      - A consent screen where the user can approve requested scopes.
    - After successful login and consent, generate a real authorization code, store the associated client, redirect URI, and scopes, and only then redirect back with that code.
 
-3. **Back your `/oauth/token` endpoint with real tokens**
+3. **Back your `/auth/token` endpoint with real tokens**
    - In `get_oauth2_router().token`, replace the dummy token issuance with logic that:
      - Validates the authorization code or client credentials against stored data.
      - Issues an access token (and optionally refresh token) in the format you need (opaque string or signed JWT).
      - Sets appropriate `expires_in`, `scope`, and `token_type` values.
    - Align this implementation with `validate_oauth2_token` in `mcp/app.py` so tool calls are validated consistently.
 
-4. **Customize dynamic client registration in `/oauth/register`**
+4. **Customize dynamic client registration in `/auth/register`**
    - The template currently issues opaque identifiers and does not persist registrations.
    - Extend `register_client` in `mcp/auth.py` to:
      - Validate incoming metadata against your policies (allowed redirect URIs, required authentication methods, allowed grant types/scopes, etc.).

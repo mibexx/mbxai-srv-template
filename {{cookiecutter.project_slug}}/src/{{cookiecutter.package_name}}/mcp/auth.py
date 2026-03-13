@@ -78,13 +78,13 @@ def get_oauth2_router() -> APIRouter:
     This implementation is intentionally minimal and is meant to be replaced
     or extended in real projects. It provides:
 
-    - GET /oauth/authorize
-    - POST /oauth/token
-    - POST /oauth/register (RFC 7591 dynamic client registration)
+    - GET /auth/authorize
+    - POST /auth/token
+    - POST /auth/register (RFC 7591 dynamic client registration)
     """
     router = APIRouter()
 
-    @router.get("/oauth/authorize")
+    @router.get("/auth/authorize")
     async def authorize(
         response_type: str = "code",
         client_id: str | None = None,
@@ -121,7 +121,7 @@ def get_oauth2_router() -> APIRouter:
 
         return RedirectResponse(url=redirect_target)
 
-    @router.post("/oauth/token", response_model=TokenResponse)
+    @router.post("/auth/token", response_model=TokenResponse)
     async def token(
         grant_type: str = Form(...),
         code: str | None = Form(default=None),
@@ -158,7 +158,7 @@ def get_oauth2_router() -> APIRouter:
         )
 
     @router.post(
-        "/oauth/register",
+        "/auth/register",
         response_model=ClientRegistrationResponse,
         name="oauth_dynamic_client_registration",
         status_code=status.HTTP_201_CREATED,

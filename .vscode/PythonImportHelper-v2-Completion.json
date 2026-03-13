@@ -947,7 +947,7 @@
         "kind": 2,
         "importPath": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "description": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
-        "peekOfCode": "def get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /oauth/authorize\n    - POST /oauth/token\n    - POST /oauth/register (RFC 7591 dynamic client registration)\n    \"\"\"\n    router = APIRouter()\n    @router.get(\"/oauth/authorize\")",
+        "peekOfCode": "def get_oauth2_router() -> APIRouter:\n    \"\"\"Create a simple, overridable OAuth2 router.\n    This implementation is intentionally minimal and is meant to be replaced\n    or extended in real projects. It provides:\n    - GET /auth/authorize\n    - POST /auth/token\n    - POST /auth/register (RFC 7591 dynamic client registration)\n    \"\"\"\n    router = APIRouter()\n    @router.get(\"/auth/authorize\")",
         "detail": "{{cookiecutter.project_slug}}.src.{{cookiecutter.package_name}}.mcp.auth",
         "documentation": {}
     },
